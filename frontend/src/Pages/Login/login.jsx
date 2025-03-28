@@ -1,6 +1,6 @@
 import React from "react";
 import "./login.css";
-import logo from "../../assets/logo.png";
+import logo from "../../assets/YM.png";
 // import Sidebar from "../../components/Sidebar/Sidebar.jsx";
 
 
