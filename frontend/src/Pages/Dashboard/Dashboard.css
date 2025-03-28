@@ -1,0 +1,104 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f3f4f6;
+    margin: 0;
+    padding: 0;
+}
+
+/* Dashboard Container */
+.dashboard-container {
+    padding: 20px;
+    text-align: center;
+}
+
+/* Title */
+.dashboard-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* Top Cards */
+.card-container {
+    display: flex;
+    justify-content: center;  /* Centers cards */
+    gap: 20px;  /* Adjust spacing */
+    margin-bottom: 20px;
+    flex-direction: row;
+}
+
+/* Card Styling */
+.card {
+    background: white;
+    padding: 15px 30px;  /* Wider padding for width */
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: 0.3s;
+    cursor: pointer;
+    width: 180px;  /* Set fixed width */
+    height: 70px;  /* Reduce height */
+    justify-content: center;
+    
+}
+
+.card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Icon Styling */
+.icon {
+    width: 30px;
+    height: 30px;
+}
+
+/* Card Title */
+.card-title {
+    font-size: 16px;
+    color: #000;
+    font-weight: 500;
+}
+
+/* Orders Table */
+.table-container {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    max-width: 80%;
+    margin: 0 auto;
+}
+
+.table-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background: #e5e7eb;
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
+    background: #f9fafb;
+}
+
+/* Improves text contrast */
+td {
+    color: #333;
+}
