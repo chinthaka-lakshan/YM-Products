@@ -1,13 +1,13 @@
 import React from "react";
 import "./login.css";
 import logo from "../../assets/logo.png";
+// import Sidebar from "../../components/Sidebar/Sidebar.jsx";
 
 
 const Login = () => {
   return (
-    <>
-      {/* <SideBar />
-      <TopBar /> */}
+    <div className="container">
+      {/* <Sidebar /> */}
 
       <div className="full">
         <form>
@@ -31,7 +31,7 @@ const Login = () => {
           <img src={logo} alt="YM Products Logo" />
         </div>
       </div>
-    </>
+      </div>
   );
 };
 
