@@ -1,0 +1,149 @@
+/* Sidebar Styles */
+.sidebar {
+    height: 100vh;
+    background-color: #ffffff;
+    border-right: 1px solid #e0e0e0;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Navigation Container */
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* Sidebar Header */
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+}
+
+.sidebar-logo {
+    transition: width 0.3s ease-in-out;
+}
+
+.expanded {
+    width: 128px;
+}
+
+.collapsed {
+    width: 0;
+    overflow: hidden;
+}
+
+/* Toggle Button */
+.toggle-btn {
+    background-color: #f3f4f6;
+    border: none;
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.toggle-btn:hover {
+    background-color: #e5e7eb;
+}
+
+/* Sidebar Menu */
+.sidebar-menu {
+    flex: 1;
+    padding: 16px;
+}
+
+/* Sidebar Footer */
+.sidebar-footer {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+}
+
+.profile-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    overflow: hidden;
+    transition: width 0.3s ease-in-out;
+}
+
+.profile-text {
+    margin-left: 12px;
+}
+
+.profile-name {
+    font-weight: bold;
+}
+
+.profile-email {
+    font-size: 12px;
+    color: #666;
+}
+
+/* Sidebar Items */
+.sidebar-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 16px;
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
+}
+
+.sidebar-item:hover {
+    background-color: #eef2ff;
+}
+
+.sidebar-item.active {
+    background: linear-gradient(to right, #c7d2fe, #e0e7ff);
+    color: #3730a3;
+}
+
+/* Sidebar Text */
+.sidebar-text {
+    transition: width 0.3s ease-in-out;
+}
+
+.sidebar-text.collapsed {
+    width: 0;
+    overflow: hidden;
+}
+
+.sidebar-alert {
+    width: 8px;
+    height: 8px;
+    background-color: #6366f1;
+    border-radius: 50%;
+    position: absolute;
+    right: 10px;
+}
+
+/* Tooltip for Collapsed Sidebar */
+.sidebar-tooltip {
+    position: absolute;
+    left: 100%;
+    margin-left: 10px;
+    background-color: #6366f1;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    white-space: nowrap;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.sidebar-item:hover .sidebar-tooltip {
+    visibility: visible;
+    opacity: 1;
+}
