@@ -20,12 +20,12 @@ body {
 }
 
 /* Top Cards */
-.card-container {
+.CardContainer{
     display: flex;
+    flex-direction: row;
     justify-content: center;  /* Centers cards */
     gap: 20px;  /* Adjust spacing */
     margin-bottom: 20px;
-    flex-direction: row;
 }
 
 /* Card Styling */
