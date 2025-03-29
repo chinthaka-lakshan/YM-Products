@@ -20,7 +20,7 @@ const Dashboard = () => {
       <h1 className="text-2xl font-bold mb-6">Welcome to YM Products</h1>
 
       {/* Top Cards */}
-      <div className="grid grid-cols-3 gap-4 mb-6 ">
+      <div className="CardContainer">
         <div className="card">
           <img src={order} alt="Orders" className="icon" />
           <span>Orders</span>
