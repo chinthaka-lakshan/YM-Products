@@ -1,0 +1,89 @@
+/* Top Bar Container */
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    padding: 10px 20px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    height: 60px;
+}
+
+/* Left Side - Logo */
+.topbar-left {
+    font-size: 24px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    color: black;
+    font-family: Arial, sans-serif;
+    margin-top: 110px;
+}
+
+.logo-highlight {
+    color: red;
+}
+
+/* Right Side - Admin Info */
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Admin Info */
+.admin-info {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.admin-icon {
+    font-size: 24px;
+    color: gray;
+}
+
+/* Admin Name */
+.admin-name {
+    font-size: 16px;
+    font-weight: bold;
+    color: blue; /* ✅ Change this color if needed */
+}
+
+/* Mobile Menu Icon (Hidden on Desktop) */
+.menu-icon {
+    display: none;
+    font-size: 24px;
+    cursor: pointer;
+    background-color: aqua;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .topbar {
+        padding: 10px;
+    }
+
+    /* Hide Admin Name on Small Screens */
+    .admin-name {
+        display: none;
+    }
+
+    /* Adjust Right Side */
+    .topbar-right {
+        gap: 10px;
+    }
+
+    /* Show Mobile Menu Icon */
+    .menu-icon {
+        display: block;
+    }
+}
