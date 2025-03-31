@@ -1,16 +1,12 @@
 import { ChevronLeft, ChevronRight, MoreVert } from "@mui/icons-material";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import StorefrontIcon from "@mui/icons-material/Storefront";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import InventoryIcon from "@mui/icons-material/Inventory";
 import RepeatIcon from "@mui/icons-material/Repeat";
 import StoreIcon from "@mui/icons-material/Store";
-import PeopleIcon from "@mui/icons-material/People";
-import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 
 import { createContext, useContext, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom"; // Import from react-router
-import "./Sidebar.css";
+import "./RepSidebar.css";
 
 const SidebarContext = createContext();
 
@@ -26,13 +22,13 @@ export default function Sidebar({ onToggle }) {
 
     const menuItems = [
         { icon: <DashboardIcon />, text: "Dashboard", path: "/dashboard" },
-        { icon: <InventoryIcon />, text: "Distribution Stock", path: "/distribution" },
-        { icon: <ShoppingCartIcon />, text: "Purchase Stock", path: "/purchase" },
+        // { icon: <InventoryIcon />, text: "Distribution Stock", path: "/distribution" },
+        // { icon: <ShoppingCartIcon />, text: "Purchase Stock", path: "/purchase" },
         { icon: <StorefrontIcon />, text: "Orders", path: "/orders" },
         { icon: <RepeatIcon />, text: "Returns", path: "/returns" },
         { icon: <StoreIcon />, text: "Shops", path: "/shops" },
-        { icon: <PeopleIcon />, text: "Representative", path: "/repregistration" },
-        { icon: <AttachMoneyIcon />, text: "Cash Flow Analysis", path: "/cash-flow" },
+        // { icon: <PeopleIcon />, text: "Representative", path: "/repregistration" },
+        // { icon: <AttachMoneyIcon />, text: "Cash Flow Analysis", path: "/cash-flow" },
     ];
 
     const handleNavigation = (path) => {

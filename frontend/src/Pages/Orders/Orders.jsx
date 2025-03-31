@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Sidebar from '../../components/Sidebar/Sidebar'
+import Sidebar from '../../components/Sidebar/AdminSidebar/AdminSidebar'
 import "./Orders.css"
 import Topbar from '../../components/Topbar/topbar'
 import TopBar from '../../components/Topbar/topbar'
