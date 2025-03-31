@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./login.css";
-import logo from "../../assets/YM.png";
+import logo from "../../../assets/YM.png"; // Adjust the path to your logo image
+
 
 const AdminLogin = () => {
   const [email, setEmail] = useState("");
