@@ -25,7 +25,7 @@ export default function Sidebar({ onToggle }) {
     };
 
     const menuItems = [
-        { icon: <DashboardIcon />, text: "Dashboard", path: "/dashboard" },
+        { icon: <DashboardIcon />, text: "Dashboard", path: "/admindashboard" },
         { icon: <InventoryIcon />, text: "Distribution Stock", path: "/distribution" },
         { icon: <ShoppingCartIcon />, text: "Purchase Stock", path: "/purchase" },
         { icon: <StorefrontIcon />, text: "Orders", path: "/orders" },

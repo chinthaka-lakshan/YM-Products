@@ -1,14 +1,15 @@
 import React from "react";
 import "./RepDashboard.css";
-import orderIcon from "../../assets/oder.png"; // Update with actual path
-import returnIcon from "../../assets/return.png"; // Update with actual path
-import Sidebar from "../../components/Sidebar/Sidebar";
-import TopBar from "../../components/Topbar/topbar";
+import orderIcon from "../../../assets/oder.png"; // Update with actual path
+import returnIcon from "../../../assets/return.png"; // Update with actual path
+import RepSidebar from "../../../components/Sidebar/RepSidebar/RepSidebar";
+
+import TopBar from "../../../components/Topbar/topbar";
 
 const RepDashboard = () => {
   return (
     <div className="dashboard-container">
-        <Sidebar/>
+        <RepSidebar/>
         <TopBar/>
       <div className="welcome-text">
         <h2>Welcome to YM Products</h2>
