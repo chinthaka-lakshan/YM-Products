@@ -16,7 +16,7 @@ const DashboardWidget = ({ type }) => {
       data = {
         title: "PURCHASE STOCK",
         isMoney: false,
-        link: <Link to="" style={{textDecoration:"none", color:"#425060"}}><span>View Purchase Stock</span></Link>,
+        link: <Link to="" style={{textDecoration:"none", color:"#425060"}}><span>View Stock</span></Link>,
         icon: (
           <StorefrontIcon
             className="icon"
@@ -30,7 +30,7 @@ const DashboardWidget = ({ type }) => {
       data = {
         title: "DISTRIBUTION STOCK",
         isMoney: false,
-        link: <Link to="" style={{textDecoration:"none", color:"#425060"}}><span>View Distribution Stock</span></Link>,
+        link: <Link to="" style={{textDecoration:"none", color:"#425060"}}><span>View Stock</span></Link>,
         icon: (
           <ShoppingCartIcon
             className="icon"
