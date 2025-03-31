@@ -1,65 +1,29 @@
-import React from "react";
-import "./dashboard.css"; // Ensure proper styles
-import order from "../../assets/orders.png"; 
-import rep from "../../assets/rep.png";
-import stock from "../../assets/stock.png";
-import Sidebar from "../../components/Sidebar/Sidebar.jsx"; // Import Sidebar component
+import React, { useState } from "react";
+import "./dashboard.css";
+import Sidebar from "../../components/Sidebar/Sidebar.jsx";
+import DashboardWidget from "../../components/DashboardWidget/DashboardWidget.jsx";
+import LowPurchaseStockTable from "../../components/LowPurchaseStockTable/LowPurchaseStockTable.jsx";
 
 const Dashboard = () => {
-  const orders = [
-    { shop: "Shop", date: "3/4/2025", rep: "Roshen" },
-    { shop: "Shop", date: "3/4/2025", rep: "Roshen" },
-    { shop: "Shop", date: "3/4/2025", rep: "Roshen" },
-    { shop: "Shop", date: "3/4/2025", rep: "Roshen" },
-  ];
+    const [sidebarExpanded, setSidebarExpanded] = useState(true);
 
-  return (
-    <div className="container">
-        <Sidebar />
-    <div className="bg-gray-100 min-h-screen p-6">
-      <h1 className="text-2xl font-bold mb-6">Welcome to YM Products</h1>
-
-      {/* Top Cards */}
-      <div className="CardContainer">
-        <div className="card">
-          <img src={order} alt="Orders" className="icon" />
-          <span>Orders</span>
+    return (
+        <div className="Dashboard">
+            <Sidebar onToggle={setSidebarExpanded} />
+            <div className={`DashboardContainer ${sidebarExpanded ? "" : "collapsed"}`}>
+                <div className="DashboardWidgets">
+                    <DashboardWidget type="purchaseStock"/>
+                    <DashboardWidget type="distributionStock"/>
+                    <DashboardWidget type="orders"/>
+                    <DashboardWidget type="returns"/>
+                    <DashboardWidget type="shops"/>
+                </div>
+                <div className="TablesContainer">
+                    <LowPurchaseStockTable/>
+                </div>
+            </div>
         </div>
-        <div className="card">
-          <img src={rep} alt="Rep" className="icon" />
-          <span>Rep</span>
-        </div>
-        <div className="card">
-          <img src={stock} alt="Stock" className="icon" />
-          <span>D_Stock</span>
-        </div>
-      </div>
-
-      {/* Orders Table */}
-      <div className="bg-white shadow-md rounded-lg p-4">
-        <h2 className="text-lg font-semibold mb-4">Orders</h2>
-        <table className="w-full border-collapse">
-          <thead>
-            <tr className="bg-gray-200 text-gray-700">
-              <th className="p-2 text-left">Shop</th>
-              <th className="p-2 text-left">Date</th>
-              <th className="p-2 text-left">Rep Name</th>
-            </tr>
-          </thead>
-          <tbody>
-            {orders.map((order, index) => (
-              <tr key={index} className="border-t">
-                <td className="p-2">{order.shop}</td>
-                <td className="p-2">{order.date}</td>
-                <td className="p-2">{order.rep}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-    </div>
-  );
+    );
 };
 
 export default Dashboard;

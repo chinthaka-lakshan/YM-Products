@@ -9,14 +9,18 @@ import PeopleIcon from "@mui/icons-material/People";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 
 import { createContext, useContext, useState } from "react";
-import "./Sidebar.css"; // Ensure proper styles
+import "./Sidebar.css";
 
 const SidebarContext = createContext();
 
-export default function Sidebar() {
+export default function Sidebar({ onToggle }) {
     const [expanded, setExpanded] = useState(true);
 
-    // Menu items with MUI icons
+    const toggleSidebar = () => {
+        setExpanded(!expanded);
+        onToggle(!expanded);
+    };
+
     const menuItems = [
         { icon: <DashboardIcon />, text: "Dashboard", active: true },
         { icon: <InventoryIcon />, text: "Distribution Stock" },
@@ -29,11 +33,11 @@ export default function Sidebar() {
     ];
 
     return (
-        <aside className={`sidebar ${expanded ? "expanded" : "collapsed"}`}>
+        <aside className={`sidebar ${expanded ? "" : "collapsed"}`}>
             <nav className="sidebar-nav">
                 <div className="sidebar-header">
                     <h2 className="sidebar-title">{expanded ? "DeepNix" : "D"}</h2>
-                    <button onClick={() => setExpanded(!expanded)} className="toggle-btn">
+                    <button onClick={toggleSidebar} className="toggle-btn">
                         {expanded ? <ChevronLeft /> : <ChevronRight />}
                     </button>
                 </div>
