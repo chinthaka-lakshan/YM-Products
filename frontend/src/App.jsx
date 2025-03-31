@@ -1,22 +1,22 @@
 import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; 
 import './App.css';
-import Login from '../src/Pages/Login/login.jsx';
-import Sidebar from '../src/components/Sidebar/Sidebar.jsx'; 
+import Login from './Pages/Login/AdminLogin/login.jsx'; // Import the AdminLogin component
+import RepLogin from './Pages/Login/RepLogin/RepLogin.jsx'; // Import the RepLogin component
+import RepRegistration from './Pages/RepRegistration/RepRegistration.jsx';
 import Dashboard from './Pages/Dashboard/Dashboard.jsx';
-import Orders from './Pages/Orders/Orders.jsx';
 
 function App() {
   const [count, setCount] = useState(0);
 
   return (
-    <Router> {/* Router should wrap Routes */}
+    <Router> 
       <div className="App">
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="/sidebar" element={<Sidebar />} />
-          <Route path="/dashboard" element={<Dashboard/>} /> {/* Assuming Sidebar is the main component for the dashboard */}
-          <Route path='/orders' element={<Orders/>} /> {/* Assuming Sidebar is the main component for the orders */}
+          <Route path="/dashboard" element={<Dashboard/>} />
+          <Route path="/replogin" element={<RepLogin />} />
+          <Route path="/repredistration" element={<RepRegistration/>} />
         </Routes>
       </div>
     </Router>
