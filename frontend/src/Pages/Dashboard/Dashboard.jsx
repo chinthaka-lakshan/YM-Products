@@ -1,5 +1,5 @@
 import React from "react";
-import "./dashboard.css"; // Ensure proper styles
+import "./AdminDashboard.css"; 
 import order from "../../assets/orders.png"; 
 import rep from "../../assets/rep.png";
 import stock from "../../assets/stock.png";
