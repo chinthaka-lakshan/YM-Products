@@ -5,14 +5,29 @@
     justify-content: center;
     height: 100vh;
     text-align: center;
+    padding: 20px;
   }
   
+  /* Welcome text styling */
+  .welcome-text {
+    position: relative;
+    top: -15%;
+    right: 13%;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .welcome-text h2{
+    font-size: 28px;
+  }
+  /* Buttons container */
   .buttons-container {
     display: flex;
     gap: 40px;
-    margin-top: 20px;
+    margin-top: 10px;
   }
   
+  /* Styling for buttons */
   .dashboard-button {
     display: flex;
     flex-direction: column;
@@ -23,15 +38,92 @@
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
     cursor: pointer;
     transition: transform 0.2s;
+    position: relative; /* 🔥 UPDATED */
+    left: 29%;
   }
   
-  .dashboard-button:hover {
-    transform: scale(1.05);
-  }
-  
+  /* 🔥 UPDATED: Changed PNG size and position */
   .dashboard-button img {
-    width: 80px;
-    height: 80px;
-    margin-bottom: 10px;
+    width: 130px; /* 🔥 Increased size */
+    height: 130px; /* 🔥 Increased size */
+    margin-bottom: 5px; /* 🔥 Adjusted spacing */
+    position: relative; /* 🔥 Added */
+    top: -5px; 
+    /* 🔥 Moves PNG slightly up */
+  }
+  
+  /* Custom text colors */
+  .dashboard-button p {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0;
+  }
+  
+  /* Order (Blue) and Return (Green) text color */
+  .dashboard-button:first-child p {
+    color: #070707;
+  }
+  
+  .dashboard-button:last-child p {
+    color: #0b0b0b;
+  }
+  
+  /* 🔥 Responsive styles */
+  @media (max-width: 768px) {
+    .buttons-container {
+      flex-direction: column;
+      gap: 20px;
+    }
+  
+    .dashboard-button {
+      width: 80%;
+      padding: 15px;
+    }
+  
+    /* 🔥 UPDATED: Adjusted PNG size for tablets */
+    .dashboard-button img {
+      width: 80px;
+      height: 80px;
+      top: -3px;
+    }
+  
+    .welcome-text {
+      position: relative;
+      left: 10%;
+      top: -20px;
+    }
+
+    .welcome-text h2{
+        font-size: 18px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .buttons-container {
+      width: 100%;
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .dashboard-button {
+      width: 90%;
+      padding: 15px;
+    }
+  
+    /* 🔥 UPDATED: Adjusted PNG size for mobile */
+    .dashboard-button img {
+      width: 60px;
+      height: 60px;
+      top: -2px;
+    }
+  
+    .dashboard-button p {
+      font-size: 16px;
+    }
+  
+    .welcome-text {
+      font-size: 8px;
+      top: -10px;
+    }
   }
   
