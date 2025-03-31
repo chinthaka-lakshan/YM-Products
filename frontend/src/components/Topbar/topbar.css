@@ -20,12 +20,13 @@
     font-weight: bold;
     display: flex;
     align-items: center;
+    margin-left: 17%; /* ✅ Shifted right to create space for sidebar */
 }
 
 .logo {
     color: black;
     font-family: Arial, sans-serif;
-    margin-top: 110px;
+    margin-top: 50%;
 }
 
 .logo-highlight {
@@ -37,36 +38,69 @@
     display: flex;
     align-items: center;
     gap: 15px;
+    position: relative;
 }
 
-/* Admin Info */
-.admin-info {
+/* User Icon Container */
+.user-container {
+    position: relative;
+    cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 8px; /* ✅ Added spacing between icon & name */
 }
 
+/* Admin Icon */
 .admin-icon {
     font-size: 24px;
     color: gray;
 }
 
-/* Admin Name */
+/* Admin Name (Visible only on Desktop) */
 .admin-name {
     font-size: 16px;
     font-weight: bold;
-    color: blue; /* ✅ Change this color if needed */
+    color: blue;
 }
 
-/* Mobile Menu Icon (Hidden on Desktop) */
+/* Logout Dropdown (Initially Hidden) */
+.logout-dropdown {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background-color: white;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    gap: 8px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+/* Logout Icon */
+.logout-icon {
+    font-size: 20px;
+    color: red;
+}
+
+/* Logout Text */
+.logout-text {
+    font-size: 14px;
+    font-weight: bold;
+    color: black;
+}
+
+/* Mobile Menu Icon */
 .menu-icon {
     display: none;
     font-size: 24px;
     cursor: pointer;
-    background-color: aqua;
 }
 
-/* Responsive Design */
+/* 🔹 Responsive Design */
 @media screen and (max-width: 768px) {
     .topbar {
         padding: 10px;
@@ -74,16 +108,21 @@
 
     /* Hide Admin Name on Small Screens */
     .admin-name {
-        display: none;
+        display: none; /* ✅ Ensured admin name is hidden on mobile */
     }
 
-    /* Adjust Right Side */
+    /* Move User Icon to Right */
     .topbar-right {
-        gap: 10px;
+        margin-left: auto;
     }
 
     /* Show Mobile Menu Icon */
     .menu-icon {
         display: block;
+    }
+
+    /* ✅ Reduce left margin on small screens */
+    .topbar-left {
+        margin-left: 40%;
     }
 }
