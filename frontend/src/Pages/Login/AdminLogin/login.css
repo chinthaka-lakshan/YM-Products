@@ -10,6 +10,11 @@ body {
     min-height: 100vh;
 
 }
+.container{
+    position: absolute ;
+    top:15%;
+    left: 17.5%;
+}
 
 /* Wrapper Styling */
 .full {
