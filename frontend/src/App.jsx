@@ -6,7 +6,7 @@ import RepLogin from './Pages/Login/RepLogin/RepLogin.jsx';
 import RepRegistration from './Pages/RepRegistration/RepRegistration.jsx';
 import AdminDashboard from './Pages/Dashboard/AdminDashboard/AdminDashboard.jsx';
 import Orders from './Pages/Orders/Orders.jsx';
-import RepDashboard from './Pages/RepDashboard/RepDashboard.jsx';
+import RepDashboard from './Pages/Dashboard/RepDashboard/RepDashboard.jsx';
 
 function App() {
   const [count, setCount] = useState(0);
