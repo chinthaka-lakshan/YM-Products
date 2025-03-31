@@ -2,11 +2,15 @@ import React from "react";
 import Sidebar from "../../components/Sidebar/Sidebar";
 // import Navbar from "../../components/Navbar/Navbar";
 import "./RepRegistration.css";
+import Topbar from "../../components/Topbar/topbar";
 
 const RepRegistration = () => {
   return (
     <div className="rep-container">
       <Sidebar />
+      <div>
+      <Topbar/>
+      </div>
         <div className="registration-form">
           <h2>Representative Registration</h2>
           <form>
