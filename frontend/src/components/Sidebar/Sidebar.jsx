@@ -9,12 +9,15 @@ import PeopleIcon from "@mui/icons-material/People";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 
 import { createContext, useContext, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom"; // Import from react-router
 import "./Sidebar.css";
 
 const SidebarContext = createContext();
 
 export default function Sidebar({ onToggle }) {
     const [expanded, setExpanded] = useState(true);
+    const navigate = useNavigate(); // Hook to navigate programmatically
+    const location = useLocation(); // Hook to get current location
 
     const toggleSidebar = () => {
         setExpanded(!expanded);
@@ -22,15 +25,19 @@ export default function Sidebar({ onToggle }) {
     };
 
     const menuItems = [
-        { icon: <DashboardIcon />, text: "Dashboard", active: true },
-        { icon: <InventoryIcon />, text: "Distribution Stock" },
-        { icon: <ShoppingCartIcon />, text: "Purchase Stock" },
-        { icon: <StorefrontIcon />, text: "Orders" },
-        { icon: <RepeatIcon />, text: "Returns" },
-        { icon: <StoreIcon />, text: "Shops" },
-        { icon: <PeopleIcon />, text: "Representative" },
-        { icon: <AttachMoneyIcon />, text: "Cash Flow Analysis" },
+        { icon: <DashboardIcon />, text: "Dashboard", path: "/dashboard" },
+        { icon: <InventoryIcon />, text: "Distribution Stock", path: "/distribution" },
+        { icon: <ShoppingCartIcon />, text: "Purchase Stock", path: "/purchase" },
+        { icon: <StorefrontIcon />, text: "Orders", path: "/orders" },
+        { icon: <RepeatIcon />, text: "Returns", path: "/returns" },
+        { icon: <StoreIcon />, text: "Shops", path: "/shops" },
+        { icon: <PeopleIcon />, text: "Representative", path: "/repregistration" },
+        { icon: <AttachMoneyIcon />, text: "Cash Flow Analysis", path: "/cash-flow" },
     ];
+
+    const handleNavigation = (path) => {
+        navigate(path);
+    };
 
     return (
         <aside className={`sidebar ${expanded ? "" : "collapsed"}`}>
@@ -45,7 +52,13 @@ export default function Sidebar({ onToggle }) {
                 <SidebarContext.Provider value={{ expanded }}>
                     <ul className="sidebar-menu">
                         {menuItems.map((item, index) => (
-                            <SidebarItem key={index} icon={item.icon} text={item.text} active={item.active} />
+                            <SidebarItem 
+                                key={index} 
+                                icon={item.icon} 
+                                text={item.text} 
+                                active={location.pathname === item.path}
+                                onClick={() => handleNavigation(item.path)}
+                            />
                         ))}
                     </ul>
                 </SidebarContext.Provider>
@@ -62,11 +75,14 @@ export default function Sidebar({ onToggle }) {
     );
 }
 
-export function SidebarItem({ icon, text, active }) {
+export function SidebarItem({ icon, text, active, onClick }) {
     const { expanded } = useContext(SidebarContext);
 
     return (
-        <li className={`sidebar-item ${active ? "active" : ""}`}>
+        <li 
+            className={`sidebar-item ${active ? "active" : ""}`}
+            onClick={onClick}
+        >
             {icon}
             <span className={`sidebar-text ${expanded ? "expanded" : "collapsed"}`}>{text}</span>
         </li>
