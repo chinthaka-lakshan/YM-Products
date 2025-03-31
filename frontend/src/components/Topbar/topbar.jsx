@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./topBar.css";
 import { FaUserCircle } from "react-icons/fa";
 import { FiMenu, FiLogOut } from "react-icons/fi"; // Icons
-import Sidebar from "../Sidebar/Sidebar";
+import Sidebar from "../Sidebar/AdminSidebar/AdminSidebar";
 
 const TopBar = () => {
   const [showLogout, setShowLogout] = useState(false);
