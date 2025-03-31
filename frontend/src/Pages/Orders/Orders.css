@@ -1,69 +1,66 @@
 .order-title h1{
-    position:absolute;
-    top: 10%;
-    left:330px;
-    
-    
+  position:absolute;
+  top: 12%;
+  left:330px;
 }
 
 .btn1{
-    position:absolute;
-    top: 20%;
-    right: 18%;
-}
-.btn2{
   position:absolute;
   top: 20%;
-  right: 10%;
+  right: 18%;
 }
-  
+.btn2{
+position:absolute;
+top: 20%;
+right: 10%;
+}
+
 .history-btn {
-    background-color: #ffc107;
-    color: #212529;
-    border: none;
-  }
-  
+  background-color: #ffc107;
+  color: #212529;
+  border: none;
+}
+
 .add-new-btn {
-    background-color: #28a745;
-    color: white;
-    border: none;
+  background-color: #28a745;
+  color: white;
+  border: none;
 }
 .table-container{
-  width: 950px;
-  position: absolute;
-  top:30%;
-  right:5%;
+width: 1000px;
+position: absolute;
+top:33%;
+right:5%;
 }
 .table th {
-  font-weight: normal;
-  color: #6c757d;
-  border-top: none;
-  width: 120px;
-  text-align: center;
+font-weight: normal;
+color: #6c757d;
+border-top: none;
+text-align: center;
+width: 150px;
 }
 .table td{
 text-align: center;
+width: 100px;
 }
+
 .view-btn {
-    background-color: #007bff;
-    color: white;
-    width: 100%;
+  background-color: #007bff;
+  color: white;
+  width: 100%;
 }
-  
+
 .accept-btn {
-    background-color: #28a745;
-    color: white;
-    width: 100%;
+  background-color: #28a745;
+  color: white;
+  width: 100%;
 }
-  
+
 .cancel-btn {
-    background-color: #dc3545;
-    color: white;
-    width: 100%;
-  }
-  
-
-
+  background-color: #dc3545;
+  color: white;
+  width: 100%;
+}
 
 /* Pagination styling */
 .pagination-container {
@@ -72,6 +69,9 @@ justify-content: flex-end;
 margin-top: 20px;
 border-top: 1px solid #e0e0e0;
 padding-top: 15px;
+position: absolute;
+top: 100%;
+right: 8%;
 }
 
 .pagination {

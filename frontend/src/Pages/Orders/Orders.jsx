@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
 import Sidebar from '../../components/Sidebar/AdminSidebar/AdminSidebar'
 import "./Orders.css"
+import Topbar from '../../components/Topbar/topbar'
+import TopBar from '../../components/Topbar/topbar'
+
 
 const Orders = () => {
   const [orders, setOrders] = useState([
@@ -31,9 +34,13 @@ const Orders = () => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
-    <div className="container">
-       <Sidebar/>
-       
+    <div className="container1">
+       <div>
+         <Sidebar/>
+       </div>
+       <div>
+          <TopBar/>
+       </div>
        <div className='order-title'>
          <h1>Orders</h1>
        </div>
