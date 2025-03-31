@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import "./dashboard.css";
+import "./Dashboard.css";
 import Sidebar from "../../components/Sidebar/Sidebar.jsx";
 import DashboardWidget from "../../components/DashboardWidget/DashboardWidget.jsx";
 import LowPurchaseStockTable from "../../components/LowPurchaseStockTable/LowPurchaseStockTable.jsx";
+import LowDistributionStockTable from "../../components/LowDistributionStockTable/LowDistributionStockTable.jsx";
+import PendingOrdersTable from "../../components/DashboardWidget/PendingOrdersTable/PendingOrdersTable.jsx";
 
 const Dashboard = () => {
     const [sidebarExpanded, setSidebarExpanded] = useState(true);
@@ -20,6 +22,8 @@ const Dashboard = () => {
                 </div>
                 <div className="TablesContainer">
                     <LowPurchaseStockTable/>
+                    <LowDistributionStockTable/>
+                    <PendingOrdersTable/>
                 </div>
             </div>
         </div>
