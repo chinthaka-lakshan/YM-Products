@@ -4,24 +4,15 @@
     background-color: #2c3e50;
     color: white;
     position: fixed;
-    left: 0%;
-    top: 0%;
+    left: 0;
+    top: 0;
     transition: width 0.3s ease;
+    overflow: hidden;
 }
 
 .sidebar.collapsed {
     width: 80px;
 }
-.sidebar-logo {
-    width: 120px; /* Full size */
-    height: auto;
-    transition: width 0.3s ease;
-}
-
-.sidebar-logo.collapsed {
-    width: 40px; /* Smaller when collapsed */
-}
-
 
 .sidebar-nav {
     display: flex;
@@ -55,6 +46,7 @@
     padding: 10px 15px;
     cursor: pointer;
     transition: background 0.3s;
+    white-space: nowrap;
 }
 
 .sidebar-item.active {
@@ -67,12 +59,13 @@
 
 .sidebar-text {
     margin-left: 10px;
-    transition: opacity 0.3s;
+    transition: opacity 0.3s, width 0.3s;
 }
 
-.sidebar-text.collapsed {
+.sidebar.collapsed .sidebar-text {
     opacity: 0;
     width: 0;
+    overflow: hidden;
 }
 
 .sidebar-footer {
@@ -83,9 +76,12 @@
 }
 
 .profile-info {
-    transition: opacity 0.3s;
+    transition: opacity 0.3s, width 0.3s;
+    white-space: nowrap;
 }
 
-.profile-info.collapsed {
+.sidebar.collapsed .profile-info {
     opacity: 0;
+    width: 0;
+    overflow: hidden;
 }
