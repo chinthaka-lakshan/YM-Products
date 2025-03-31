@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import "./LowPurchaseStockTable.css";
+import "./PendingOrdersTable.css";
 import { Link } from "react-router-dom";
 
-const LowPurchaseStockTable = () => {
+const PendingOrdersTable = () => {
   // Mock data for low purchase stock items
   const [data, setData] = useState([
     { id: 1, item: "Spice A", weight: 5 },
@@ -55,4 +55,4 @@ const LowPurchaseStockTable = () => {
   );
 };
 
-export default LowPurchaseStockTable;
+export default PendingOrdersTable;
