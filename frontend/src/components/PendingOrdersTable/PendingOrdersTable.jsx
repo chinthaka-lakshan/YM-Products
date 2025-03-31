@@ -4,28 +4,25 @@ import "./PendingOrdersTable.css";
 import { Link } from "react-router-dom";
 
 const PendingOrdersTable = () => {
-  // Mock data for low purchase stock items
+
   const [data, setData] = useState([
-    { id: 1, item: "Spice A", weight: 5 },
-    { id: 2, item: "Spice B", weight: 10 },
-    { id: 3, item: "Spice C", weight: 3 },
-    { id: 4, item: "Spice D", weight: 7 },
-    { id: 5, item: "Spice E", weight: 6 },
-    { id: 6, item: "Spice F", weight: 4 },
-    { id: 7, item: "Spice G", weight: 8 },
-    { id: 8, item: "Spice H", weight: 9 },
+    { id: 1, date: "2025 Jan 13", shop: "Lakshan Stores" },
+    { id: 2, date: "2025 Feb 13", shop: "Hasitha Stores" },
+    { id: 3, date: "2025 Mar 13", shop: "YM Stores" },
+    { id: 4, date: "2025 Apr 13", shop: "Wijaya Stores" },
+    { id: 5, date: "2025 May 13", shop: "CJ Stores" },
   ]);
 
-  const LowPurchaseStockTableColumns = [
-    { field: "item", headerName: "Item", width: 150 },
-    { field: "weight", headerName: "Weight (KG)", width: 150 },
+  const PendingOrdersTableColumns = [
+    { field: "date", headerName: "Date", width: 150 },
+    { field: "shop", headerName: "Shop", width: 150 },
   ];
 
   const actionColumn = [
     {
       field: "action",
       headerName: "Action",
-      width: 150,
+      width: 100,
       renderCell: (params) => {
         return (
           <div className="cellAction">
@@ -39,14 +36,12 @@ const PendingOrdersTable = () => {
   ];
 
   return (
-    <div className="LowPurchaseStockTable">
-      <div className="LowPurchaseStockTableTitle">
-        <span>Low Purchase Stock</span>
-      </div>
+    <div className="PendingOrdersTable">
+      <span className="PendingOrdersTableTitle">Pending Orders</span>
       <DataGrid
         className="dataGrid"
         rows={data}
-        columns={LowPurchaseStockTableColumns.concat(actionColumn)}
+        columns={PendingOrdersTableColumns.concat(actionColumn)}
         pageSize={8}
         rowsPerPageOptions={[5]}
         getRowId={(row) => row.id}
