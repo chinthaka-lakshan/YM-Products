@@ -4,14 +4,18 @@ import Sidebar from "../../components/Sidebar/Sidebar.jsx";
 import DashboardWidget from "../../components/DashboardWidget/DashboardWidget.jsx";
 import LowPurchaseStockTable from "../../components/LowPurchaseStockTable/LowPurchaseStockTable.jsx";
 import LowDistributionStockTable from "../../components/LowDistributionStockTable/LowDistributionStockTable.jsx";
-import PendingOrdersTable from "../../components/DashboardWidget/PendingOrdersTable/PendingOrdersTable.jsx";
+import PendingOrdersTable from "../../../components/DashboardWidget/PendingOrdersTable/PendingOrdersTable.jsx";
+import Sidebar from "../../components/Sidebar/Sidebar.jsx";
+import DashboardWidget from "../../components/DashboardWidget/DashboardWidget.jsx";
+import LowPurchaseStockTable from "../../components/LowPurchaseStockTable/LowPurchaseStockTable.jsx";
+import LowDistributionStockTable from "../../components/LowDistributionStockTable/LowDistributionStockTable.jsx";
+import PendingOrdersTable from "../../components/PendingOrdersTable/PendingOrdersTable.jsx";
 
 const Dashboard = () => {
     const [sidebarExpanded, setSidebarExpanded] = useState(true);
 
     return (
         <div className="Dashboard">
-           
             <Sidebar onToggle={setSidebarExpanded} />
             <div className={`DashboardContainer ${sidebarExpanded ? "" : "collapsed"}`}>
                 <div className="DashboardWidgets">
