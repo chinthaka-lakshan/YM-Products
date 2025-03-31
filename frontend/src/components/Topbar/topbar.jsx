@@ -1,16 +1,22 @@
 import React, { useState } from "react";
 import "./topBar.css";
 import { FaUserCircle } from "react-icons/fa";
-import { FiMenu } from "react-icons/fi";
-import { FiLogOut } from "react-icons/fi"; // Logout icon
+import { FiMenu, FiLogOut } from "react-icons/fi"; // Icons
 import Sidebar from "../Sidebar/Sidebar";
 
 const TopBar = () => {
   const [showLogout, setShowLogout] = useState(false);
+  const [sidebarExpanded, setSidebarExpanded] = useState(true); // ✅ State for sidebar toggle
+
+  const toggleSidebar = () => {
+    setSidebarExpanded(!sidebarExpanded);
+  };
 
   return (
-    <div className="topbar">
-      <Sidebar/>
+    <div className={`topbar ${sidebarExpanded ? "expanded" : "collapsed"}`}>
+      {/* Sidebar Component with Toggle Function */}
+      <Sidebar toggleSidebar={toggleSidebar} expanded={sidebarExpanded} />
+
       {/* Left side - Logo */}
       <div className="topbar-left">
         <span className="logo">
@@ -29,7 +35,7 @@ const TopBar = () => {
         <div className="user-container" onClick={() => setShowLogout(!showLogout)}>
           <FaUserCircle className="admin-icon" />
           <span className="admin-name">Admin</span>
-          
+
           {/* Logout option (hidden until clicked) */}
           {showLogout && (
             <div className="logout-dropdown">

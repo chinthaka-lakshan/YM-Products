@@ -11,6 +11,7 @@ const Dashboard = () => {
 
     return (
         <div className="Dashboard">
+           
             <Sidebar onToggle={setSidebarExpanded} />
             <div className={`DashboardContainer ${sidebarExpanded ? "" : "collapsed"}`}>
                 <div className="DashboardWidgets">

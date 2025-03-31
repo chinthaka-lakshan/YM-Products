@@ -12,6 +12,16 @@
     right: 0;
     z-index: 1000;
     height: 60px;
+    transition: margin-left 0.3s ease; /* ✅ Smooth transition */
+}
+
+/* Adjust topbar position when sidebar is expanded/collapsed */
+.topbar.expanded {
+    margin-left: 250px; /* ✅ When sidebar is expanded */
+}
+
+.topbar.collapsed {
+    margin-left: 80px; /* ✅ When sidebar is collapsed */
 }
 
 /* Left Side - Logo */
@@ -20,7 +30,6 @@
     font-weight: bold;
     display: flex;
     align-items: center;
-    margin-left: 17%; /* ✅ Shifted right to create space for sidebar */
 }
 
 .logo {
@@ -47,7 +56,7 @@
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 8px; /* ✅ Added spacing between icon & name */
+    gap: 8px;
 }
 
 /* Admin Icon */
@@ -56,14 +65,14 @@
     color: gray;
 }
 
-/* Admin Name (Visible only on Desktop) */
+/* Admin Name */
 .admin-name {
     font-size: 16px;
     font-weight: bold;
     color: blue;
 }
 
-/* Logout Dropdown (Initially Hidden) */
+/* Logout Dropdown */
 .logout-dropdown {
     position: absolute;
     top: 40px;
@@ -108,21 +117,20 @@
 
     /* Hide Admin Name on Small Screens */
     .admin-name {
-        display: none; /* ✅ Ensured admin name is hidden on mobile */
+        display: none;
     }
 
-    /* Move User Icon to Right */
-    .topbar-right {
-        margin-left: auto;
+    /* Adjust topbar when sidebar is collapsed */
+    .topbar.expanded {
+        margin-left: 80px;
+    }
+
+    .topbar.collapsed {
+        margin-left: 0;
     }
 
     /* Show Mobile Menu Icon */
     .menu-icon {
         display: block;
-    }
-
-    /* ✅ Reduce left margin on small screens */
-    .topbar-left {
-        margin-left: 40%;
     }
 }
