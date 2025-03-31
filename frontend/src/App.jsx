@@ -4,7 +4,7 @@ import './App.css';
 import Login from './Pages/Login/AdminLogin/login.jsx';
 import RepLogin from './Pages/Login/RepLogin/RepLogin.jsx';
 import RepRegistration from './Pages/RepRegistration/RepRegistration.jsx';
-import Dashboard from './Pages/Dashboard/AdminDashboard/Dashboard.jsx';
+import Dashboard from './Pages/Dashboard/Dashboard.jsx';
 import Orders from './Pages/Orders/Orders.jsx';
 
 function App() {
