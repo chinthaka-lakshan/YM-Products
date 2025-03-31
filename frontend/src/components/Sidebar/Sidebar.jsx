@@ -16,14 +16,19 @@ const SidebarContext = createContext();
 
 export default function Sidebar({ onToggle }) {
     const [expanded, setExpanded] = useState(true);
+    const [activeItem, setActiveItem] = useState("Dashboard"); // Add state for active item
 
     const toggleSidebar = () => {
         setExpanded(!expanded);
         onToggle(!expanded);
     };
 
+    const handleItemClick = (text) => {
+        setActiveItem(text); // Update active item when clicked
+    };
+
     const menuItems = [
-        { icon: <DashboardIcon />, text: "Dashboard", active: true },
+        { icon: <DashboardIcon />, text: "Dashboard" },
         { icon: <InventoryIcon />, text: "Distribution Stock" },
         { icon: <ShoppingCartIcon />, text: "Purchase Stock" },
         { icon: <StorefrontIcon />, text: "Orders" },
@@ -46,7 +51,13 @@ export default function Sidebar({ onToggle }) {
                 <SidebarContext.Provider value={{ expanded }}>
                     <ul className="sidebar-menu">
                         {menuItems.map((item, index) => (
-                            <SidebarItem key={index} icon={item.icon} text={item.text} active={item.active} />
+                            <SidebarItem 
+                                key={index} 
+                                icon={item.icon} 
+                                text={item.text} 
+                                active={activeItem === item.text}
+                                onClick={() => handleItemClick(item.text)}
+                            />
                         ))}
                     </ul>
                 </SidebarContext.Provider>
@@ -63,11 +74,14 @@ export default function Sidebar({ onToggle }) {
     );
 }
 
-export function SidebarItem({ icon, text, active }) {
+export function SidebarItem({ icon, text, active, onClick }) {
     const { expanded } = useContext(SidebarContext);
 
     return (
-        <li className={`sidebar-item ${active ? "active" : ""}`}>
+        <li 
+            className={`sidebar-item ${active ? "active" : ""}`}
+            onClick={onClick} // Add click handler
+        >
             {icon}
             <span className={`sidebar-text ${expanded ? "expanded" : "collapsed"}`}>{text}</span>
         </li>
