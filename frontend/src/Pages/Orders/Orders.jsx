@@ -33,39 +33,19 @@ const Orders = () => {
   return (
     <div className="container">
        <Sidebar/>
-       <div>
-          <h1>YM Product</h1>
-       </div>
-
-       <div className="admin-profile">
-          <img src="profile.png" alt="Admin Avatar" className="admin-avatar" />
-          <span className="admin-text">Admin</span>
-       </div>
+       
        <div className='order-title'>
-        <h2>Orders</h2>
+         <h1>Orders</h1>
        </div>
        <div className='btn1'>
-          <button>History</button>
-          <button>Add New</button>
-      </div>
-       
-          
+          <button className='history-btn'>History</button>
+       </div>
+       <div className='btn2'>
+       <button className='add-new-btn'>Add New</button>
+       </div>
 
-       
-        
-
-        
-        
-      
-
-       
-        
-
-        
-        
-          <div className="card-body">
-            <div className="table-responsive">
-              <table className="table">
+       <div className='table-container'>           
+        <table className="table">
                 <thead>
                   <tr>
                     <th>Shop</th>
@@ -104,15 +84,52 @@ const Orders = () => {
                     </tr>
                   ))}
                 </tbody>
-              </table>
-            </div>
-          </div>
-
-
-
-
-          
-      </div>  
+        </table>
+        
+        {/* Pagination component */}
+        <div className="pagination-container">
+          <ul className="pagination">
+            <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+              <button 
+                className="page-link" 
+                onClick={() => paginate(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
+                &lt;
+              </button>
+            </li>
+            {[...Array(totalPages).keys()].map((number) => (
+              <li 
+                key={number + 1} 
+                className={`page-item ${currentPage === number + 1 ? 'active' : ''}`}
+              >
+                <button 
+                  className="page-link" 
+                  onClick={() => paginate(number + 1)}
+                >
+                  {number + 1}
+                </button>
+              </li>
+            ))}
+            <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+              <button 
+                className="page-link" 
+                onClick={() => paginate(currentPage + 1)}
+                disabled={currentPage === totalPages}
+              >
+                &gt;
+              </button>
+            </li>
+            <li className="page-item">
+              <button className="page-link">...</button>
+            </li>
+            <li className="page-item">
+              <button className="page-link go-btn">Go</button>
+            </li>
+          </ul>
+        </div>
+      </div>         
+    </div>  
   )
 }
 
