@@ -1,5 +1,5 @@
 import React from "react";
-import Sidebar from "../../components/Sidebar/AdminSidebar/AdminSidebar";
+import Sidebar from "../../components/Sidebar/Sidebar";
 // import Navbar from "../../components/Navbar/Navbar";
 import "./RepRegistration.css";
 import Topbar from "../../components/Topbar/topbar";
