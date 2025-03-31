@@ -1,61 +1,18 @@
-.LowPurchaseStockTable{
-    height: 550px;
-    padding: 20px;
+.LowDistributionStockTable {
     align-items: center;
     justify-content: center;
+    -webkit-box-shadow: 1px 1px 5px 1px #425060;
+    box-shadow: 1px 1px 5px 1px #a0afc1;
+    border-radius: 5px;
+    width: 30%;
 
-    .LowPurchaseStockTableTitle{
-        width: 100%;
-        font-size: 24px;
+    .LowDistributionStockTableTitle {
+        font-size: 20px;
         color: #616161;
-        margin-bottom: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-
-        .link{
-            color: #fff;
-            font-size: 16px;
-            font-weight: 400;
-            border: 1px solid #000;
-            background-color: green;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-            width: 100px;
-            height: 30px;
-        }
-
-        .link:hover{
-            transform: scale(1.05);
-        }
     }
 
-    .datagrid{
+    .Datagrid{
         color: #616161;
         border: none;
-    }
-
-    .cellAction{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        font-size: 15px;
-        text-decoration: none;
-        margin-top: 10px;
-
-        .viewButton{
-            width: 50px;
-            height: 30px;
-            border-radius: 5px;
-            color: #fff;
-            cursor: pointer;
-            background-color: #1a1f24;
-        }
-
-        .viewButton:hover{
-            transform: scale(1.05);
-        }
     }
 }

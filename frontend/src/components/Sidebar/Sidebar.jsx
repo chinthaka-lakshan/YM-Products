@@ -8,35 +8,36 @@ import StoreIcon from "@mui/icons-material/Store";
 import PeopleIcon from "@mui/icons-material/People";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 
-
 import { createContext, useContext, useState } from "react";
-import "./Sidebar.css";
+import { useNavigate, useLocation } from "react-router-dom"; // Import from react-router
+import "./AdminSidebar.css";
 
 const SidebarContext = createContext();
 
 export default function Sidebar({ onToggle }) {
     const [expanded, setExpanded] = useState(true);
-    const [activeItem, setActiveItem] = useState("Dashboard"); // Add state for active item
+    const navigate = useNavigate(); // Hook to navigate programmatically
+    const location = useLocation(); // Hook to get current location
 
     const toggleSidebar = () => {
         setExpanded(!expanded);
         onToggle(!expanded);
     };
 
-    const handleItemClick = (text) => {
-        setActiveItem(text); // Update active item when clicked
-    };
-
     const menuItems = [
-        { icon: <DashboardIcon />, text: "Dashboard" },
-        { icon: <InventoryIcon />, text: "Distribution Stock" },
-        { icon: <ShoppingCartIcon />, text: "Purchase Stock" },
-        { icon: <StorefrontIcon />, text: "Orders" },
-        { icon: <RepeatIcon />, text: "Returns" },
-        { icon: <StoreIcon />, text: "Shops" },
-        { icon: <PeopleIcon />, text: "Representative" },
-        { icon: <AttachMoneyIcon />, text: "Cash Flow Analysis" },
+        { icon: <DashboardIcon />, text: "Dashboard", path: "/dashboard" },
+        { icon: <InventoryIcon />, text: "Distribution Stock", path: "/distribution" },
+        { icon: <ShoppingCartIcon />, text: "Purchase Stock", path: "/purchase" },
+        { icon: <StorefrontIcon />, text: "Orders", path: "/orders" },
+        { icon: <RepeatIcon />, text: "Returns", path: "/returns" },
+        { icon: <StoreIcon />, text: "Shops", path: "/shops" },
+        { icon: <PeopleIcon />, text: "Representative", path: "/repregistration" },
+        { icon: <AttachMoneyIcon />, text: "Cash Flow Analysis", path: "/cash-flow" },
     ];
+
+    const handleNavigation = (path) => {
+        navigate(path);
+    };
 
     return (
         <aside className={`sidebar ${expanded ? "" : "collapsed"}`}>
@@ -55,8 +56,8 @@ export default function Sidebar({ onToggle }) {
                                 key={index} 
                                 icon={item.icon} 
                                 text={item.text} 
-                                active={activeItem === item.text}
-                                onClick={() => handleItemClick(item.text)}
+                                active={location.pathname === item.path}
+                                onClick={() => handleNavigation(item.path)}
                             />
                         ))}
                     </ul>
@@ -80,7 +81,7 @@ export function SidebarItem({ icon, text, active, onClick }) {
     return (
         <li 
             className={`sidebar-item ${active ? "active" : ""}`}
-            onClick={onClick} // Add click handler
+            onClick={onClick}
         >
             {icon}
             <span className={`sidebar-text ${expanded ? "expanded" : "collapsed"}`}>{text}</span>

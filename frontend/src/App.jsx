@@ -21,6 +21,7 @@ function App() {
           <Route path="/replogin" element={<RepLogin />} />
           <Route path="/repredistration" element={<RepRegistration/>} />
           <Route path="/repdashboard" element={<RepDashboard/>} />
+          <Route path="/repregistration" element={<RepRegistration/>} />
         </Routes>
       </div>
     </Router>
