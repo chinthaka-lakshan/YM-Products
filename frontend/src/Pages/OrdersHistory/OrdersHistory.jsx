@@ -9,11 +9,16 @@ const OrdersHistory = () => {
     { id: 2, shop: 'Shop', date: '3/4/2025', repName: 'Raheem', status: 'Distributed' },
     { id: 3, shop: 'Shop', date: '3/4/2025', repName: 'Raheem', status: 'Distributed' },
     { id: 4, shop: 'Shop', date: '3/4/2025', repName: 'Raheem', status: 'Distributed' },
+    { id: 5, shop: 'Shop', date: '3/4/2025', repName: 'Raheem', status: 'Distributed' },
+    { id: 6, shop: 'Shop', date: '3/4/2025', repName: 'Raheem', status: 'Distributed' },
+    { id: 7, shop: 'Shop', date: '3/4/2025', repName: 'Raheem', status: 'Distributed' },
+    { id: 8, shop: 'Shop', date: '3/4/2025', repName: 'Rah', status: 'Distributed' },
+
   ]);
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  const [ordersPerPage] = useState(10);
+  const [ordersPerPage] = useState(5);
   
   // Calculate current orders to display
   const indexOfLastOrder = currentPage * ordersPerPage;
@@ -32,11 +37,12 @@ const OrdersHistory = () => {
             <Sidebar/>
         </div> 
         <div>
-            <TopBar/>
+            
         </div>
         <div className='order-title'>
          <h1>Orders</h1>
         </div>
+
         <div className="order-table-container">
         <table className="order-table">
             <thead>
@@ -56,7 +62,7 @@ const OrdersHistory = () => {
                 <td>{order.repName}</td>
                 <td>{order.status}</td>
                 <td>
-                    <button className="view-btn">View</button>
+                    <button className="view-btn1">View</button>
                 </td>
                 </tr>
             ))}
