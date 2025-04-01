@@ -16,6 +16,10 @@
             background: #f4f4f4;
             gap: 10px;
             padding: 20px;
+            margin-top: 75px;
+            margin-left: 16%;
+            height: calc(100vh - 75px);
+            overflow-y: scroll;
 
             .DistributionStockTop {
                 display: flex;
