@@ -1,0 +1,88 @@
+.AdminNavbar {
+    height: 75px;
+    display: flex;
+    align-items: center;
+    background-color: darkcyan;
+    padding: 0 20px;
+
+    .AdminNavbarContainer {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: space-between;
+
+        .NavbarTitle {
+            font-size: 30px;
+            font-weight: bold;
+            color: darkslategray;
+            flex: 1;
+            text-align: center;
+        }
+
+        .NavbarLog {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+
+            span {
+                font-size: 20px;
+                font-weight: bold;
+                color: darkslategray;
+            }
+
+            .ProfileIcon {
+                font-size: 45px !important;
+                color: darkslategray;
+                cursor: pointer;
+            }
+        }
+    }
+
+    .LogoutPopup {
+        position: absolute;
+        top: 40px;
+        right: 30px;
+        width: 10%;
+        height: 20%;
+        background: #a0afc1;
+        padding: 10px;
+        border-radius: 10px;
+        -webkit-box-shadow: 1px 1px 5px 1px #425060;
+        box-shadow: 1px 1px 5px 1px #a0afc1;
+        justify-content: center;
+        align-items: center;
+
+        .PopupContent {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            justify-content: center;
+            align-items: center;
+
+            p {
+                color: black;
+                font-size: 16px;
+                font-weight: bold;
+            }
+
+            .PopupLogoutButton {
+                width: 80%;
+                background: darkred;
+                color: white;
+                padding: 5px;
+                border: none;
+                cursor: pointer;
+            }
+
+            .PopupCancelButton {
+                width: 80%;
+                background: gray;
+                color: white;
+                padding: 5px;
+                border: none;
+                cursor: pointer;
+            }
+        }
+    }
+}

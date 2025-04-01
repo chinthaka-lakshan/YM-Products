@@ -1,12 +1,27 @@
 import React, { useState } from "react";
 import "./DistributionStock.css";
-import Sidebar from "../../components/Sidebar/Sidebar.jsx";
-import Topbar from "../../components/Topbar/topbar.jsx";
+import AdminNavbar from "../../components/AdminNavbar/AdminNavbar.jsx";
+import AdminSidebar from "../../components/Sidebar/AdminSidebar/AdminSidebar.jsx";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 const DistributionStock = () => {
-    const [sidebarExpanded, setSidebarExpanded] = useState(true);
+
     const [items, setItems] = useState([
+        { item: "Chilli Powder 50g", unitPrice: "250.50", quantity: 52 },
+        { item: "Chilli Powder 100g", unitPrice: "480.50", quantity: 22 },
+        { item: "Curry Powder 50g", unitPrice: "200.00", quantity: 42 },
+        { item: "Curry Powder 100g", unitPrice: "400.00", quantity: 72 },
+        { item: "Chilli Pieces 50g", unitPrice: "180.75", quantity: 12 },
+        { item: "Chilli Powder 50g", unitPrice: "250.50", quantity: 52 },
+        { item: "Chilli Powder 100g", unitPrice: "480.50", quantity: 22 },
+        { item: "Curry Powder 50g", unitPrice: "200.00", quantity: 42 },
+        { item: "Curry Powder 100g", unitPrice: "400.00", quantity: 72 },
+        { item: "Chilli Pieces 50g", unitPrice: "180.75", quantity: 12 },
+        { item: "Chilli Powder 50g", unitPrice: "250.50", quantity: 52 },
+        { item: "Chilli Powder 100g", unitPrice: "480.50", quantity: 22 },
+        { item: "Curry Powder 50g", unitPrice: "200.00", quantity: 42 },
+        { item: "Curry Powder 100g", unitPrice: "400.00", quantity: 72 },
+        { item: "Chilli Pieces 50g", unitPrice: "180.75", quantity: 12 },
         { item: "Chilli Powder 50g", unitPrice: "250.50", quantity: 52 },
         { item: "Chilli Powder 100g", unitPrice: "480.50", quantity: 22 },
         { item: "Curry Powder 50g", unitPrice: "200.00", quantity: 42 },
@@ -46,9 +61,9 @@ const DistributionStock = () => {
 
     return (
         <div className="DistributionStock">
-            <Sidebar onToggle={setSidebarExpanded}/>
-            <div className={`DistributionStockContainer ${sidebarExpanded ? "" : "collapsed"}`}>
-                <Topbar/>
+            <AdminSidebar/>
+            <div className="DistributionStockContainer">
+                <AdminNavbar/>
                 <div className="DistributionStockCardsContainer">
                     <div className="DistributionStockTop">
                         <h1>Distribution Stock</h1>
