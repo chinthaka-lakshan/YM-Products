@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import './OrdersHistory.css';
 import Sidebar from '../../components/Sidebar/AdminSidebar/AdminSidebar';
-import TopBar from '../../components/Topbar/topbar';
 
 const OrdersHistory = () => {
   const [orders, setOrders] = useState([
@@ -40,7 +39,7 @@ const OrdersHistory = () => {
             
         </div>
         <div className='order-title'>
-         <h1>Orders</h1>
+         <h1>Orders History</h1>
         </div>
 
         <div className="order-table-container">

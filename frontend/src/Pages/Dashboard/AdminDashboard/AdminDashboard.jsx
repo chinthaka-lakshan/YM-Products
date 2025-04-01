@@ -1,11 +1,11 @@
 import React from "react";
 import "./AdminDashboard.css";
-import AdminSidebar from "../../components/AdminSidebar/AdminSidebar.jsx";
-import AdminNavbar from "../../components/AdminNavbar/AdminNavbar.jsx";
-import DashboardWidget from "../../components/DashboardWidget/DashboardWidget.jsx";
-import LowPurchaseStockTable from "../../components/LowPurchaseStockTable/LowPurchaseStockTable.jsx";
-import LowDistributionStockTable from "../../components/LowDistributionStockTable/LowDistributionStockTable.jsx";
-import PendingOrdersTable from "../../components/PendingOrdersTable/PendingOrdersTable.jsx";
+import AdminSidebar from "../../../components/Sidebar/AdminSidebar/AdminSidebar.jsx";
+import AdminNavbar from "../../../components/AdminNavbar/AdminNavbar.jsx";
+import DashboardWidget from "../../../components/DashboardWidget/DashboardWidget.jsx";
+import LowPurchaseStockTable from "../../../components/LowPurchaseStockTable/LowPurchaseStockTable.jsx";
+import LowDistributionStockTable from "../../../components/LowDistributionStockTable/LowDistributionStockTable.jsx";
+import PendingOrdersTable from "../../../components/PendingOrdersTable/PendingOrdersTable.jsx";
 
 const AdminDashboard = () => {
 
