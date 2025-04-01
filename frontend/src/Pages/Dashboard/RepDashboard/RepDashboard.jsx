@@ -4,8 +4,6 @@ import orderIcon from "../../../assets/oder.png"; // Update with actual path
 import returnIcon from "../../../assets/return.png"; // Update with actual path
 import RepSidebar from "../../../components/Sidebar/RepSidebar/RepSidebar";
 
-import TopBar from "../../../components/Topbar/topbar";
-
 const RepDashboard = () => {
   return (
     <div className="dashboard-container">
