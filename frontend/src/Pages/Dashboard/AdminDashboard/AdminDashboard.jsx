@@ -1,26 +1,27 @@
-import React, { useState } from "react";
+import React from "react";
 import "./AdminDashboard.css";
-import AdminSidebar from "../../../components/Sidebar/AdminSidebar/AdminSidebar.jsx";
-import DashboardWidget from "../../../components/DashboardWidget/DashboardWidget.jsx";
-import LowPurchaseStockTable from "../../../components/LowPurchaseStockTable/LowPurchaseStockTable.jsx";
-import LowDistributionStockTable from "../../../components/LowDistributionStockTable/LowDistributionStockTable.jsx";
-import PendingOrdersTable from "../../../components/PendingOrdersTable/PendingOrdersTable.jsx";
+import AdminSidebar from "../../components/AdminSidebar/AdminSidebar.jsx";
+import AdminNavbar from "../../components/AdminNavbar/AdminNavbar.jsx";
+import DashboardWidget from "../../components/DashboardWidget/DashboardWidget.jsx";
+import LowPurchaseStockTable from "../../components/LowPurchaseStockTable/LowPurchaseStockTable.jsx";
+import LowDistributionStockTable from "../../components/LowDistributionStockTable/LowDistributionStockTable.jsx";
+import PendingOrdersTable from "../../components/PendingOrdersTable/PendingOrdersTable.jsx";
 
-const Dashboard = () => {
-    const [sidebarExpanded, setSidebarExpanded] = useState(true);
+const AdminDashboard = () => {
 
     return (
-        <div className="Dashboard">
-            <AdminSidebar onToggle={setSidebarExpanded} />
-            <div className={`DashboardContainer ${sidebarExpanded ? "" : "collapsed"}`}>
-                <div className="DashboardWidgets">
+        <div className="AdminDashboard">
+            <AdminSidebar/>
+            <div className="AdminDashboardContainer">
+                <AdminNavbar/>
+                <div className="AdminDashboardWidgets">
                     <DashboardWidget type="purchaseStock"/>
                     <DashboardWidget type="distributionStock"/>
                     <DashboardWidget type="orders"/>
                     <DashboardWidget type="returns"/>
                     <DashboardWidget type="shops"/>
                 </div>
-                <div className="TablesContainer">
+                <div className="AdminTablesContainer">
                     <LowPurchaseStockTable/>
                     <LowDistributionStockTable/>
                     <PendingOrdersTable/>
@@ -30,4 +31,4 @@ const Dashboard = () => {
     );
 };
 
-export default Dashboard;
+export default AdminDashboard;

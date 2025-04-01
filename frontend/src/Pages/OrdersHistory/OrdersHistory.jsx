@@ -40,7 +40,7 @@ const OrdersHistory = () => {
             
         </div>
         <div className='order-title'>
-         <h1>Orders</h1>
+         <h1>Orders History</h1>
         </div>
 
         <div className="order-table-container">
