@@ -1,5 +1,6 @@
 import React from 'react';
 import "./AdminSidebar.css";
+import Logo from "../../../assets/YM.png";
 import { Link, useLocation } from 'react-router-dom';
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -9,7 +10,6 @@ import RepeatIcon from "@mui/icons-material/Repeat";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import PeopleIcon from "@mui/icons-material/People";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
-import Logo from "../../assets/YM.png";
 
 const AdminSidebar = () => {
     const location = useLocation();
@@ -21,8 +21,8 @@ const AdminSidebar = () => {
             </div>
             <div className='Bottom'>
                 <ul>
-                    <Link to="/adminDashboard" style={{textDecoration:"none"}}>
-                        <li className={location.pathname === "/adminDashboard" ? "active" : ""}>
+                    <Link to="/admindashboard" style={{textDecoration:"none"}}>
+                        <li className={location.pathname === "/admindashboard" ? "active" : ""}>
                             <DashboardIcon className='Icon'/>
                             <span>Admin Dashboard</span>
                         </li>
@@ -45,7 +45,7 @@ const AdminSidebar = () => {
                             <span>Orders</span>
                         </li>
                     </Link>
-                    <Link to="/adminReturns" style={{textDecoration:"none"}}>
+                    <Link to="/returns" style={{textDecoration:"none"}}>
                         <li className={location.pathname === "/adminReturns" ? "active" : ""}>
                             <RepeatIcon className='Icon'/>
                             <span>Returns</span>

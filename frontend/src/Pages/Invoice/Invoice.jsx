@@ -57,7 +57,6 @@
 import React, { useState, useRef } from "react";
 import "./Invoice.css";
 import Sidebar from "../../components/Sidebar/AdminSidebar/AdminSidebar";
-import TopBar from "../../components/Topbar/topbar";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import logo from "../../assets/YMlogo.PNG"

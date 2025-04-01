@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import './OrdersHistory.css';
 import Sidebar from '../../components/Sidebar/AdminSidebar/AdminSidebar';
-import TopBar from '../../components/Topbar/topbar';
 
 const OrdersHistory = () => {
   const [orders, setOrders] = useState([
