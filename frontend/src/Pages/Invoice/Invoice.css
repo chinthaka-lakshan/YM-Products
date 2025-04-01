@@ -1,19 +1,33 @@
 .invoice-container {
     padding: 20px;
-    background-color: #f9f9f9;
+    background-color: #f4eded;
     border-radius: 8px;
-    width: 100%;
+    width: 60%;
     max-width: 900px;
+    height: 350px;
     margin: auto;
+    position: absolute;
+    top: 25%;
+    left: 25%;
+
+   
+   
+    
    
   }
+
+  /* .invoice-title h2{
+    position: relative;
+    bottom: 10%;
+  } */
   
   .invoice-title {
     text-align: center;
     font-size: 24px;
     position: relative;
-    color: #333;
-    margin-top: 10%;
+    color: #0b0b0b;
+    bottom: 10%;
+    
   }
   
   .invoice-table {
@@ -62,7 +76,7 @@
   }
   
   .edit-btn {
-    background-color: rgb(56, 230, 56);
+    background-color: rgb(15, 174, 15);
     color: white;
     margin-right: 5px;
   }
@@ -97,10 +111,10 @@
   }
   
   .add-btn {
-    background-color: rgb(92, 216, 92);
+    background-color:  rgb(15, 174, 15);
     color: white;
     position: relative;
-    left: 70%;
+    /* left: 70%; */
 }
 
 .add-btn:hover{
@@ -110,12 +124,19 @@
 
   
   .generate-btn {
-    background-color: rgb(92, 216, 92);
+    background-color:  rgb(15, 174, 15);
     color: white;
   }
 
 .generate-btn:hover{
     background-color: green;
+}
+
+.invoice-actions {
+  display: flex;
+  justify-content: right; /* Centering the buttons */
+   gap: 20px;/* Added spacing between buttons */
+  margin-top: 20px;
 }
   
   /* Responsive Design */

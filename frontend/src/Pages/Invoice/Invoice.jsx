@@ -1,5 +1,5 @@
 import React from "react";
-import "./RepInvoice.css";
+import "./Invoice.css";
 import Sidebar from "../../components/Sidebar/AdminSidebar/AdminSidebar";
 import TopBar from "../../components/Topbar/topbar";
 
@@ -12,7 +12,7 @@ const RepInvoice = () => {
   ];
 
   return (
-    <div className="invoice-container">\
+    <div className="invoice-container">
     <Sidebar/>
     <TopBar/>
       <h2 className="invoice-title">Invoice</h2>
