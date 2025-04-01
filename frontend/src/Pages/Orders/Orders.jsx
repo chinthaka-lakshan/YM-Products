@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import Sidebar from '../../components/Sidebar/AdminSidebar/AdminSidebar'
+import Navbar from '../../components/AdminNavbar/AdminNavbar'
+
 import "./Orders.css"
-import TopBar from '../../components/Topbar/topbar'
 
 
 const Orders = () => {
@@ -46,7 +47,7 @@ const Orders = () => {
          <Sidebar/>
        </div>
        <div>
-          <TopBar/>
+          <Navbar/>
        </div>
        <div className='order-title'>
          <h1>Orders</h1>

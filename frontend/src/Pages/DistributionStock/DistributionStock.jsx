@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./DistributionStock.css";
-import AdminSidebar from "../../components/AdminSidebar/AdminSidebar.jsx";
 import AdminNavbar from "../../components/AdminNavbar/AdminNavbar.jsx";
+import AdminSidebar from "../../components/Sidebar/AdminSidebar/AdminSidebar.jsx";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 const DistributionStock = () => {

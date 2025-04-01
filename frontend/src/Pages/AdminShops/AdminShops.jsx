@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./AdminShops.css";
-import AdminSidebar from "../../components/AdminSidebar/AdminSidebar.jsx";
+import AdminSidebar from "../../components/Sidebar/AdminSidebar/AdminSidebar.jsx";
 import AdminNavbar from "../../components/AdminNavbar/AdminNavbar.jsx";
 import StoreFrontIcon from "@mui/icons-material/Store";
 
