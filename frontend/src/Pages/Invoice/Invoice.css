@@ -1,0 +1,158 @@
+.invoice-container {
+    padding: 20px;
+    background-color: #f4eded;
+    border-radius: 8px;
+    width: 60%;
+    max-width: 900px;
+    height: 350px;
+    margin: auto;
+    position: absolute;
+    top: 25%;
+    left: 25%;
+
+   
+   
+    
+   
+  }
+
+  /* .invoice-title h2{
+    position: relative;
+    bottom: 10%;
+  } */
+  
+  .invoice-title {
+    text-align: center;
+    font-size: 24px;
+    position: relative;
+    color: #0b0b0b;
+    bottom: 10%;
+    
+  }
+  
+  .invoice-table {
+    overflow-x: auto;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  /* Header text color */
+  .table-header {
+    background-color: #f1f1f1;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  /* Table text color */
+  .table-text {
+    color: #555;
+  }
+  
+  /* Alternating row colors */
+  .row-even {
+    background-color: #f2f2f2;
+  }
+  
+  .row-odd {
+    background-color: #ffffff;
+  }
+  
+  /* Buttons */
+  .edit-btn, .delete-btn {
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  .edit-btn {
+    background-color: rgb(15, 174, 15);
+    color: white;
+    margin-right: 5px;
+  }
+
+  .edit-btn:hover{
+    background-color: green;
+  }
+  
+  .delete-btn {
+    background-color: rgb(230, 85, 77);
+    color: white;
+  }
+
+  .delete-btn:hover{
+    background-color:rgb(249, 13, 13);
+  }
+  
+  /* Actions section */
+  .invoice-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .add-btn, .generate-btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .add-btn {
+    background-color:  rgb(15, 174, 15);
+    color: white;
+    position: relative;
+    /* left: 70%; */
+}
+
+.add-btn:hover{
+    background-color: green;
+}
+
+
+  
+  .generate-btn {
+    background-color:  rgb(15, 174, 15);
+    color: white;
+  }
+
+.generate-btn:hover{
+    background-color: green;
+}
+
+.invoice-actions {
+  display: flex;
+  justify-content: right; /* Centering the buttons */
+   gap: 20px;/* Added spacing between buttons */
+  margin-top: 20px;
+}
+  
+  /* Responsive Design */
+  @media (max-width: 600px) {
+    .invoice-actions {
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+    }
+  
+    table {
+      font-size: 14px;
+    }
+  
+    th, td {
+      padding: 8px;
+    }
+  }
+  

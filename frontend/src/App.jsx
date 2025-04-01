@@ -7,6 +7,7 @@ import RepRegistration from './Pages/RepRegistration/RepRegistration.jsx';
 import AdminDashboard from './Pages/Dashboard/AdminDashboard/AdminDashboard.jsx';
 import Orders from './Pages/Orders/Orders.jsx';
 import RepDashboard from './Pages/Dashboard/RepDashboard/RepDashboard.jsx';
+import Invoice from "./Pages/Invoice/Invoice.jsx"
 import OrdersHistory from './Pages/OrdersHistory/OrdersHistory.jsx'
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
           <Route path="/repredistration" element={<RepRegistration/>} />
           <Route path="/repdashboard" element={<RepDashboard/>} />
           <Route path="/repregistration" element={<RepRegistration/>} />
+          <Route path="/invoice" element={<Invoice/>} />
           <Route path="/ordersHistory" element={<OrdersHistory/>} />
         </Routes>
       </div>
