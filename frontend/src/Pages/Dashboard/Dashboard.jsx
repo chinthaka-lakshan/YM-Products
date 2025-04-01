@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./Dashboard.css";
 import Sidebar from "../../components/Sidebar/Sidebar.jsx";
+import Topbar from "../../components/Topbar/topbar.jsx";
 import DashboardWidget from "../../components/DashboardWidget/DashboardWidget.jsx";
 import LowPurchaseStockTable from "../../components/LowPurchaseStockTable/LowPurchaseStockTable.jsx";
 import LowDistributionStockTable from "../../components/LowDistributionStockTable/LowDistributionStockTable.jsx";
@@ -13,6 +14,7 @@ const Dashboard = () => {
         <div className="Dashboard">
             <Sidebar onToggle={setSidebarExpanded} />
             <div className={`DashboardContainer ${sidebarExpanded ? "" : "collapsed"}`}>
+                <Topbar/>
                 <div className="DashboardWidgets">
                     <DashboardWidget type="purchaseStock"/>
                     <DashboardWidget type="distributionStock"/>
