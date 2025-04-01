@@ -1,0 +1,242 @@
+.DistributionStock {
+    font-family: Arial, sans-serif;
+    width: 100%;
+    display: flex;
+
+    .DistributionStockContainer {
+        margin-left: 15%;
+        width: 82%;
+        display: flex;
+        flex-direction: column;
+        padding: 1.5%;
+        transition: margin-left 0.3s ease;
+
+        .DistributionStockCardsContainer {
+            display: flex;
+            flex-direction: column;
+            background: #f4f4f4;
+            gap: 10px;
+
+            .DistributionStockTop {
+                display: flex;
+                flex-direction: row;
+                width: 100%;
+                align-items: center;
+                justify-content: space-between;
+
+                h1 {
+                    font-size: 30px;
+                    color: #616161;
+                    align-self: flex-start;
+                }
+
+                .AddButton {
+                    background: green;
+                    color: white;
+                    padding: 10px;
+                    border: none;
+                    cursor: pointer;
+                    border-radius: 5px;
+                    align-self: flex-end;
+                }
+                
+                .AddButton:hover {
+                    background: darkgreen;
+                    transform: scale(1.05);
+                } 
+            }
+
+            .DistributionStockGrid {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 20px;
+
+                .DistributionItemCard {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    background: rgb(167, 200, 174);
+                    padding: 10px;
+                    border-radius: 10px;
+                    -webkit-box-shadow: 1px 1px 5px 1px #425060;
+                    box-shadow: 1px 1px 5px 1px #a0afc1;
+                    transition: transform 0.3s ease, box-shadow 0.3s ease;
+                    gap: 5px;
+
+                    h2 {
+                        font-size: 20px;
+                        color: #616161;
+                        margin-top: -5px;
+                    }
+
+                    .DistributionItemCardMiddle {
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        justify-content: space-between;
+                        gap: 10px;
+
+                        .DistributionItemCardIcon {
+                            font-size: 70px;
+                            align-self: flex-start;
+                            color: #616161;
+                        }
+
+                        .DistributionItemCardDetails {
+                            display: flex;
+                            flex-direction: column;
+                            font-size: 16px;
+                            color: #616161;
+                        }
+                    }
+
+                    .DistributionItemCardButtons {
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: space-between;
+                        gap: 20px;
+
+                        .DeleteButton, .EditButton {
+                            border: none;
+                            cursor: pointer;
+                            border-radius: 5px;
+                            font-size: 12px;
+                            transition: background 0.3s ease, transform 0.2s ease;
+                        }
+                        
+                        .DeleteButton {
+                            background: darkred;
+                        }
+                        
+                        .DeleteButton:hover {
+                            background: red;
+                            transform: scale(1.05);
+                        }
+                        
+                        .EditButton {
+                            background: peru;
+                        }
+                        
+                        .EditButton:hover {
+                            background: green;
+                            transform: scale(1.05);
+                        }                        
+                    }
+                }
+
+                .DistributionItemCard:hover {
+                    transform: scale(1.05);
+                    box-shadow: 4px 6px 20px rgba(0, 0, 0, 0.15);
+                }
+            }
+        }
+    }
+
+    .DistributionStockContainer.collapsed {
+        margin-left: 80px;
+    }
+
+    .ModalBackdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .Modal {
+            display: flex;
+            flex-direction: column;
+            width: 60%;
+            height: 70%;
+            background: whitesmoke;
+            border-radius: 20px;
+            -webkit-box-shadow: 1px 1px 5px 1px #425060;
+            box-shadow: 4px 6px 20px rgba(0, 0, 0, 0.15);
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            gap: 30px;
+
+            h2 {
+                font-size: 35px;
+                color: #616161;
+                margin-top: -20px;
+            }
+
+            .ModalMiddle {
+                display: flex;
+                flex-direction: row;
+                gap: 40px;
+                width: 90%;
+
+                .ModalIcon {
+                    font-size: 250px;
+                    color: #616161;
+                    align-self: flex-start;
+                }
+
+                .ModalInputs {
+                    display: flex;
+                    flex-direction: column;
+                    width: 70%;
+                    gap: 40px;
+
+                    input {
+                        font-size: 25px;
+                        padding: 10px;
+                        border-radius: 10px;
+                        color: white;
+                        background-color: #000
+                    }
+                }
+            }
+
+            .ModalButtons {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                gap: 40px;
+                font-size: 20px;
+
+                .CancelButton {
+                    background: orangered;
+                    border: none;
+                    padding: 10px;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    font-weight: bold;
+                }
+
+                .CancelButton:hover {
+                    transform: scale(1.05);
+                    background: orange;
+                }
+
+                .SaveButton {
+                    background: peru;
+                    border: none;
+                    padding: 10px;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    font-weight: bold;
+                }
+
+                .SaveButton:hover {
+                    transform: scale(1.05);
+                    background: green;
+                }
+            }
+        }
+    }
+}
