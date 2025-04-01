@@ -12,25 +12,13 @@ const DashboardWidget = ({ type }) => {
   let data;
 
   switch (type) {
-    case "purchaseStock":
-      data = {
-        title: "PURCHASE STOCK",
-        isMoney: false,
-        link: <Link to="" style={{textDecoration:"none", color:"#425060"}}><span>View Stock</span></Link>,
-        icon: (
-          <StorefrontIcon
-            className="icon"
-            style={{ color: "#616161", backgroundColor: "#daa52033" }}
-          />
-        ),
-      };
-      break;
 
     case "distributionStock":
       data = {
+        path: "/distributionStock",
         title: "DISTRIBUTION STOCK",
         isMoney: false,
-        link: <Link to="" style={{textDecoration:"none", color:"#425060"}}><span>View Stock</span></Link>,
+        text: "View Stock",
         icon: (
           <ShoppingCartIcon
             className="icon"
@@ -40,11 +28,27 @@ const DashboardWidget = ({ type }) => {
       };
       break;
 
+    case "purchaseStock":
+      data = {
+        path: "/purchaseStock",
+        title: "PURCHASE STOCK",
+        isMoney: false,
+        text: "View Stock",
+        icon: (
+          <StorefrontIcon
+            className="icon"
+            style={{ color: "#616161", backgroundColor: "#daa52033" }}
+          />
+        ),
+      };
+      break;
+
     case "orders":
       data = {
+        path: "/adminOrders",
         title: "ORDERS",
         isMoney: false,
-        link: <Link to="" style={{textDecoration:"none", color:"#425060"}}><span>View Orders</span></Link>,
+        text: "View Orders",
         icon: (
           <InventoryIcon
             className="icon"
@@ -56,9 +60,10 @@ const DashboardWidget = ({ type }) => {
 
     case "returns":
       data = {
+        path: "/adminReturns",
         title: "RETURNS",
         isMoney: false,
-        link: <Link to="" style={{textDecoration:"none", color:"#425060"}}><span>View Returns</span></Link>,
+        text: "View Returns",
         icon: (
           <RepeatIcon
             className="icon"
@@ -70,9 +75,10 @@ const DashboardWidget = ({ type }) => {
 
       case "shops":
         data = {
+          path: "/adminShops",
           title: "SHOPS",
           isMoney: false,
-          link: <Link to="" style={{textDecoration:"none", color:"#425060"}}><span>View Shops</span></Link>,
+          text: "View Shops",
           icon: (
             <StoreIcon
               className="icon"
@@ -87,15 +93,17 @@ const DashboardWidget = ({ type }) => {
   }
 
   return (
-    <div className='widget'>
-      <div className='left'>
-        <span className='title'>{data.title}</span>
+    <Link to={data.path}>
+      <div className='widget'>
+        <div className='left'>
+          <span className='WidgetTitle'>{data.title}</span>
+        </div>
+        <div className='right'>
+          {data.icon}
+          <span>{data.text}</span>
+        </div>
       </div>
-      <div className='right'>
-        {data.icon}
-        <span className='link'>{data.link}</span>
-      </div>
-    </div>
+    </Link>
   );
 };
 
