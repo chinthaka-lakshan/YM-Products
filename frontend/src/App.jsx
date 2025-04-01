@@ -11,6 +11,7 @@ import AdminShops from './Pages/AdminShops/AdminShops.jsx';
 import RepRegistration from './Pages/RepRegistration/RepRegistration.jsx';
 import Return from './Pages/Returns/Returns.jsx';
 import CashFlow from './Pages/CashFlowAnalysis/CashFlowAnalysis.jsx';
+import SalesReps from './Pages/SalesReps/SalesReps.jsx';
 
 
 function App() {
@@ -27,9 +28,10 @@ function App() {
           <Route path="/purchaseStock" element={<PurchaseStock />}/>
           <Route path="/adminOrders" element={<Orders />}/>  
           <Route path="/adminShops" element={<AdminShops />}/>
-          <Route path="/salesReps" element={<RepRegistration />}/>
+          
           <Route path="/returns" element={<Return />}/>
           <Route path="/cashFlow" element={<CashFlow />}/>
+          <Route path="/salesreps" element={<SalesReps />}/>
           
         </Routes>
       </div>
