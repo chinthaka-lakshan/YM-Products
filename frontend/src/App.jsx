@@ -12,6 +12,7 @@ import RepRegistration from './Pages/RepRegistration/RepRegistration.jsx';
 import Return from './Pages/Returns/Returns.jsx';
 import CashFlow from './Pages/CashFlowAnalysis/CashFlowAnalysis.jsx';
 
+
 function App() {
   const [count, setCount] = useState(0);
 
@@ -30,6 +31,16 @@ function App() {
           <Route path="/cashflow" element={<CashFlow/>}/>
 
           <Route path="/repLogin" element={<RepLogin />}/>
+          <Route path="/" element={<Login />} />
+          <Route path="/admindashboard" element={<AdminDashboard/>} />
+          <Route path="/orders" element={<Orders/>} />
+          <Route path="/replogin" element={<RepLogin />} />
+          <Route path="/repredistration" element={<RepRegistration/>} />
+          <Route path="/repdashboard" element={<RepDashboard/>} />
+          <Route path="/repregistration" element={<RepRegistration/>} />
+          <Route path="/invoice" element={<Invoice/>} />
+          <Route path="/ordersHistory" element={<OrdersHistory/>} />
+          
         </Routes>
       </div>
     </Router>
