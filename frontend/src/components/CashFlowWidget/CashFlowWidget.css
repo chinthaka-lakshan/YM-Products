@@ -1,0 +1,38 @@
+.widget{
+    display: flex;
+    flex-direction: row;
+    padding: 30px;
+    -webkit-box-shadow: 1px 1px 5px 1px #425060;
+    box-shadow: 1px 1px 5px 1px #a0afc1;
+    border-radius: 5px;
+    height: 60px;
+    background-color: #fff;
+    align-items: center;
+    gap: 20px;
+
+    .left{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+
+        .title{
+            font-weight: bold;
+            font-size: 20px;
+            color: #425060;
+        }
+        .amount{
+            font-size: 40px;
+            font-weight: bold;
+            color: #425060;
+            align-self: center;
+        }
+    }
+
+    .icon{
+        font-size: 80px;
+        color: green;
+        align-self: flex-end;
+    }
+}
