@@ -1,7 +1,7 @@
 .order-title h1{
   position:absolute;
   top: 12%;
-  left:330px;
+  left:20%
 }
 
 .btn1{
@@ -26,36 +26,37 @@ right: 10%;
   color: white;
   border: none;
 }
-.History-table-container{
-width: 1000px;
+.orders-table-container{
+/* width: 5000px; */
 position: absolute;
 top:30%;
-right:5%;
+left: 20%;
 
 }
-.table{
+.tableO{
 border: 1px solid #e1e6f0;
 border-radius: 8px;
 background-color: white;
 border-collapse: collapse;
+width: 110%;
 
 }
-.table th {
+.tableO th {
 font-weight: normal;
 color: #020608;
 border-top: none;
 text-align: center;
 width: 180px;
-height: 45px;
+height: 50px;
 background-color:whitesmoke;
 border-bottom: 1px solid #e1e6f0;
 
 
 }
-.table td{
+.tableO td{
 text-align: center;
 border-bottom: 1px solid #f1f1f5;
-height: 30px;
+height: 50px;
 
 }
 
@@ -94,7 +95,7 @@ height: 30px;
 }
 
 /* Pagination styling */
-.pagination-container {
+.pagination-container-O {
 display: flex;
 justify-content: flex-end;
 margin-top: 20px;
@@ -102,21 +103,21 @@ border-top: 1px solid #e0e0e0;
 padding-top: 15px;
 position: absolute;
 top: 100%;
-right: 8%;
+right: -95px;
 }
 
-.pagination {
+.pagination-O {
 display: flex;
 list-style: none;
 padding: 0;
 margin: 0;
 }
 
-.page-item {
+.page-item-O {
 margin: 0 2px;
 }
 
-.page-link {
+.page-link-O {
 display: flex;
 align-items: center;
 justify-content: center;
@@ -132,18 +133,18 @@ font-size: 14px;
 padding: 0 10px;
 }
 
-.page-item.active .page-link {
+.page-item-O.active .page-link-O {
 background-color: #4c3eff;
 color: white;
 border-color: #4c3eff;
 }
 
-.page-item.disabled .page-link {
+.page-item-O.disabled .page-link-O {
 color: #6c757d;
 pointer-events: none;
 cursor: not-allowed;
 }
 
-.go-btn {
+.go-btn-O {
 background-color: #f8f9fa;
 }

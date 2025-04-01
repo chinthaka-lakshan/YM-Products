@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Sidebar from '../../components/Sidebar/AdminSidebar/AdminSidebar'
 import Navbar from '../../components/AdminNavbar/AdminNavbar'
+import { Link } from 'react-router-dom'
 
 import "./Orders.css"
 
@@ -53,14 +54,16 @@ const Orders = () => {
          <h1>Orders</h1>
        </div>
        <div className='btn1'>
-          <button className='history-btn'>History</button>
+            <Link to="/adminOrdersHistory">
+              <button className='history-btn'>History</button>
+            </Link>
        </div>
        <div className='btn2'>
        <button className='add-new-btn'>Add New</button>
        </div>
 
-       <div className='History-table-container'>           
-        <table className="table">
+       <div className='orders-table-container'>           
+        <table className="tableO">
                 <thead>
                   <tr>
                     <th>Shop</th>
@@ -102,9 +105,9 @@ const Orders = () => {
         </table>
         
         {/* Pagination component */}
-        <div className="pagination-container">
-          <ul className="pagination">
-            <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+        <div className="pagination-container-O">
+          <ul className="pagination-O">
+            <li className={`page-item-O ${currentPage === 1 ? 'disabled' : ''}`}>
               <button 
                 className="page-link" 
                 onClick={() => paginate(currentPage - 1)}
@@ -119,27 +122,27 @@ const Orders = () => {
                 className={`page-item ${currentPage === number + 1 ? 'active' : ''}`}
               >
                 <button 
-                  className="page-link" 
+                  className="page-link-O" 
                   onClick={() => paginate(number + 1)}
                 >
                   {number + 1}
                 </button>
               </li>
             ))}
-            <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+            <li className={`page-item-O ${currentPage === totalPages ? 'disabled' : ''}`}>
               <button 
-                className="page-link" 
+                className="page-link-O" 
                 onClick={() => paginate(currentPage + 1)}
                 disabled={currentPage === totalPages}
               >
                 &gt;
               </button>
             </li>
-            <li className="page-item">
-              <button className="page-link">...</button>
+            <li className="page-item-O">
+              <button className="page-link-O">...</button>
             </li>
-            <li className="page-item">
-              <button className="page-link go-btn">Go</button>
+            <li className="page-item-O">
+              <button className="page-link go-btn-O">Go</button>
             </li>
           </ul>
         </div>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './OrdersHistory.css';
 import Sidebar from '../../components/Sidebar/AdminSidebar/AdminSidebar';
+import AdminNavbar from '../../components/AdminNavbar/AdminNavbar';
 
 const OrdersHistory = () => {
   const [orders, setOrders] = useState([
@@ -36,9 +37,9 @@ const OrdersHistory = () => {
             <Sidebar/>
         </div> 
         <div>
-            
+            <AdminNavbar/>
         </div>
-        <div className='order-title'>
+        <div className='order-titl'>
          <h1>Orders History</h1>
         </div>
 

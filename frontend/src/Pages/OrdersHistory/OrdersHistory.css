@@ -1,12 +1,12 @@
 .order-titl h1{
     position:absolute;
     top: 12%;
-    left:330px;
+    left:20%;
   }.order-table-container {
-    width: 920px;
+    width: 1000px;
     position: absolute;
     left: 22%;
-    top:22%
+    top:25%
   }
   
   .order-table {
@@ -21,7 +21,7 @@
     color: #141414;
     font-weight: normal;
     border-bottom: 1px solid #e1e6f0;
-    width: 150px;
+    width: 200px;
     height: 45px;
     background-color:whitesmoke;
 
