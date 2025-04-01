@@ -38,6 +38,7 @@ border: 1px solid #e1e6f0;
 border-radius: 8px;
 background-color: white;
 border-collapse: collapse;
+width: 115%;
 
 }
 .tableO th {
@@ -45,7 +46,7 @@ font-weight: normal;
 color: #020608;
 border-top: none;
 text-align: center;
-width: 172px;
+width: 170px;
 height: 50px;
 background-color:whitesmoke;
 border-bottom: 1px solid #e1e6f0;
