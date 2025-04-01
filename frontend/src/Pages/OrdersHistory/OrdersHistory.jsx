@@ -39,19 +39,19 @@ const OrdersHistory = () => {
         <div>
             <AdminNavbar/>
         </div>
-        <div className='order-titl'>
+        <div className='order-titl-h'>
          <h1>Orders History</h1>
         </div>
 
-        <div className="order-table-container">
-        <table className="order-table">
+        <div className="order-table-container-h">
+        <table className="order-table-h">
             <thead>
             <tr>
                 <th>Shop</th>
                 <th>Date</th>
                 <th>Rep Name</th>
                 <th>Status</th>
-                <th></th>
+                <th>Action</th>
             </tr>
             </thead>
             <tbody>
@@ -69,9 +69,9 @@ const OrdersHistory = () => {
             </tbody>
         </table>
         
-        <div className="pagination-container">
+        <div className="pagination-container-h">
             <button 
-            className="pagination-arrow" 
+            className="pagination-arrow-h" 
             onClick={() => paginate(currentPage > 1 ? currentPage - 1 : 1)}
             disabled={currentPage === 1}
             >
@@ -82,18 +82,18 @@ const OrdersHistory = () => {
             <button
                 key={number + 1}
                 onClick={() => paginate(number + 1)}
-                className={`pagination-number ${currentPage === number + 1 ? 'active' : ''}`}
+                className={`pagination-number-h ${currentPage === number + 1 ? 'active' : ''}`}
             >
                 {number + 1}
             </button>
             ))}
             
-            <button className="pagination-ellipsis">...</button>
+            <button className="pagination-ellipsis-h">...</button>
             
-            <button className="pagination-number">40</button>
+            <button className="pagination-number-h">40</button>
             
             <button 
-            className="pagination-arrow" 
+            className="pagination-arrow-h" 
             onClick={() => paginate(currentPage < totalPages ? currentPage + 1 : totalPages)}
             disabled={currentPage === totalPages}
             >

@@ -27,7 +27,7 @@ right: 10%;
   border: none;
 }
 .orders-table-container{
-/* width: 5000px; */
+
 position: absolute;
 top:30%;
 left: 20%;
@@ -38,7 +38,6 @@ border: 1px solid #e1e6f0;
 border-radius: 8px;
 background-color: white;
 border-collapse: collapse;
-width: 110%;
 
 }
 .tableO th {
@@ -46,7 +45,7 @@ font-weight: normal;
 color: #020608;
 border-top: none;
 text-align: center;
-width: 180px;
+width: 172px;
 height: 50px;
 background-color:whitesmoke;
 border-bottom: 1px solid #e1e6f0;

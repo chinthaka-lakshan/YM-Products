@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import Sidebar from '../../components/Sidebar/AdminSidebar/AdminSidebar'
 import Navbar from '../../components/AdminNavbar/AdminNavbar'
 import { Link } from 'react-router-dom'
-
 import "./Orders.css"
 
 
