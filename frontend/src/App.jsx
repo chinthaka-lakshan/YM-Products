@@ -8,6 +8,7 @@ import AdminDashboard from './Pages/Dashboard/AdminDashboard/AdminDashboard.jsx'
 import Orders from './Pages/Orders/Orders.jsx';
 import RepDashboard from './Pages/Dashboard/RepDashboard/RepDashboard.jsx';
 import Invoice from "./Pages/Invoice/Invoice.jsx"
+import OrdersHistory from './Pages/OrdersHistory/OrdersHistory.jsx'
 
 function App() {
   const [count, setCount] = useState(0);
@@ -24,6 +25,7 @@ function App() {
           <Route path="/repdashboard" element={<RepDashboard/>} />
           <Route path="/repregistration" element={<RepRegistration/>} />
           <Route path="/invoice" element={<Invoice/>} />
+          <Route path="/ordersHistory" element={<OrdersHistory/>} />
         </Routes>
       </div>
     </Router>
