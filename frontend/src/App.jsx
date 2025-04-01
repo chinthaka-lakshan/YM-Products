@@ -21,25 +21,15 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/" element={<Login />}/>
-          <Route path="/admindashboard" element={<AdminDashboard/>}/>
-          <Route path="/distributionStock" element={<DistributionStock/>}/>
-          <Route path="/returns" element={<Return/>}/>
-          <Route path="/purchaseStock" element={<PurchaseStock/>}/>
-          <Route path="/adminOrders" element={<Orders/>}/>
-          <Route path="/adminShops" element={<AdminShops/>}/>
-          <Route path="/salesReps" element={<RepRegistration/>}/>
-          <Route path="/cashflow" element={<CashFlow/>}/>
-
-          <Route path="/repLogin" element={<RepLogin />}/>
-          <Route path="/" element={<Login />} />
-          <Route path="/admindashboard" element={<AdminDashboard/>} />
-          <Route path="/orders" element={<Orders/>} />
-          <Route path="/replogin" element={<RepLogin />} />
-          <Route path="/repredistration" element={<RepRegistration/>} />
-          <Route path="/repdashboard" element={<RepDashboard/>} />
-          <Route path="/repregistration" element={<RepRegistration/>} />
-          <Route path="/invoice" element={<Invoice/>} />
-          <Route path="/ordersHistory" element={<OrdersHistory/>} />
+          <Route path="/rep-login" element={<RepLogin />}/>
+          <Route path="/admindashboard" element={<AdminDashboard />}/>
+          <Route path="/distributionStock" element={<DistributionStock />}/>
+          <Route path="/purchaseStock" element={<PurchaseStock />}/>
+          <Route path="/adminOrders" element={<Orders />}/>  
+          <Route path="/adminShops" element={<AdminShops />}/>
+          <Route path="/salesReps" element={<RepRegistration />}/>
+          <Route path="/returns" element={<Return />}/>
+          <Route path="/cashFlow" element={<CashFlow />}/>
           
         </Routes>
       </div>
