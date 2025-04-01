@@ -20,7 +20,7 @@ const DashboardWidget = ({ type }) => {
         icon: (
           <StorefrontIcon
             className="icon"
-            style={{ color: "crimson", backgroundColor: "#ff000033" }}
+            style={{ color: "#616161", backgroundColor: "#daa52033" }}
           />
         ),
       };
@@ -34,7 +34,7 @@ const DashboardWidget = ({ type }) => {
         icon: (
           <ShoppingCartIcon
             className="icon"
-            style={{ color: "purple", backgroundColor: "#80008033" }}
+            style={{ color: "#616161", backgroundColor: "#daa52033" }}
           />
         ),
       };
@@ -48,7 +48,7 @@ const DashboardWidget = ({ type }) => {
         icon: (
           <InventoryIcon
             className="icon"
-            style={{ color: "goldenrod", backgroundColor: "#daa52033" }}
+            style={{ color: "#616161", backgroundColor: "#daa52033" }}
           />
         ),
       };
@@ -62,7 +62,7 @@ const DashboardWidget = ({ type }) => {
         icon: (
           <RepeatIcon
             className="icon"
-            style={{ color: "green", backgroundColor: "#00800033" }}
+            style={{ color: "#616161", backgroundColor: "#daa52033" }}
           />
         ),
       };
@@ -76,7 +76,7 @@ const DashboardWidget = ({ type }) => {
           icon: (
             <StoreIcon
               className="icon"
-              style={{ color: "goldenrod", backgroundColor: "#daa52033" }}
+              style={{ color: "#616161", backgroundColor: "#daa52033" }}
             />
           ),
         };
