@@ -10,10 +10,18 @@ const Orders = () => {
     { id: 2, shop: 'Shop', date: '3/4/2025', repName: 'Raheem', status: 'Pending' },
     { id: 3, shop: 'Shop', date: '3/4/2025', repName: 'Raheem', status: 'Pending' },
     { id: 4, shop: 'Shop', date: '3/4/2025', repName: 'Raheem', status: 'Pending' },
+    { id: 5, shop: 'Shop', date: '3/4/2025', repName: 'Raheem', status: 'Pending' },
+    { id: 6, shop: 'Shop', date: '3/4/2025', repName: 'Raheem', status: 'Pending' },
+    { id: 7, shop: 'Shop', date: '3/4/2025', repName: 'Raheem', status: 'Pending' },
+    { id: 8, shop: 'Shop', date: '3/4/2025', repName: 'Raheem', status: 'Pending' },
+    { id: 9, shop: 'Shop', date: '3/4/2025', repName: 'Raheem', status: 'Pending' },
+    { id: 10, shop: 'Shop', date: '3/4/2025', repName: 'Raheem', status: 'Pending' },
+    { id: 11, shop: 'Shop', date: '3/4/2025', repName: 'Rah', status: 'Pending' },
+    { id: 12, shop: 'Shop', date: '3/4/2025', repName: 'Raheem', status: 'Pending' },
   ]);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const ordersPerPage = 10;
+  const ordersPerPage = 5;
 
   // Handle status change (Accept/Cancel)
   const handleStatusChange = (id, newStatus) => {
@@ -50,7 +58,7 @@ const Orders = () => {
        <button className='add-new-btn'>Add New</button>
        </div>
 
-       <div className='table-container'>           
+       <div className='History-table-container'>           
         <table className="table">
                 <thead>
                   <tr>
@@ -140,3 +148,4 @@ const Orders = () => {
 }
 
 export default Orders;
+
