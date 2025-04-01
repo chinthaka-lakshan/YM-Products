@@ -18,6 +18,39 @@ const DistributionStock = () => {
     { item: "Curry Powder 100g", unitPrice: "400.00", quantity: 72 },
     { item: "Chilli Pieces 50g", unitPrice: "180.75", quantity: 12 },
   ]);
+import AdminNavbar from "../../components/AdminNavbar/AdminNavbar.jsx";
+import AdminSidebar from "../../components/Sidebar/AdminSidebar/AdminSidebar.jsx";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+
+const DistributionStock = () => {
+
+    const [items, setItems] = useState([
+        { item: "Chilli Powder 50g", unitPrice: "250.50", quantity: 52 },
+        { item: "Chilli Powder 100g", unitPrice: "480.50", quantity: 22 },
+        { item: "Curry Powder 50g", unitPrice: "200.00", quantity: 42 },
+        { item: "Curry Powder 100g", unitPrice: "400.00", quantity: 72 },
+        { item: "Chilli Pieces 50g", unitPrice: "180.75", quantity: 12 },
+        { item: "Chilli Powder 50g", unitPrice: "250.50", quantity: 52 },
+        { item: "Chilli Powder 100g", unitPrice: "480.50", quantity: 22 },
+        { item: "Curry Powder 50g", unitPrice: "200.00", quantity: 42 },
+        { item: "Curry Powder 100g", unitPrice: "400.00", quantity: 72 },
+        { item: "Chilli Pieces 50g", unitPrice: "180.75", quantity: 12 },
+        { item: "Chilli Powder 50g", unitPrice: "250.50", quantity: 52 },
+        { item: "Chilli Powder 100g", unitPrice: "480.50", quantity: 22 },
+        { item: "Curry Powder 50g", unitPrice: "200.00", quantity: 42 },
+        { item: "Curry Powder 100g", unitPrice: "400.00", quantity: 72 },
+        { item: "Chilli Pieces 50g", unitPrice: "180.75", quantity: 12 },
+        { item: "Chilli Powder 50g", unitPrice: "250.50", quantity: 52 },
+        { item: "Chilli Powder 100g", unitPrice: "480.50", quantity: 22 },
+        { item: "Curry Powder 50g", unitPrice: "200.00", quantity: 42 },
+        { item: "Curry Powder 100g", unitPrice: "400.00", quantity: 72 },
+        { item: "Chilli Pieces 50g", unitPrice: "180.75", quantity: 12 },
+        { item: "Chilli Powder 50g", unitPrice: "250.50", quantity: 52 },
+        { item: "Chilli Powder 100g", unitPrice: "480.50", quantity: 22 },
+        { item: "Curry Powder 50g", unitPrice: "200.00", quantity: 42 },
+        { item: "Curry Powder 100g", unitPrice: "400.00", quantity: 72 },
+        { item: "Chilli Pieces 50g", unitPrice: "180.75", quantity: 12 },
+    ]);
 
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -84,6 +117,34 @@ const DistributionStock = () => {
                       {item.quantity}
                     </span>
                   </div>
+    return (
+        <div className="DistributionStock">
+            <AdminSidebar/>
+            <div className="DistributionStockContainer">
+                <AdminNavbar/>
+                <div className="DistributionStockCardsContainer">
+                    <div className="DistributionStockTop">
+                        <h1>Distribution Stock</h1>
+                        <button className="AddButton" onClick={() => setShowAddModal(true)}>Add New</button>
+                    </div>
+                    <div className="DistributionStockGrid">
+                        {items.map((item, index) => (
+                            <div key={index} className="DistributionItemCard">
+                                <h2>{item.item}</h2>
+                                <div className="DistributionItemCardMiddle">
+                                    <ShoppingCartIcon className="DistributionItemCardIcon"/>
+                                    <div className="DistributionItemCardDetails">
+                                        <span><strong>Price (LKR) : </strong>{item.unitPrice}</span>
+                                        <span><strong>Quantity : </strong>{item.quantity}</span>
+                                    </div>
+                                </div>
+                                <div className="DistributionItemCardButtons">
+                                    <button className="DeleteButton">Delete</button>
+                                    <button className="EditButton" onClick={() => handleEditClick(index)}>Update</button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
                 <div className="DistributionItemCardButtons">
                   <button className="DeleteButton">Delete</button>
