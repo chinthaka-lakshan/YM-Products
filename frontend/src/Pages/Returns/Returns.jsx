@@ -1,118 +1,7 @@
-// import React from 'react'
-// import './Returns.css'
-// import Sidebar from '../../components/Sidebar/AdminSidebar/AdminSidebar'
-
-// const Returns = () => {
-//     const [retuens, setReturns] = useState([
-//         { id: 1, shop: 'Shop', Item: 'Chil Powder', Weight: '58g', QTY: '50', Type:"Good", Date:'3/4/2001' },
-        
-    
-//       ]);
-    
-//       // Pagination state
-//       const [currentPage, setCurrentPage] = useState(1);
-//       const [retuensPerPage] = useState(5);
-      
-//       // Calculate current orders to display
-//       const indexOfLastOrder = currentPage * retuensPerPage;
-//       const indexOfFirstOrder = indexOfLastOrder - retuensPerPage;
-//       const currentOrders = retuens.slice(indexOfFirstOrder, indexOfLastOrder);
-      
-//       // Change page
-//       const paginate = (pageNumber) => setCurrentPage(pageNumber);
-      
-//       // Calculate total pages
-//       const totalPages = Math.ceil(retuens.length / retuensPerPage);
-//   return (
-//     <div>
-//         <div>
-//             <Sidebar/>
-//         </div>
-//         <div className='returns-title'>
-//          <h1>Returns</h1>
-//         </div>
-//         <div className='btn-r'>
-//           <button className='history-btn'>Good !</button>
-//         </div>
-//         <div className='btn--r'>
-//            <button className='add-new-btn'>Bad !</button>
-//         </div>
-
-//         <div className="order-table-container">
-//         <table className="order-table">
-//             <thead>
-//             <tr>
-//                 <th>Shop</th>
-//                 <th>Item</th>
-//                 <th>Weight(g)</th>
-//                 <th>QTY</th>
-//                 <th>Type</th>
-//                 <th>Date</th>
-//                 <th></th>
-//             </tr>
-//             </thead>
-//             <tbody>
-//             {currentOrders.map(retuens => (
-//                 <tr key={retuens.id}>
-//                 <td>{retuens.shop}</td>
-//                 <td>{retuens.Item}</td>
-//                 <td>{retuens.Weight}</td>
-//                 <td>{retuens.QTY}</td>
-//                 <td>{retuens.Type}</td>
-//                 <td>{retuens.Date}</td>
-//                 <td>
-//                     <button className="view-btn1">Delete</button>
-//                 </td>
-//                 </tr>
-//             ))}
-//             </tbody>
-//         </table>
-        
-//         <div className="pagination-container">
-//             <button 
-//             className="pagination-arrow" 
-//             onClick={() => paginate(currentPage > 1 ? currentPage - 1 : 1)}
-//             disabled={currentPage === 1}
-//             >
-//             &lt;
-//             </button>
-            
-//             {[...Array(totalPages).keys()].slice(0, 5).map(number => (
-//             <button
-//                 key={number + 1}
-//                 onClick={() => paginate(number + 1)}
-//                 className={`pagination-number ${currentPage === number + 1 ? 'active' : ''}`}
-//             >
-//                 {number + 1}
-//             </button>
-//             ))}
-            
-//             <button className="pagination-ellipsis">...</button>
-            
-//             <button className="pagination-number">40</button>
-            
-//             <button 
-//             className="pagination-arrow" 
-//             onClick={() => paginate(currentPage < totalPages ? currentPage + 1 : totalPages)}
-//             disabled={currentPage === totalPages}
-//             >
-//             &gt;
-//             </button>
-//         </div>
-//         </div>
-        
-        
-        
-        
-//     </div>
-//   )
-// }
-
-// export default Returns
-
 import React, { useState } from 'react'
 import './Returns.css'
 import Sidebar from '../../components/Sidebar/AdminSidebar/AdminSidebar'
+import AdminNavbar from '../../components/AdminNavbar/AdminNavbar'
 
 const Returns = () => {
     const [returns, setReturns] = useState([
@@ -151,6 +40,9 @@ const Returns = () => {
           <div>
               <Sidebar/>
           </div>
+          <div>
+              <AdminNavbar/>
+          </div>
           <div className='returns-title'>
            <h1>Returns</h1>
           </div>
@@ -171,7 +63,7 @@ const Returns = () => {
                     <th>QTY</th>
                     <th>Type</th>
                     <th>Date</th>
-                    <th></th>
+                    <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
