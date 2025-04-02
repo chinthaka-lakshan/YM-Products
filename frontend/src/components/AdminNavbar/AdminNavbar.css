@@ -4,17 +4,23 @@
     align-items: center;
     background-color: darkcyan;
     padding: 0 20px;
+    position: fixed;
+    top: 0;
+    left: 16%;
+    width: 84%;
+    z-index: 999;
 
     .AdminNavbarContainer {
         display: flex;
         width: 100%;
         align-items: center;
         justify-content: space-between;
+        padding-right: 30px;
 
         .NavbarTitle {
             font-size: 30px;
             font-weight: bold;
-            color: darkslategray;
+            color: #333;
             flex: 1;
             text-align: center;
         }
@@ -24,16 +30,17 @@
             align-items: center;
             gap: 10px;
             cursor: pointer;
+            flex-shrink: 0;
 
             span {
                 font-size: 20px;
                 font-weight: bold;
-                color: darkslategray;
+                color: #333;
             }
 
             .ProfileIcon {
-                font-size: 45px !important;
-                color: darkslategray;
+                font-size: 45px;
+                color: #333;
                 cursor: pointer;
             }
         }
@@ -41,10 +48,10 @@
 
     .LogoutPopup {
         position: absolute;
-        top: 40px;
-        right: 30px;
+        top: 50px;
+        right: 50px;
         width: 10%;
-        height: 20%;
+        height: 150px;
         background: #a0afc1;
         padding: 10px;
         border-radius: 10px;
