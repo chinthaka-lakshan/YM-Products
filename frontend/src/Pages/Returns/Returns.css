@@ -35,7 +35,6 @@
 }
 
 .returns-table-container {
-    width: 920px;
     position: absolute;
     left: 22%;
     top: 30%
@@ -54,7 +53,7 @@
     color: #141414;
     font-weight: normal;
     border-bottom: 1px solid #e1e6f0;
-    width: 150px;
+    width: 113px;
     height: 45px;
     background-color: whitesmoke;
 }
