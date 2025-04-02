@@ -11,6 +11,10 @@ import Return from './Pages/Returns/Returns.jsx';
 import CashFlow from './Pages/CashFlowAnalysis/CashFlowAnalysis.jsx';
 import OrdersHistory from './Pages/OrdersHistory/OrdersHistory.jsx';
 import SalesReps from './Pages/SalesReps/SalesReps.jsx';
+import RepInvoice from './Pages/RepInvoice/RepInvoice.jsx';
+import Invoice from "./Pages/Invoice/Invoice.jsx"
+
+
 
 import RepLogin from './Pages/Login/RepLogin/RepLogin.jsx';
 import RepDashboard from './Pages/Dashboard/RepDashboard/RepDashboard.jsx';
@@ -39,8 +43,8 @@ function App() {
           <Route path="/repLogin" element={<RepLogin />}/>
           <Route path='/repDashboard' element={<RepDashboard/>}/>
           <Route path='/repOrdersHistory' element={<RepOrdersHistory/>}/>
-
-
+          <Route path="/repinvoice" element={<RepInvoice />}/>
+          <Route path="/invoice" element={<Invoice />}/>
           
         </Routes>
       </div>
