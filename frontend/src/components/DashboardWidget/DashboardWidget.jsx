@@ -94,11 +94,11 @@ const DashboardWidget = ({ type }) => {
 
   return (
     <Link to={data.path}>
-      <div className='widget'>
-        <div className='left'>
-          <span className='WidgetTitle'>{data.title}</span>
+      <div className='DashboardWidget'>
+        <div className='DashboardWidgetLeft'>
+          <span className='DashboardWidgetTitle'>{data.title}</span>
         </div>
-        <div className='right'>
+        <div className='DashboardWidgetRight'>
           {data.icon}
           <span>{data.text}</span>
         </div>
