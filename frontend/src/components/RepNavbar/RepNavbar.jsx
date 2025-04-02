@@ -12,9 +12,9 @@ const RepNavbar = () => {
   return (
     <div className="RepNavbar">
       <div className="RepNavbarContainer">
-        <span className="RepNavbarTitle">SALESREP DASHBOARD</span>
+        <span className="RepNavbarTitle">SALES REP DASHBOARD</span>
         <div className="RepNavbarLog" onClick={toggleLogoutPopup}>
-          <span>Admin1</span>
+          <span>Rep1</span>
           <AccountCircleIcon className="RepProfileIcon" />
         </div>
       </div>

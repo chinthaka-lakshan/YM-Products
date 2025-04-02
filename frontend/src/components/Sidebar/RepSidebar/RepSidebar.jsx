@@ -39,7 +39,7 @@ export default function Sidebar({ onToggle }) {
         <aside className={`sidebar ${expanded ? "" : "collapsed"}`}>
             <nav className="sidebar-nav">
                 <div className="sidebar-header">
-                    <h2 className="sidebar-title">{expanded ? "DeepNix" : "D"}</h2>
+                    <h2 className="sidebar-title">{expanded ? "YM PRODUCTS" : "D"}</h2>
                     {/* <button onClick={toggleSidebar} className="toggle-btn">
                         {expanded ? <ChevronLeft /> : <ChevronRight />}
                     </button> */}
