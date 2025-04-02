@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './RepOrdersHistory.css';
 import RepSideBar from '../../components/Sidebar/RepSidebar/RepSidebar';
+import RepNavbar from '../../components/RepNavbar/RepNavbar';
 
 const RepOrdersHistory = () => {
   const [orders, setOrders] = useState([
@@ -33,6 +34,9 @@ const RepOrdersHistory = () => {
     <div className="rep-orders-history-container">
       <div className="sidebar-container-rep">
         <RepSideBar/>
+      </div>
+      <div>
+        <RepNavbar/>
       </div>
        <div className="order-title-rep">
           <h1>Orders History</h1>
