@@ -8,12 +8,13 @@ import DistributionStock from './Pages/DistributionStock/DistributionStock.jsx';
 import PurchaseStock from './Pages/PurchaseStock/PurchaseStock.jsx';
 import Orders from './Pages/Orders/Orders.jsx';
 import AdminShops from './Pages/AdminShops/AdminShops.jsx';
-import RepRegistration from './Pages/RepRegistration/RepRegistration.jsx';
 import Return from './Pages/Returns/Returns.jsx';
 import CashFlow from './Pages/CashFlowAnalysis/CashFlowAnalysis.jsx';
 import OrdersHistory from './Pages/OrdersHistory/OrdersHistory.jsx';
 
 import SalesReps from './Pages/SalesReps/SalesReps.jsx';
+import RepInvoice from './Pages/RepInvoice/RepInvoice.jsx';
+import Invoice from "./Pages/Invoice/Invoice.jsx"
 
 
 function App() {
@@ -35,6 +36,9 @@ function App() {
           <Route path="/cashFlow" element={<CashFlow />}/>
           <Route path='/adminOrdersHistory' element={<OrdersHistory/>}/>
           <Route path="/salesreps" element={<SalesReps />}/>
+          <Route path="/repinvoice" element={<RepInvoice />}/>
+          <Route path="/invoice" element={<Invoice />}/>
+          
           
         </Routes>
       </div>
