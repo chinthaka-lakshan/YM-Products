@@ -15,8 +15,8 @@ const AdminDashboard = () => {
             <div className="AdminDashboardContainer">
                 <AdminNavbar/>
                 <div className="AdminDashboardWidgets">
-                    <DashboardWidget type="purchaseStock"/>
                     <DashboardWidget type="distributionStock"/>
+                    <DashboardWidget type="purchaseStock"/>
                     <DashboardWidget type="orders"/>
                     <DashboardWidget type="returns"/>
                     <DashboardWidget type="shops"/>

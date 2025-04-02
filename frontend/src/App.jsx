@@ -10,6 +10,8 @@ import Orders from './Pages/Orders/Orders.jsx';
 import AdminShops from './Pages/AdminShops/AdminShops.jsx';
 import Return from './Pages/Returns/Returns.jsx';
 import CashFlow from './Pages/CashFlowAnalysis/CashFlowAnalysis.jsx';
+import OrdersHistory from './Pages/OrdersHistory/OrdersHistory.jsx';
+
 import SalesReps from './Pages/SalesReps/SalesReps.jsx';
 import RepInvoice from './Pages/RepInvoice/RepInvoice.jsx';
 import Invoice from "./Pages/Invoice/Invoice.jsx"
@@ -32,6 +34,7 @@ function App() {
           
           <Route path="/returns" element={<Return />}/>
           <Route path="/cashFlow" element={<CashFlow />}/>
+          <Route path='/adminOrdersHistory' element={<OrdersHistory/>}/>
           <Route path="/salesreps" element={<SalesReps />}/>
           <Route path="/repinvoice" element={<RepInvoice />}/>
           <Route path="/invoice" element={<Invoice />}/>

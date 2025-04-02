@@ -5,6 +5,7 @@ import AdminNavbar from "../../components/AdminNavbar/AdminNavbar.jsx";
 import StoreFrontIcon from "@mui/icons-material/Store";
 
 const AdminShops = () => {
+
     const [shops, setShops] = useState([
         { shopName: "Lakshan Shop", location: "Nattandiya", contact: "076 21326548" },
         { shopName: "Hasitha Shop", location: "Nattandiya", contact: "076 21326548" },
