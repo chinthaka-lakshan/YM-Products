@@ -14,7 +14,8 @@ import OrdersHistory from './Pages/OrdersHistory/OrdersHistory.jsx';
 
 import SalesReps from './Pages/SalesReps/SalesReps.jsx';
 import RepInvoice from './Pages/RepInvoice/RepInvoice.jsx';
-import Invoice from "./Pages/Invoice/Invoice.jsx"
+import Invoice from "./Pages/Invoice/Invoice.jsx";
+import RepReturns from "./Pages/RepReturns/RepReturns.jsx";
 
 
 
@@ -40,6 +41,7 @@ function App() {
           <Route path="/salesreps" element={<SalesReps />}/>
           <Route path="/repinvoice" element={<RepInvoice />}/>
           <Route path="/invoice" element={<Invoice />}/>
+          <Route path="/repreturns" element={<RepReturns />}/>
 
           
           
