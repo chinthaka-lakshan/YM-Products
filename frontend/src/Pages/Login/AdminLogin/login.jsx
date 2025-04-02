@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./login.css";
 import logo from "../../../assets/YM.png"; // Adjust the path to your logo image
@@ -68,9 +68,11 @@ const AdminLogin = () => {
             />
           </div>
 
-          <button type="submit" className="btn" disabled={loading}>
-            {loading ? "Logging in..." : "Login"}
-          </button>
+          <Link to={"/admindashboard"}>
+            <button type="submit" className="btn" disabled={loading}>
+              {loading ? "Logging in..." : "Login"}
+            </button>
+          </Link>
         </form>
 
         <div className="logo-container">
