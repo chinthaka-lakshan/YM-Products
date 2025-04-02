@@ -24,7 +24,7 @@ export default function Sidebar({ onToggle }) {
         { icon: <DashboardIcon />, text: "Dashboard", path: "/repdashboard" },
         // { icon: <InventoryIcon />, text: "Distribution Stock", path: "/distribution" },
         // { icon: <ShoppingCartIcon />, text: "Purchase Stock", path: "/purchase" },
-        { icon: <StorefrontIcon />, text: "Orders", path: "/orders" },
+        { icon: <StorefrontIcon />, text: "Orders", path: "/repOrdersHistory" },
         { icon: <RepeatIcon />, text: "Returns", path: "/returns" },
         { icon: <StoreIcon />, text: "Shops", path: "/shops" },
         // { icon: <PeopleIcon />, text: "Representative", path: "/repregistration" },

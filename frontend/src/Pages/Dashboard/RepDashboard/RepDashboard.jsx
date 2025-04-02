@@ -8,7 +8,6 @@ const RepDashboard = () => {
   return (
     <div className="dashboard-container">
         <RepSidebar/>
-        <TopBar/>
       <div className="welcome-text">
         <h2>Welcome to YM Products</h2>
       </div>
