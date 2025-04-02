@@ -32,74 +32,71 @@ const OrdersHistory = () => {
   const totalPages = Math.ceil(orders.length / ordersPerPage);
 
   return (
-    <div>
-        <div>
-            <Sidebar/>
-        </div> 
-        <div>
+    <div className='OrderHistory'>
+        <Sidebar/>
+        <div className='OrderHistoryContainer'>
             <AdminNavbar/>
-        </div>
-        <div className='order-titl-h'>
-         <h1>Orders History</h1>
-        </div>
-
-        <div className="order-table-container-h">
-        <table className="order-table-h">
-            <thead>
-            <tr>
-                <th>Shop</th>
-                <th>Date</th>
-                <th>Rep Name</th>
-                <th>Status</th>
-                <th>Action</th>
-            </tr>
-            </thead>
-            <tbody>
-            {currentOrders.map(order => (
-                <tr key={order.id}>
-                <td>{order.shop}</td>
-                <td>{order.date}</td>
-                <td>{order.repName}</td>
-                <td>{order.status}</td>
-                <td>
-                    <button className="view-btn1">View</button>
-                </td>
-                </tr>
-            ))}
-            </tbody>
-        </table>
-        
-        <div className="pagination-container-h">
-            <button 
-            className="pagination-arrow-h" 
-            onClick={() => paginate(currentPage > 1 ? currentPage - 1 : 1)}
-            disabled={currentPage === 1}
-            >
-            &lt;
-            </button>
+            <div className='orderHistorytitle'>
+                <h1>Orders History</h1>
+            </div>
+            <div className="order-tablecontainerh">
+                <table className="order-table-h">
+                    <thead>
+                    <tr>
+                        <th>Shop</th>
+                        <th>Date</th>
+                        <th>Rep Name</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {currentOrders.map(order => (
+                        <tr key={order.id}>
+                        <td>{order.shop}</td>
+                        <td>{order.date}</td>
+                        <td>{order.repName}</td>
+                        <td>{order.status}</td>
+                        <td>
+                            <button className="view-btn1">View</button>
+                        </td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
             
-            {[...Array(totalPages).keys()].slice(0, 5).map(number => (
-            <button
-                key={number + 1}
-                onClick={() => paginate(number + 1)}
-                className={`pagination-number-h ${currentPage === number + 1 ? 'active' : ''}`}
-            >
-                {number + 1}
-            </button>
-            ))}
-            
-            <button className="pagination-ellipsis-h">...</button>
-            
-            <button className="pagination-number-h">40</button>
-            
-            <button 
-            className="pagination-arrow-h" 
-            onClick={() => paginate(currentPage < totalPages ? currentPage + 1 : totalPages)}
-            disabled={currentPage === totalPages}
-            >
-            &gt;
-            </button>
-        </div>
+                <div className="pagination-container-h">
+                    <button 
+                    className="pagination-arrow-h" 
+                    onClick={() => paginate(currentPage > 1 ? currentPage - 1 : 1)}
+                    disabled={currentPage === 1}
+                    >
+                    &lt;
+                    </button>
+                    
+                    {[...Array(totalPages).keys()].slice(0, 5).map(number => (
+                    <button
+                        key={number + 1}
+                        onClick={() => paginate(number + 1)}
+                        className={`pagination-number-h ${currentPage === number + 1 ? 'active' : ''}`}
+                    >
+                        {number + 1}
+                    </button>
+                    ))}
+                    
+                    <button className="pagination-ellipsis-h">...</button>
+                    
+                    <button className="pagination-number-h">40</button>
+                    
+                    <button 
+                    className="pagination-arrow-h" 
+                    onClick={() => paginate(currentPage < totalPages ? currentPage + 1 : totalPages)}
+                    disabled={currentPage === totalPages}
+                    >
+                    &gt;
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
   );

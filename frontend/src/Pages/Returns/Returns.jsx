@@ -36,13 +36,10 @@ const Returns = () => {
     };
 
     return (
-      <div>
-          <div>
-              <Sidebar/>
-          </div>
-          <div>
-              <AdminNavbar/>
-          </div>
+      <div className='Returns'>
+        <Sidebar/>
+        <div className='ReturnsContainer'>
+          <AdminNavbar/>
           <div className='returns-title'>
            <h1>Returns</h1>
           </div>
@@ -127,8 +124,9 @@ const Returns = () => {
                 </button>
             </div>
           </div>
+        </div>
       </div>
-    )
+  )
 }
 
 export default Returns
