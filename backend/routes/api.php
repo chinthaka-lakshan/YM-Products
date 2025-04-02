@@ -36,7 +36,7 @@ Route::middleware('auth:sanctum')->group(function () {
 FacadeRoute::post('/items', [ItemController::class, 'store']);
 
 // Shop routes
-FacadeRoute::get('/shops', [ShopController::class, 'index']);
+Route::get('/shops', [ShopController::class, 'index']);
 FacadeRoute::post('/shops', [ShopController::class, 'store']);
 FacadeRoute::get('/shops/{id}', [ShopController::class, 'show']);
 FacadeRoute::put('/shops/{id}', [ShopController::class, 'update']);

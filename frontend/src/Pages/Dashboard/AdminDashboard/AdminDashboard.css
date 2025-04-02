@@ -9,19 +9,29 @@
     .AdminDashboardContainer {
         display: flex;
         flex-direction: column;
+        margin-top: 75px;
+        margin-left: 16%;
+        width: 84%;
+        align-items: center;
 
         .AdminDashboardWidgets {
             display: flex;
             flex-direction: row;
             padding: 20px;
-            gap: 20px;
+            gap: 1.5%;
+            width: 96%;
+
+            :hover{
+                transform: scale(1.02);
+            }
         }
 
         .AdminTablesContainer {
             display: flex;
             flex-direction: row;
             padding: 20px;
-            gap: 20px;
+            gap: 2%;
+            width: 96%;
         }
     }
 }
