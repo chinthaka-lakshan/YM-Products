@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "./AdminShops.css";
 import AdminSidebar from "../../components/Sidebar/AdminSidebar/AdminSidebar.jsx";
 import AdminNavbar from "../../components/AdminNavbar/AdminNavbar.jsx";
 import StoreFrontIcon from "@mui/icons-material/Store";
 
 const AdminShops = () => {
+    const [shops, setShops] = useState([]);
 
     const [shops, setShops] = useState([
         { shopName: "Lakshan Shop", location: "Nattandiya", contact: "076 21326548" },
@@ -33,23 +35,50 @@ const AdminShops = () => {
     const [editShop, setEditShop] = useState({ shopName: "", location: "", contact: "" });
     const [editIndex, setEditIndex] = useState(null);
 
+    // ✅ Fetch shops from backend
+    useEffect(() => {
+        axios.get("http://127.0.0.1:8000/api/shops")
+            .then(response => setShops(response.data))
+            .catch(error => console.error("Error fetching shops:", error));
+    }, []);
+
+    // ✅ Add a new shop
     const handleAddShop = () => {
-        setShops([...shops, newShop]);
-        setNewShop({ shopName: "", location: "", contact: "" });
-        setShowAddModal(false);
+        axios.post("http://127.0.0.1:8000/api/shops", newShop)
+            .then(response => {
+                setShops([...shops, response.data]);
+                setNewShop({ shopName: "", location: "", contact: "" });
+                setShowAddModal(false);
+            })
+            .catch(error => console.error("Error adding shop:", error));
     };
 
+    // ✅ Open edit modal
     const handleEditClick = (index) => {
         setEditIndex(index);
         setEditShop(shops[index]);
         setShowEditModal(true);
     };
 
+    // ✅ Update shop details
     const handleEditShop = () => {
-        const updatedShops = [...shops];
-        updatedShops[editIndex] = editShop;
-        setShops(updatedShops);
-        setShowEditModal(false);
+        axios.put(`http://127.0.0.1:8000/api/shops/${shops[editIndex].id}`, editShop)
+            .then(response => {
+                const updatedShops = [...shops];
+                updatedShops[editIndex] = response.data;
+                setShops(updatedShops);
+                setShowEditModal(false);
+            })
+            .catch(error => console.error("Error updating shop:", error));
+    };
+
+    // ✅ Delete a shop
+    const handleDeleteShop = (id) => {
+        axios.delete(`http://127.0.0.1:8000/api/shops/${id}`)
+            .then(() => {
+                setShops(shops.filter(shop => shop.id !== id));
+            })
+            .catch(error => console.error("Error deleting shop:", error));
     };
 
     return (
@@ -64,8 +93,8 @@ const AdminShops = () => {
                     </div>
                     <div className="ShopsGrid">
                         {shops.map((shop, index) => (
-                            <div key={index} className="ShopCard">
-                                <h2>{shop.shopName}</h2>
+                            <div key={shop.id} className="ShopCard">
+                                <h2>{shop.shop_name}</h2>
                                 <div className="ShopCardMiddle">
                                     <StoreFrontIcon className="ShopCardIcon"/>
                                     <div className="ShopCardDetails">
@@ -74,7 +103,7 @@ const AdminShops = () => {
                                     </div>
                                 </div>
                                 <div className="ShopCardButtons">
-                                    <button className="DeleteButton">Delete</button>
+                                    <button className="DeleteButton" onClick={() => handleDeleteShop(shop.id)}>Delete</button>
                                     <button className="EditButton" onClick={() => handleEditClick(index)}>Edit</button>
                                 </div>
                             </div>
@@ -83,6 +112,7 @@ const AdminShops = () => {
                 </div>
             </div>
 
+            {/* ✅ Add Shop Modal */}
             {showAddModal && (
                 <div className="ModalBackdrop">
                     <div className="Modal">
@@ -118,6 +148,7 @@ const AdminShops = () => {
                 </div>
             )}
 
+            {/* ✅ Edit Shop Modal */}
             {showEditModal && (
                 <div className="ModalBackdrop">
                     <div className="Modal">
