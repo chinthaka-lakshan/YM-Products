@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+
 import axios from "axios";
 import "./AdminShops.css";
 import AdminSidebar from "../../components/Sidebar/AdminSidebar/AdminSidebar.jsx";
@@ -7,33 +8,12 @@ import StoreFrontIcon from "@mui/icons-material/Store";
 
 const AdminShops = () => {
     const [shops, setShops] = useState([]);
-
-    const [shops, setShops] = useState([
-        { shopName: "Lakshan Shop", location: "Nattandiya", contact: "076 21326548" },
-        { shopName: "Hasitha Shop", location: "Nattandiya", contact: "076 21326548" },
-        { shopName: "Lakshan Shop", location: "Nattandiya", contact: "076 21326548" },
-        { shopName: "Lakshan Shop", location: "Nattandiya", contact: "076 21326548" },
-        { shopName: "Hasitha Shop", location: "Nattandiya", contact: "076 21326548" },
-        { shopName: "Lakshan Shop", location: "Nattandiya", contact: "076 21326548" },
-        { shopName: "Lakshan Shop", location: "Nattandiya", contact: "076 21326548" },
-        { shopName: "Hasitha Shop", location: "Nattandiya", contact: "076 21326548" },
-        { shopName: "Lakshan Shop", location: "Nattandiya", contact: "076 21326548" },
-        { shopName: "Lakshan Shop", location: "Nattandiya", contact: "076 21326548" },
-        { shopName: "Hasitha Shop", location: "Nattandiya", contact: "076 21326548" },
-        { shopName: "Lakshan Shop", location: "Nattandiya", contact: "076 21326548" },
-        { shopName: "Lakshan Shop", location: "Nattandiya", contact: "076 21326548" },
-        { shopName: "Hasitha Shop", location: "Nattandiya", contact: "076 21326548" },
-        { shopName: "Lakshan Shop", location: "Nattandiya", contact: "076 21326548" },
-        { shopName: "Lakshan Shop", location: "Nattandiya", contact: "076 21326548" },
-        { shopName: "Hasitha Shop", location: "Nattandiya", contact: "076 21326548" },
-        { shopName: "Lakshan Shop", location: "Nattandiya", contact: "076 21326548" },
-    ]);
-
     const [showAddModal, setShowAddModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [newShop, setNewShop] = useState({ shopName: "", location: "", contact: "" });
-    const [editShop, setEditShop] = useState({ shopName: "", location: "", contact: "" });
+    const [editShop, setEditShop] = useState({ shop_name: "", location: "", contact: "" });
     const [editIndex, setEditIndex] = useState(null);
+
 
     // ✅ Fetch shops from backend
     useEffect(() => {
@@ -43,15 +23,27 @@ const AdminShops = () => {
     }, []);
 
     // ✅ Add a new shop
-    const handleAddShop = () => {
-        axios.post("http://127.0.0.1:8000/api/shops", newShop)
-            .then(response => {
-                setShops([...shops, response.data]);
-                setNewShop({ shopName: "", location: "", contact: "" });
-                setShowAddModal(false);
-            })
-            .catch(error => console.error("Error adding shop:", error));
-    };
+    const handleAddShop = async () => {
+        try {
+          const response = await axios.post("http://127.0.0.1:8000/api/shops", newShop);
+          console.log("Shop added successfully:", response.data);
+          alert(response.data.message || "Shop added successfully!");
+          // ✅ Clear form
+            setShowAddModal(false);
+            setNewShop({ shop_name: "", location: "", contact: "" });
+            window.location.reload();
+
+
+        } catch (error) {
+          if (error.response) {
+            console.error("Validation errors:", error.response.data.errors);
+          } else {
+            console.error("Unknown error:", error);
+          }
+        }
+      };
+      
+      
 
     // ✅ Open edit modal
     const handleEditClick = (index) => {
@@ -123,8 +115,8 @@ const AdminShops = () => {
                                 <input
                                     type="text"
                                     placeholder="Enter Shop Name"
-                                    value={newShop.shopName}
-                                    onChange={(e) => setNewShop({ ...newShop, shopName: e.target.value })}
+                                    value={newShop.shop_name}
+                                    onChange={(e) => setNewShop({ ...newShop, shop_name: e.target.value })}
                                 />
                                 <input 
                                     type="text"
