@@ -76,7 +76,6 @@ const AdminShops = () => {
             .then(() => {
                 setShops(shops.filter(shop => shop.id !== id));
                 alert("Shop deleted successfully!");
-                window.location.reload();
             })
             .catch(error => console.error("Error deleting shop:", error));
     };
