@@ -1,6 +1,6 @@
 import React from "react";
 import Sidebar from "../../components/Sidebar/AdminSidebar/AdminSidebar";
-// import Navbar from "../../components/Navbar/Navbar";
+import Navbar from "../../components/AdminNavbar/AdminNavbar";
 import "./RepRegistration.css";
 
 const RepRegistration = () => {
@@ -8,7 +8,7 @@ const RepRegistration = () => {
     <div className="rep-container">
       <Sidebar />
       <div>
-      <Topbar/>
+      <Navbar/>
       </div>
         <div className="registration-form">
           <h2>Representative Registration</h2>

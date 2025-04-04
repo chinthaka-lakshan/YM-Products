@@ -60,7 +60,7 @@ const DashboardWidget = ({ type }) => {
 
     case "returns":
       data = {
-        path: "/adminReturns",
+        path: "/returns",
         title: "RETURNS",
         isMoney: false,
         text: "View Returns",

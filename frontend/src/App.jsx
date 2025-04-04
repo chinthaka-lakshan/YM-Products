@@ -14,9 +14,7 @@ import SalesReps from './Pages/SalesReps/SalesReps.jsx';
 import RepInvoice from './Pages/RepInvoice/RepInvoice.jsx';
 import Invoice from "./Pages/Invoice/Invoice.jsx";
 import RepReturns from "./Pages/RepReturns/RepReturns.jsx";
-
-
-
+import RepRegistration from './Pages/RepRegistration/RepRegistration.jsx';
 import RepLogin from './Pages/Login/RepLogin/RepLogin.jsx';
 import RepDashboard from './Pages/Dashboard/RepDashboard/RepDashboard.jsx';
 import RepOrdersHistory from './Pages/RepOrdersHistory/RepOrdersHistory.jsx';
@@ -36,12 +34,11 @@ function App() {
           <Route path="/purchaseStock" element={<PurchaseStock />}/>
           <Route path="/adminOrders" element={<Orders />}/>  
           <Route path="/adminShops" element={<AdminShops />}/>
-          
           <Route path="/returns" element={<Return />}/>
           <Route path="/cashFlow" element={<CashFlow />}/>
           <Route path='/adminOrdersHistory' element={<OrdersHistory/>}/>
           <Route path="/salesreps" element={<SalesReps />}/>
-
+          <Route path='/repRegistration' element={<RepRegistration />}/>
           <Route path="/repLogin" element={<RepLogin />}/>
           <Route path='/repDashboard' element={<RepDashboard/>}/>
           <Route path='/repOrdersHistory' element={<RepOrdersHistory/>}/>
@@ -49,9 +46,6 @@ function App() {
           <Route path="/invoice" element={<Invoice />}/>
           <Route path="/repReturns" element={<RepReturns />}/>
           <Route path="/repShops" element={<RepShops/>}/>
-
-          
-      
           
         </Routes>
       </div>

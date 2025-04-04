@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import Sidebar from '../../components/Sidebar/AdminSidebar/AdminSidebar'
 import Navbar from '../../components/AdminNavbar/AdminNavbar'
+import StoreFrontIcon from "@mui/icons-material/Store";
 import { Link } from 'react-router-dom'
 import "./Orders.css"
 
-
 const Orders = () => {
+
   const [orders, setOrders] = useState([
     { id: 1, shop: 'LakshanShop', date: '3/4/2025', repName: 'Raheem', status: 'Pending' },
     { id: 2, shop: 'HasithaShop', date: '3/4/2025', repName: 'Raheem', status: 'Pending' },
@@ -21,10 +22,23 @@ const Orders = () => {
     { id: 12, shop: 'Shop', date: '3/4/2025', repName: 'Raheem', status: 'Pending' },
   ]);
 
+  const [shops, setShops] = useState([
+    { shopName: "Lakshan Shop", location: "Nattandiya", contact: "076 21326548" },
+    { shopName: "Hasitha Shop", location: "Nattandiya", contact: "076 21326548" },
+    { shopName: "Lakshan Shop", location: "Nattandiya", contact: "076 21326548" },
+    { shopName: "Lakshan Shop", location: "Nattandiya", contact: "076 21326548" },
+    { shopName: "Hasitha Shop", location: "Nattandiya", contact: "076 21326548" },
+    { shopName: "Lakshan Shop", location: "Nattandiya", contact: "076 21326548" },
+    { shopName: "Lakshan Shop", location: "Nattandiya", contact: "076 21326548" },
+    { shopName: "Hasitha Shop", location: "Nattandiya", contact: "076 21326548" },
+    { shopName: "Lakshan Shop", location: "Nattandiya", contact: "076 21326548" },
+  ]);
+
   const [currentPage, setCurrentPage] = useState(1);
   const ordersPerPage = 5;
 
-  // Handle status change (Accept/Cancel)
+  const [showAddModal, setShowAddModal] = useState(false);
+
   const handleStatusChange = (id, newStatus) => {
     setOrders(
       orders.map((order) =>
@@ -43,8 +57,8 @@ const Orders = () => {
 
   return (
     <div className="Orders">
-         <Sidebar/>
-         <div className='OrdersContainer'>
+      <Sidebar/>
+      <div className='OrdersContainer'>
           <Navbar/>
           <div className='order-title'>
             <h1>Orders</h1>
@@ -55,7 +69,7 @@ const Orders = () => {
                 </Link>
           </div>
           <div className='btn2'>
-          <button className='add-new-btn'>Add New</button>
+          <button className='add-new-btn' onClick={() => setShowAddModal(true)}>Add New</button>
           </div>
 
           <div className='orders-table-container'>           
@@ -142,11 +156,36 @@ const Orders = () => {
                 </li>
               </ul>
             </div>
+          </div>
+      </div>
+
+      {showAddModal && (
+        <div className="ModalBackdrop">
+          <div className="Modal">
+            <h2>Select Shop</h2>
+            <div className="ShopsGrid">
+              {shops.map((shop, index) => (
+                <div key={index} className="ShopCard">
+                  <h2>{shop.shopName}</h2>
+                  <div className="ShopCardMiddle">
+                    <StoreFrontIcon className="ShopCardIcon"/>
+                    <div className="ShopCardDetails">
+                      <span>{shop.location}</span>
+                      <span>{shop.contact}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="ModalButtons">
+              <button className="CancelButton" onClick={() => setShowAddModal(false)}>Cancel</button>
+            </div>
+          </div>
         </div>
-      </div>         
-    </div>  
+      )}
+
+    </div>
   )
 }
 
 export default Orders;
-
