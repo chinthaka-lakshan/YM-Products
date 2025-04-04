@@ -33,7 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 // Item routes
-FacadeRoute::post('/items', [ItemController::class, 'store']);
+Route::apiResource('items', ItemController::class);
 
 // Shop routes
 Route::apiResource('shops', ShopController::class);
