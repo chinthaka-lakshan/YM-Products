@@ -36,7 +36,8 @@ Route::middleware('auth:sanctum')->group(function () {
 FacadeRoute::post('/items', [ItemController::class, 'store']);
 
 // Shop routes
-Route::get('/shops', [ShopController::class, 'index']);
+Route::apiResource('shops', ShopController::class);
+
 
 // Protected routes
 FacadeRoute::middleware('auth:sanctum')->group(function () {
