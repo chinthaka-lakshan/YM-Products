@@ -55,14 +55,14 @@
 
 
 import React, { useState, useRef } from "react";
-import "./Invoice.css";
-import Sidebar from "../../components/Sidebar/AdminSidebar/AdminSidebar";
+import "./RepInvoice.css";
+import RepSidebar from "../../components/Sidebar/RepSidebar/RepSidebar"
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import logo from "../../assets/YMlogo.PNG";
-import AdminNavbar from "../../components/AdminNavbar/AdminNavbar";
+import logo from "../../assets/YMlogo.PNG"
 
-const Invoice = () => {
+
+const RepInvoice = () => {
   const [showPopup, setShowPopup] = useState(false);
   const invoiceRef = useRef();
 
@@ -87,11 +87,11 @@ const Invoice = () => {
   };
 
   return (
-    <div className="invoice-container">
-      <Sidebar/>
-    <h2 className="invoice-title">Invoice</h2>
-      <AdminNavbar/>
-      <div className="invoice-table">
+    <div className="invoice-container1">
+      <RepSidebar/>
+      
+      <h2 className="invoice-title1">Invoice</h2>
+      <div className="invoice-table1">
         <table>
           <thead>
             <tr>
@@ -113,23 +113,23 @@ const Invoice = () => {
           </tbody>
         </table>
       </div>
-      <div className="invoice-actions">
-        <button className="add-btn">Add Items</button>
-        <button className="generate-btn" onClick={handleGenerateInvoice}>
+      <div className="invoice-actions1">
+        <button className="add-btn1">Add Items</button>
+        <button className="generate-btn1" onClick={handleGenerateInvoice}>
           Generate Invoice
         </button>
       </div>
 
       {showPopup && (
-        <div className="invoice-popup">
-          <div className="invoice-content" ref={invoiceRef}>
-            <div className="invoice-header">
-              <img src={logo} alt="Invoice Logo" className="invoice-logo" />
+        <div className="invoice-popup1">
+          <div className="invoice-content1" ref={invoiceRef}>
+            <div className="invoice-header1">
+              <img src={logo} alt="Invoice Logo" className="invoice-logo1" />
               <div>
                 <h2>Shop</h2>
                 <p>2025/02/01</p>
               </div>
-              <div className="invoice-number">
+              <div className="invoice-number1">
                 <h2>Invoice</h2>
                 <p>#1235</p>
               </div>
@@ -154,15 +154,15 @@ const Invoice = () => {
                 ))}
               </tbody>
             </table>
-            <div className="invoice-total">
+            <div className="invoice-total1">
               <p>Sub Total: Rs. 150,000</p>
               <p>Discount: 10%</p>
               <p><strong>Total Due: Rs. 135,000</strong></p>
             </div>
           </div>
-          <div className="invoice-buttons">
-            <button className="print-btn" onClick={handlePrint}>Print</button>
-            <button className="close-btn" onClick={() => setShowPopup(false)}>Close</button>
+          <div className="invoice-buttons1">
+            <button className="print-btn1" onClick={handlePrint}>Print</button>
+            <button className="close-btn1" onClick={() => setShowPopup(false)}>Close</button>
           </div>
         </div>
       )}
@@ -170,4 +170,4 @@ const Invoice = () => {
   );
 };
 
-export default Invoice;
+export default RepInvoice;

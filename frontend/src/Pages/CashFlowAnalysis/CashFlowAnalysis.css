@@ -1,35 +1,65 @@
 .CashFlowAnalysis{
     font-family: Arial, sans-serif;
-    width: 100%;
     display: flex;
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
 
     .CashFlowContainer {
-        flex: 1;
         display: flex;
         flex-direction: column;
-        padding: 1.5%;
-        transition: margin-left 0.3s ease;
+        background: #f4f4f4;
+        gap: 10px;
+        padding: 20px;
+        margin-top: 75px;
+        margin-left: 16%;
+        height: calc(100vh - 75px);
+        overflow-y: scroll;
+        width: 90%;
+        align-items: center;
 
-        .MonthCashFlowWidgets {
+        .MonthlyCashFlow{
             display: flex;
-            padding: 20px;
-            gap: 20px;
-        }
-        .DayCashFlow{
+            flex-direction: column;
             border: 1px solid #000000;
             border-radius: 15px;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+
+            .MonthlyCashFlowWidgets{
+                display: flex;
+                flex-direction: row;
+                padding: 20px;
+                gap: 60px;
+                width: 90%;
+            }
         }
-        .DayCashFlowWidgets {
+
+        .DailyCashFlow{
             display: flex;
-            padding: 20px;
-            gap: 20px;
+            flex-direction: column;
+            border: 1px solid #000000;
+            border-radius: 15px;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+
+            .DailyCashFlowWidgets{
+                display: flex;
+                flex-direction: row;
+                padding: 20px;
+                gap: 60px;
+                width: 90%;
+            }
         }
+
         .ButtonsContainer {
-            display: flex;
-            justify-content: space-between;
             padding: 10px;
             width: 20%;
-            margin-left: 77%;
+            justify-self: center;
+            align-self: center;
         }
 
         .TablesContainer {
@@ -40,9 +70,5 @@
             padding: 20px;
             gap: 20px;
         }
-    }
-
-    .sidebar.collapsed + .CashFlowContainer {
-        margin-left: 80px;
     }
 }
