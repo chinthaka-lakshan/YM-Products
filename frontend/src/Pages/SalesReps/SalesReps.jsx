@@ -2,6 +2,7 @@ import React from "react";
 import "./SalesReps.css";
 import AdminSidebar from "../../components/Sidebar/AdminSidebar/AdminSidebar";
 import AdminNavbar from "../../components/AdminNavbar/AdminNavbar";
+import { Link } from "react-router-dom";
 
 
 const SalesReps = () => {
@@ -19,7 +20,9 @@ const SalesReps = () => {
       <div className="header-section">
       <AdminNavbar/>
         <h2>Representatives</h2>
-        <button className="add-new">Add New</button>
+        <Link to={"/repRegistration"}>
+          <button className="add-new">Add New</button>
+        </Link>
       </div>
 
       <div className="table-container">

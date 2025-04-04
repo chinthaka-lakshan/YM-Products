@@ -1,13 +1,13 @@
 .RepNavbar {
-    height: 75px;
+    height: 72px;
     display: flex;
     align-items: center;
     background-color: darkcyan;
     padding: 0 20px;
     position: fixed;
     top: 0;
-    left: 16%;
-    width: 84%;
+    left: 16.5%;
+    width: 82%;
     z-index: 999;
 
     .RepNavbarContainer {

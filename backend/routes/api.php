@@ -36,11 +36,8 @@ Route::middleware('auth:sanctum')->group(function () {
 FacadeRoute::post('/items', [ItemController::class, 'store']);
 
 // Shop routes
-Route::get('/shops', [ShopController::class, 'index']);
-FacadeRoute::post('/shops', [ShopController::class, 'store']);
-FacadeRoute::get('/shops/{id}', [ShopController::class, 'show']);
-FacadeRoute::put('/shops/{id}', [ShopController::class, 'update']);
-FacadeRoute::delete('/shops/{id}', [ShopController::class, 'destroy']);
+Route::apiResource('shops', ShopController::class);
+
 
 // Protected routes
 FacadeRoute::middleware('auth:sanctum')->group(function () {
