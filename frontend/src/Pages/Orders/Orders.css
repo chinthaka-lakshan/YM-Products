@@ -1,18 +1,48 @@
+.Orders{
+  font-family: Arial, sans-serif;
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+
+  .OrdersContainer{
+    display: flex;
+    flex-direction: column;
+    width: 84%;
+    background: #f4f4f4;
+    gap: 10px;
+    padding: 20px;
+    margin-top: 75px;
+    margin-left: 16%;
+    height: calc(100vh - 75px);
+
+    .order-title{
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+}
+
 .order-title h1{
   position:absolute;
   top: 12%;
-  left:330px;
+  left:20%
 }
 
 .btn1{
   position:absolute;
   top: 20%;
-  right: 18%;
+  right: 12%;
 }
+
 .btn2{
-position:absolute;
-top: 20%;
-right: 10%;
+  position:absolute;
+  top: 20%;
+  right: 5%;
 }
 
 .history-btn {
@@ -26,36 +56,36 @@ right: 10%;
   color: white;
   border: none;
 }
-.History-table-container{
-width: 1000px;
-position: absolute;
-top:30%;
-right:5%;
+.orders-table-container{
+  position: absolute;
+  top:25%;
+  left: 20%;
 
 }
-.table{
+.tableO{
 border: 1px solid #e1e6f0;
 border-radius: 8px;
 background-color: white;
 border-collapse: collapse;
+width: 107%;
 
 }
-.table th {
+.tableO th {
 font-weight: normal;
 color: #020608;
 border-top: none;
 text-align: center;
-width: 180px;
-height: 45px;
+width: 170px;
+height: 50px;
 background-color:whitesmoke;
 border-bottom: 1px solid #e1e6f0;
 
 
 }
-.table td{
+.tableO td{
 text-align: center;
 border-bottom: 1px solid #f1f1f5;
-height: 30px;
+height: 50px;
 
 }
 
@@ -94,7 +124,7 @@ height: 30px;
 }
 
 /* Pagination styling */
-.pagination-container {
+.pagination-container-O {
 display: flex;
 justify-content: flex-end;
 margin-top: 20px;
@@ -102,21 +132,21 @@ border-top: 1px solid #e0e0e0;
 padding-top: 15px;
 position: absolute;
 top: 100%;
-right: 8%;
+right: -95px;
 }
 
-.pagination {
+.pagination-O {
 display: flex;
 list-style: none;
 padding: 0;
 margin: 0;
 }
 
-.page-item {
+.page-item-O {
 margin: 0 2px;
 }
 
-.page-link {
+.page-link-O {
 display: flex;
 align-items: center;
 justify-content: center;
@@ -132,18 +162,144 @@ font-size: 14px;
 padding: 0 10px;
 }
 
-.page-item.active .page-link {
+.page-item-O.active .page-link-O {
 background-color: #4c3eff;
 color: white;
 border-color: #4c3eff;
 }
 
-.page-item.disabled .page-link {
+.page-item-O.disabled .page-link-O {
 color: #6c757d;
 pointer-events: none;
 cursor: not-allowed;
 }
 
-.go-btn {
+.go-btn-O {
 background-color: #f8f9fa;
+}
+
+.ModalBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .Modal {
+      display: flex;
+      flex-direction: column;
+      width: 60%;
+      height: 80%;
+      background: whitesmoke;
+      border-radius: 20px;
+      -webkit-box-shadow: 1px 1px 5px 1px #425060;
+      box-shadow: 4px 6px 20px rgba(0, 0, 0, 0.15);
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1000;
+      gap: 30px;
+
+      h2 {
+          font-size: 35px;
+          color: #616161;
+          margin-top: -20px;
+      }
+
+      .ShopsGrid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+
+        .ShopCard {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background:rgba(100, 148, 237, 0.447);
+            padding: 10px;
+            border-radius: 10px;
+            -webkit-box-shadow: 1px 1px 5px 1px #425060;
+            box-shadow: 1px 1px 5px 1px #a0afc1;
+            gap: 5px;
+
+            h2 {
+                font-size: 20px;
+                color: #504d4d;
+                margin-top: -5px;
+            }
+
+            .ShopCardMiddle {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                gap: 10px;
+
+                .ShopCardIcon {
+                    font-size: 70px;
+                    align-self: flex-start;
+                    color: #504d4d;
+                }
+
+                .ShopCardDetails {
+                    display: flex;
+                    flex-direction: column;
+                    font-size: 16px;
+                    color: #616161;
+                }
+            }
+        }
+
+        .ShopCard:hover {
+            transform: scale(1.05);
+            box-shadow: 4px 6px 20px rgba(0, 0, 0, 0.15);
+        }
+      }
+
+      .ModalButtons {
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+          gap: 40px;
+          font-size: 20px;
+
+          .CancelButton {
+              background: orangered;
+              border: none;
+              padding: 10px;
+              border-radius: 5px;
+              cursor: pointer;
+              font-weight: bold;
+          }
+
+          .CancelButton:hover {
+              transform: scale(1.05);
+              background: orange;
+          }
+
+          .SaveButton {
+              background: peru;
+              border: none;
+              padding: 10px;
+              border-radius: 5px;
+              cursor: pointer;
+              font-weight: bold;
+          }
+
+          .SaveButton:hover {
+              transform: scale(1.05);
+              background: green;
+          }
+      }
+  }
 }

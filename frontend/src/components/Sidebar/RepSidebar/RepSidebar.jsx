@@ -24,9 +24,9 @@ export default function Sidebar({ onToggle }) {
         { icon: <DashboardIcon />, text: "Dashboard", path: "/repdashboard" },
         // { icon: <InventoryIcon />, text: "Distribution Stock", path: "/distribution" },
         // { icon: <ShoppingCartIcon />, text: "Purchase Stock", path: "/purchase" },
-        { icon: <StorefrontIcon />, text: "Orders", path: "/orders" },
-        { icon: <RepeatIcon />, text: "Returns", path: "/returns" },
-        { icon: <StoreIcon />, text: "Shops", path: "/shops" },
+        { icon: <StorefrontIcon />, text: "Orders", path: "/repOrdersHistory" },
+        { icon: <RepeatIcon />, text: "Returns", path: "/repReturns" },
+        { icon: <StoreIcon />, text: "Shops", path: "/repShops" },
         // { icon: <PeopleIcon />, text: "Representative", path: "/repregistration" },
         // { icon: <AttachMoneyIcon />, text: "Cash Flow Analysis", path: "/cash-flow" },
     ];
@@ -39,10 +39,10 @@ export default function Sidebar({ onToggle }) {
         <aside className={`sidebar ${expanded ? "" : "collapsed"}`}>
             <nav className="sidebar-nav">
                 <div className="sidebar-header">
-                    <h2 className="sidebar-title">{expanded ? "DeepNix" : "D"}</h2>
-                    <button onClick={toggleSidebar} className="toggle-btn">
+                    <h2 className="sidebar-title">{expanded ? "YM PRODUCTS" : "D"}</h2>
+                    {/* <button onClick={toggleSidebar} className="toggle-btn">
                         {expanded ? <ChevronLeft /> : <ChevronRight />}
-                    </button>
+                    </button> */}
                 </div>
 
                 <SidebarContext.Provider value={{ expanded }}>

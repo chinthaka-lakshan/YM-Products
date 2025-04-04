@@ -1,10 +1,8 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./RepLogin.css";
 import Replogo from "../../../assets/replogo.png"; // Adjust the path to your logo image
-
-
 
 const AdminLogin = () => {
   const [email, setEmail] = useState("");
@@ -68,9 +66,11 @@ const AdminLogin = () => {
             />
           </div>
 
-          <button type="submit" className="btn" disabled={loading}>
-            {loading ? "Logging in..." : "Login"}
-          </button>
+          <Link to={"/repdashboard"}>
+            <button type="submit" className="btn" disabled={loading}>
+              {loading ? "Logging in..." : "Login"}
+            </button>
+          </Link>
         </form>
 
         <div className="logo-container">
