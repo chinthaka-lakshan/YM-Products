@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-import './Returns.css'
-import Sidebar from '../../components/Sidebar/AdminSidebar/AdminSidebar'
-import AdminNavbar from '../../components/AdminNavbar/AdminNavbar'
+import './RepReturns.css'
+import RepNavbar from "../../components/RepNavbar/RepNavbar"
+import RepSidebar from "../../components/Sidebar/RepSidebar/RepSidebar"
 
-const Returns = () => {
+
+const RepReturns = () => {
     const [returns, setReturns] = useState([
         { id: 1, shop: 'Shop', item: 'Chil Powder', weight: '50', qty: '5', type: 'Good', date: '2023/01/10' },
         { id: 2, shop: 'Shop', item: 'Chil Powder', weight: '100', qty: '10', type: 'Bad', date: '2023/01/10' },
@@ -36,22 +37,25 @@ const Returns = () => {
     };
 
     return (
-      <div className='Returns'>
-        <Sidebar/>
-        <div className='ReturnsContainer'>
-          <AdminNavbar/>
-          <div className='returns-title'>
+      <div>
+          <div>
+              <RepSidebar/>
+          </div>
+          <div>
+              <RepNavbar/>
+          </div>
+          <div className='repreturns-title'>
            <h1>Returns</h1>
           </div>
-          <div className='btn-re'>
-            <button className='good-btn'>Good</button>
+          <div className='repbtn-re'>
+            <button className='repgood-btn'>Good</button>
           </div>
-          <div className='btn--re'>
-             <button className='bad-btn'>Bad</button>
+          <div className='repbtn--re'>
+             <button className='repbad-btn'>Bad</button>
           </div>
 
-          <div className="returns-table-container">
-            <table className="returns-table">
+          <div className="repreturns-table-container">
+            <table className="repreturns-table">
                 <thead>
                 <tr>
                     <th>Shop</th>
@@ -74,7 +78,7 @@ const Returns = () => {
                     <td>{returnItem.date}</td>
                     <td>
                         <button 
-                          className="dlt-btn"
+                          className="repdlt-btn"
                           onClick={() => handleDelete(returnItem.id)}
                         >
                           Delete
@@ -85,9 +89,9 @@ const Returns = () => {
                 </tbody>
             </table>
           
-            <div className="pagination-container-returns">
+            <div className="reppagination-container-returns">
                 <button 
-                className="pagination-arrow-returns" 
+                className="reppagination-arrow-returns" 
                 onClick={() => paginate(currentPage > 1 ? currentPage - 1 : 1)}
                 disabled={currentPage === 1}
                 >
@@ -98,17 +102,17 @@ const Returns = () => {
                 <button
                     key={number + 1}
                     onClick={() => paginate(number + 1)}
-                    className={`pagination-number-returns ${currentPage === number + 1 ? 'active' : ''}`}
+                    className={`reppagination-number-returns ${currentPage === number + 1 ? 'active' : ''}`}
                 >
                     {number + 1}
                 </button>
                 ))}
                 
-                {totalPages > 5 && <button className="pagination-ellipsis-returns">...</button>}
+                {totalPages > 5 && <button className="reppagination-ellipsis-returns">...</button>}
                 
                 {totalPages > 5 && (
                   <button 
-                    className="pagination-number-returns"
+                    className="reppagination-number-returns"
                     onClick={() => paginate(totalPages)}
                   >
                     {totalPages}
@@ -116,7 +120,7 @@ const Returns = () => {
                 )}
                 
                 <button 
-                className="pagination-arrow-returns" 
+                className="reppagination-arrow-returns" 
                 onClick={() => paginate(currentPage < totalPages ? currentPage + 1 : totalPages)}
                 disabled={currentPage === totalPages}
                 >
@@ -124,9 +128,8 @@ const Returns = () => {
                 </button>
             </div>
           </div>
-        </div>
       </div>
-  )
+    )
 }
 
-export default Returns
+export default RepReturns

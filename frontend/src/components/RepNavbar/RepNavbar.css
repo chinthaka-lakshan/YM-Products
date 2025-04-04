@@ -1,23 +1,23 @@
-.AdminNavbar {
-    height: 75px;
+.RepNavbar {
+    height: 72px;
     display: flex;
     align-items: center;
     background-color: darkcyan;
     padding: 0 20px;
     position: fixed;
     top: 0;
-    left: 16%;
-    width: 84%;
+    left: 16.5%;
+    width: 82%;
     z-index: 999;
 
-    .AdminNavbarContainer {
+    .RepNavbarContainer {
         display: flex;
         width: 100%;
         align-items: center;
         justify-content: space-between;
         padding-right: 30px;
 
-        .NavbarTitle {
+        .RepNavbarTitle {
             font-size: 30px;
             font-weight: bold;
             color: #333;
@@ -25,7 +25,7 @@
             text-align: center;
         }
 
-        .NavbarLog {
+        .RepNavbarLog {
             display: flex;
             align-items: center;
             gap: 10px;
@@ -38,7 +38,7 @@
                 color: #333;
             }
 
-            .ProfileIcon {
+            .RepProfileIcon {
                 font-size: 45px;
                 color: #333;
                 cursor: pointer;
@@ -46,7 +46,7 @@
         }
     }
 
-    .LogoutPopup {
+    .RepLogoutPopup {
         position: absolute;
         top: 50px;
         right: 50px;
@@ -60,7 +60,7 @@
         justify-content: center;
         align-items: center;
 
-        .PopupContent {
+        .RepPopupContent {
             display: flex;
             flex-direction: column;
             gap: 5px;
@@ -73,7 +73,7 @@
                 font-weight: bold;
             }
 
-            .PopupLogoutButton {
+            .RepPopupLogoutButton {
                 width: 80%;
                 background: darkred;
                 color: white;
@@ -82,7 +82,7 @@
                 cursor: pointer;
             }
 
-            .PopupCancelButton {
+            .RepPopupCancelButton {
                 width: 80%;
                 background: gray;
                 color: white;
