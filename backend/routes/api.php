@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route as FacadeRoute;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\OrderController;
 
 
 /*
@@ -34,13 +35,16 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 // Item routes
-FacadeRoute::post('/items', [ItemController::class, 'store']);
+Route::apiResource('items', ItemController::class);
 
 // Shop routes
 Route::apiResource('shops', ShopController::class);
 
 // Rep routes
 Route::apiResource('sales_reps',SalesRepController::class);
+// Order routes
+Route::apiResource('orders', OrderController::class);
+
 
 
 // Protected routes

@@ -53,15 +53,21 @@ const AdminShops = () => {
     };
 
     // ✅ Update shop details
-    const handleEditShop = () => {
-        axios.put(`http://127.0.0.1:8000/api/shops/${shops[editIndex].id}`, editShop)
-            .then(response => {
-                const updatedShops = [...shops];
-                updatedShops[editIndex] = response.data;
-                setShops(updatedShops);
-                setShowEditModal(false);
-            })
-            .catch(error => console.error("Error updating shop:", error));
+    const handleEditShop = async () => {
+        try {
+            const response = await axios.put(`http://127.0.0.1:8000/api/shops/${shops[editIndex].id}`, editShop);
+            console.log("Shop updated successfully:", response.data);
+            alert(response.data.message || "Shop updated successfully!");
+            setShowEditModal(false);
+            setEditShop({ shop_name: "", location: "", contact: "" });
+        } catch (error) {
+        
+            if (error.response) {
+                console.error("Validation errors:", error.response.data.errors);
+            } else {
+                console.error("Unknown error:", error);
+            }
+        }
     };
 
     // ✅ Delete a shop
@@ -69,6 +75,7 @@ const AdminShops = () => {
         axios.delete(`http://127.0.0.1:8000/api/shops/${id}`)
             .then(() => {
                 setShops(shops.filter(shop => shop.id !== id));
+                alert("Shop deleted successfully!");
             })
             .catch(error => console.error("Error deleting shop:", error));
     };
@@ -151,8 +158,8 @@ const AdminShops = () => {
                                 <input 
                                     type="text" 
                                     placeholder="Enter Shop Name" 
-                                    value={editShop.shopName} 
-                                    onChange={(e) => setEditShop({ ...editShop, shopName: e.target.value })}
+                                    value={editShop.shop_name} 
+                                    onChange={(e) => setEditShop({ ...editShop, shop_name: e.target.value })}
                                 />
                                 <input 
                                     type="text" 
