@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SalesRepController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route as FacadeRoute;
 use App\Http\Controllers\AuthController;
@@ -37,6 +38,9 @@ Route::apiResource('items', ItemController::class);
 
 // Shop routes
 Route::apiResource('shops', ShopController::class);
+
+// Rep routes
+Route::apiResource('sales_reps',SalesRepController::class);
 
 
 // Protected routes
