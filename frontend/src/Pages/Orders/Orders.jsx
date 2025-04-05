@@ -41,7 +41,7 @@ const Orders = () => {
     { item: "Chilli Powder 300g", unitPrice: "480.50", quantity: 22 },
     { item: "Curry Powder 150g", unitPrice: "200.00", quantity: 42 },
     { item: "Curry Powder 125g", unitPrice: "400.00", quantity: 72 },
-    { item: "Chilli Pieces 500g", unitPrice: "180.75", quantity: 12 },
+    { item: "Chilli Pieces 700g", unitPrice: "180.75", quantity: 12 },
   ]);
 
   const [currentPage, setCurrentPage] = useState(1);
