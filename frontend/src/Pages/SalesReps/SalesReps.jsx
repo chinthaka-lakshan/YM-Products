@@ -44,7 +44,11 @@ const SalesReps = () => {
                 <td>{rep.contact}</td>
                 <td>{rep.nic}</td>
                 <td className="actions">
+
+                  <Link to ={"/editrep"}>
                   <button className="edit">Edit</button>
+                  </Link>
+                 
                   <button className="delete">Delete</button>
                 </td>
               </tr>
