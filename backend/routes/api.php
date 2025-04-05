@@ -33,14 +33,11 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 // Item routes
-FacadeRoute::post('/items', [ItemController::class, 'store']);
+Route::apiResource('items', ItemController::class);
 
 // Shop routes
-Route::get('/shops', [ShopController::class, 'index']);
-FacadeRoute::post('/shops', [ShopController::class, 'store']);
-FacadeRoute::get('/shops/{id}', [ShopController::class, 'show']);
-FacadeRoute::put('/shops/{id}', [ShopController::class, 'update']);
-FacadeRoute::delete('/shops/{id}', [ShopController::class, 'destroy']);
+Route::apiResource('shops', ShopController::class);
+
 
 // Protected routes
 FacadeRoute::middleware('auth:sanctum')->group(function () {
