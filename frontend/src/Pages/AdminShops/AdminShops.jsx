@@ -26,22 +26,15 @@ const AdminShops = () => {
     const handleAddShop = async () => {
         try {
           const response = await axios.post("http://127.0.0.1:8000/api/shops", newShop);
-          console.log("Shop added successfully:", response.data);
-          alert(response.data.message || "Shop added successfully!");
-          // ✅ Clear form
-            setShowAddModal(false);
-            setNewShop({ shop_name: "", location: "", contact: "" });
-            window.location.reload();
-
-
+          setShops([...shops, response.data.shop]);
+          setNewShop({ shopName: "", location: "", contact: "" });
+          alert("Shop added successfully");
+          setShowAddModal(false);
         } catch (error) {
-          if (error.response) {
-            console.error("Validation errors:", error.response.data.errors);
-          } else {
-            console.error("Unknown error:", error);
-          }
+            console.error("Error adding shop:", error);
+            alert("Failed to add item");
         }
-      };
+    };
       
       
 
@@ -73,13 +66,17 @@ const AdminShops = () => {
     };
 
     // ✅ Delete a shop
-    const handleDeleteShop = (id) => {
-        axios.delete(`http://127.0.0.1:8000/api/shops/${id}`)
-            .then(() => {
-                setShops(shops.filter(shop => shop.id !== id));
-                alert("Shop deleted successfully!");
-            })
-            .catch(error => console.error("Error deleting shop:", error));
+    const handleDeleteShop = async (id) => {
+        if (!window.confirm("Are you sure you want to delete this shop?")) return;
+
+        try {
+            await axios.delete(`http://127.0.0.1:8000/api/shops/${id}`)
+            setShops(shops.filter(shop => shop.id !== id));
+            alert("Shop deleted successfully!");
+        } catch (error) {
+            console.error("Error deleting shop:", error);
+            alert("Failed to delete shop.");
+        }
     };
 
     return (
@@ -99,8 +96,8 @@ const AdminShops = () => {
                                 <div className="ShopCardMiddle">
                                     <StoreFrontIcon className="ShopCardIcon"/>
                                     <div className="ShopCardDetails">
-                                        <span>{shop.location}</span>
-                                        <span>{shop.contact}</span>
+                                        <span><strong>Location: </strong>{shop.location}</span>
+                                        <span><strong>Contact: </strong>{shop.contact}</span>
                                     </div>
                                 </div>
                                 <div className="ShopCardButtons">
