@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Controllers\SalesRepController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route as FacadeRoute;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\PurchaseStockController;
+use App\Http\Controllers\OrderController;
 
 
 /*
@@ -38,6 +40,12 @@ Route::apiResource('items', ItemController::class);
 Route::apiResource('purchase_stock',PurchaseStockController::class);
 // Shop routes
 Route::apiResource('shops', ShopController::class);
+
+// Rep routes
+Route::apiResource('sales_reps',SalesRepController::class);
+// Order routes
+Route::apiResource('orders', OrderController::class);
+
 
 
 // Protected routes
