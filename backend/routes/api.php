@@ -38,6 +38,9 @@ FacadeRoute::post('/items', [ItemController::class, 'store']);
 // Shop routes
 Route::apiResource('shops', ShopController::class);
 
+//Returns routes
+Route::apiResource('returns',ReturnsController::class);
+
 
 // Protected routes
 FacadeRoute::middleware('auth:sanctum')->group(function () {
