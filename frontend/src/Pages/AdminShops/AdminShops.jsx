@@ -50,6 +50,7 @@ const AdminShops = () => {
         setEditIndex(index);
         setEditShop(shops[index]);
         setShowEditModal(true);
+    
     };
 
     // ✅ Update shop details
@@ -60,6 +61,7 @@ const AdminShops = () => {
             alert(response.data.message || "Shop updated successfully!");
             setShowEditModal(false);
             setEditShop({ shop_name: "", location: "", contact: "" });
+            window.location.reload();
         } catch (error) {
         
             if (error.response) {
