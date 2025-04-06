@@ -15,6 +15,7 @@ class ItemController extends Controller
         
         return response()->json(Item::all());
     }
+    
     public function store(Request $request)
     {
        $validator = Validator::make($request->all(),[
