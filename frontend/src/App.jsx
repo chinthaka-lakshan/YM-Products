@@ -19,6 +19,7 @@ import RepLogin from './Pages/Login/RepLogin/RepLogin.jsx';
 import RepDashboard from './Pages/Dashboard/RepDashboard/RepDashboard.jsx';
 import RepOrdersHistory from './Pages/RepOrdersHistory/RepOrdersHistory.jsx';
 import RepShops from './Pages/RepShops/RepShops.jsx';
+import EditRep from './Pages/RepRegistration/EditRep.jsx';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -46,6 +47,7 @@ function App() {
           <Route path="/invoice" element={<Invoice />}/>
           <Route path="/repReturns" element={<RepReturns />}/>
           <Route path="/repShops" element={<RepShops/>}/>
+          <Route path="/editrep" element={<EditRep/>}/>
           
         </Routes>
       </div>
