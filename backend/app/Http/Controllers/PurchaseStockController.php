@@ -77,21 +77,24 @@ class PurchaseStockController extends Controller
         }
         }
 
-        public function destroy($id){
+        public function destroy($id)
+        {
             $purchase_stock = PurchaseStock::find($id);
-            if($purchase_stock){
-                return response()->json(['message'=>'Item Not found'],404);
-            }
-            try{
-                $purchase_stock->delete();
-                return response()->json(['message'=> 'Item Deleted Successfully'],200);
 
-            }catch(\Exception $e){
-                return response()->json([
-                    'message'=> 'Error when deleteing Item',
-                    'error'=> $e->getMessage()
-                ],500);
+            if (!$purchase_stock) {
+                return response()->json(['message' => 'Item Not found'], 404);
             }
-        }
+
+            try {
+                $purchase_stock->delete();
+                return response()->json(['message' => 'Item Deleted Successfully'], 200);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'message' => 'Error when deleting Item',
+                    'error' => $e->getMessage()
+                ], 500);
+            }
+}
+
    
 }
