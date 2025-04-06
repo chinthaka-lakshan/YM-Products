@@ -47,7 +47,10 @@ function App() {
           <Route path="/invoice" element={<Invoice />}/>
           <Route path="/repReturns" element={<RepReturns />}/>
           <Route path="/repShops" element={<RepShops/>}/>
-          <Route path="/editrep" element={<EditRep/>}/>
+
+          {/* edit rep by rep id */}
+          <Route path="/editrep/:id" element={<EditRep />} />
+
           
         </Routes>
       </div>
