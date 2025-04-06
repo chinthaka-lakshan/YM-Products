@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Sidebar from "../../components/Sidebar/AdminSidebar/AdminSidebar";
 import Navbar from "../../components/AdminNavbar/AdminNavbar";
 import "./RepRegistration.css";
+import { useNavigate } from "react-router-dom";
 
 const RepRegistration = () => {
   const [formData, setFormData] = useState({
@@ -11,6 +12,8 @@ const RepRegistration = () => {
     contact_number: "",
     password: "",
   });
+
+  const navigate = useNavigate(); 
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -43,6 +46,8 @@ const RepRegistration = () => {
           contact_number: "",
           password: "",
         });
+
+        navigate("/salesreps");
       } else {
         alert("Failed to register: " + (data.message || "Unknown error"));
       }
@@ -123,6 +128,7 @@ const RepRegistration = () => {
             </div>
           </div>
 
+          
           <button type="submit" className="register-btn">
             Register
           </button>
