@@ -3,7 +3,7 @@
     padding: 30px;
     background-color: #f8f9fa;
     position:fixed;
-    top: 25%;
+    top: 16%;
     left: 20%;
     width: 70%;
    
@@ -37,6 +37,7 @@
   
   .add-new:hover {
     background-color: #218838;
+    color: #ddd;
   }
   
   /* Table Styles */
@@ -91,6 +92,7 @@
   
   .edit:hover {
     background-color: #218838;
+    color: #ddd;
   }
   
   .delete:hover {
