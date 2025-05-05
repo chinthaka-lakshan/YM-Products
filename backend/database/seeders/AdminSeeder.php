@@ -1,0 +1,34 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\Admin;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
+
+class AdminSeeder extends Seeder
+{
+    public function run()
+    {
+        // Create default admin
+        Admin::firstOrCreate(
+            ['email' => env('DEFAULT_ADMIN_EMAIL', 'admin@example.com')],
+            [
+                'name' => 'Super Admin',
+                'password' => Hash::make(env('DEFAULT_ADMIN_PASSWORD', 'Admin@123')),
+                'role' => 'admin',
+            ]
+        );
+        
+        Admin::firstOrCreate(
+            ['email' => env('DEFAULT_SALES_EMAIL', 'sales@example.com')],
+            [
+                'name' => 'Sales Representative',
+                'password' => Hash::make(env('DEFAULT_SALES_PASSWORD', 'Sales@123')),
+                'role' => 'sales_rep',
+            ]
+        );
+
+        $this->command->info('Default admin and sales rep users created!');
+    }
+}
