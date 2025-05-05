@@ -296,15 +296,16 @@ const Orders = () => {
               <p><strong>Date:</strong> {viewingOrder.date}</p>
               <p><strong>Rep Name:</strong> {viewingOrder.repName}</p>
               <p><strong>Shop Name:</strong> {viewingOrder.shop}</p>
+              
              
               <p><strong>Total Amount:</strong> Rs. {viewingOrder.items.reduce((total, item) => total + (item.orderQty * parseFloat(item.unitPrice)), 0).toFixed(2)}</p>
             </div>
-            {/* <table className="confirmedOrderTable">
+            <table className="confirmedOrderTable">
               <thead>
                 <tr>
                   <th>Item</th>
                   <th>Qty</th>
-                  <th>Unit Price</th>
+                 
                   <th>Total</th>
                 </tr>
               </thead>
@@ -313,12 +314,12 @@ const Orders = () => {
                   <tr key={index}>
                     <td>{item.item}</td>
                     <td>{item.orderQty}</td>
-                    <td>{item.unitPrice}</td>
+                   
                     <td>{(item.orderQty * parseFloat(item.unitPrice)).toFixed(2)}</td>
                   </tr>
                 ))}
               </tbody>
-            </table> */}
+            </table>
             <div className="Action">
               <button onClick={() => setViewingOrder(null)}>Close</button>
             </div>
