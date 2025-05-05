@@ -42,14 +42,17 @@ class AuthController extends Controller
         $admin = Admin::where('email', $request->email)->first();
 
         if (!$admin || !Hash::check($request->password, $admin->password)) {
-            throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
-            ]);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'The provided credentials are incorrect.'
+            ], 401);
         }
 
-        $token = $admin->createToken('admin-token')->plainTextToken;
+        $token = $admin->createToken('admin-token', ['admin'])->plainTextToken;
 
         return response()->json([
+            'status' => 'success',
+            'message' => 'Login successful',
             'token' => $token,
             'admin' => $admin,
         ]);
