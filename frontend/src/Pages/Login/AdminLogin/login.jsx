@@ -5,8 +5,9 @@ import "./login.css";
 import logo from "../../../assets/YM.png";
 
 const AdminLogin = () => {
-  const [email, setEmail] = useState("admin@example.com"); // Default for testing
-  const [password, setPassword] = useState("Admin@123"); // Default for testing
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -18,22 +19,20 @@ const AdminLogin = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/admin-login", 
+        "http://localhost:8000/api/admin-login",
         { email, password },
         {
           headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          }
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
         }
       );
 
       if (response.data.token) {
-        // Store token in localStorage
         localStorage.setItem("admin_token", response.data.token);
-        // Store user data
         localStorage.setItem("admin_user", JSON.stringify(response.data.admin));
-        // Navigate to dashboard
+        alert(response.data.message); // Show success message
         navigate("/admindashboard");
       } else {
         setError(response.data.message || "Login failed");
@@ -41,9 +40,9 @@ const AdminLogin = () => {
     } catch (error) {
       console.error("Login error:", error.response?.data || error.message);
       setError(
-        error.response?.data?.message || 
-        error.response?.data?.error || 
-        "Login failed. Please try again."
+        error.response?.data?.message ||
+          error.response?.data?.error ||
+          "Login failed. Please try again."
       );
     } finally {
       setLoading(false);
@@ -83,11 +82,7 @@ const AdminLogin = () => {
             />
           </div>
 
-          <button 
-            type="submit" 
-            className="btn" 
-            disabled={loading}
-          >
+          <button type="submit" className="btn" disabled={loading}>
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
