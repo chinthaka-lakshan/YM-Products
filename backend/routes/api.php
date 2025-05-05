@@ -1,14 +1,13 @@
 <?php
 
-use App\Http\Controllers\SalesRepController;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route as FacadeRoute;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\SalesRepController;
 use App\Http\Controllers\PurchaseStockController;
 use App\Http\Controllers\OrderController;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -21,38 +20,34 @@ use App\Http\Controllers\OrderController;
 |
 */
 
-// Authentication routes
-FacadeRoute::post('/admin-login', [AuthController::class, 'adminLogin']);
-FacadeRoute::post('/register-rep', [AuthController::class, 'registerRep']);
-FacadeRoute::post('/rep-login', [AuthController::class, 'repLogin']);
-
+// Public routes
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/admin-login', [AuthController::class, 'adminLogin']);
+Route::post('/rep-login', [AuthController::class, 'repLogin']);
 
-// Protected routes
+// Protected admin routes
+Route::middleware(['auth:sanctum', 'ability:admin'])->group(function () {
+    Route::post('/register-rep', [AuthController::class, 'registerRep']);
+    Route::post('/admin/logout', [AuthController::class, 'logout']);
+    // Add other admin-only routes here
+});
+
+// Protected sales rep routes
+Route::middleware(['auth:sanctum', 'ability:sales_rep'])->group(function () {
+    Route::post('/rep/logout', [AuthController::class, 'logout']);
+    // Add other sales rep routes here
+});
+
+// Protected user routes
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
-    // You can move the shop routes here if you want them protected
+    // Add other protected user routes here
 });
 
-// Item routes
+// Resource routes
 Route::apiResource('items', ItemController::class);
-Route::apiResource('purchase_stock',PurchaseStockController::class);
-// Shop routes
+Route::apiResource('purchase_stock', PurchaseStockController::class);
 Route::apiResource('shops', ShopController::class);
-
-// Rep routes
-Route::apiResource('sales_reps',SalesRepController::class);
-// Order routes
+Route::apiResource('sales_reps', SalesRepController::class);
 Route::apiResource('orders', OrderController::class);
-
-
-
-// Protected routes
-FacadeRoute::middleware('auth:sanctum')->group(function () {
-    FacadeRoute::get('/user', function (Request $request) {
-        return $request->user();
-    });
-
-    // Add other protected routes here
-});
