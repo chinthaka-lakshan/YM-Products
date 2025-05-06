@@ -287,45 +287,50 @@ const Orders = () => {
         </div>
       )}
 
-            {/* View Order Popup */}
+      {/* View Order Popup */}
         {viewingOrder && (
-        <div className="ModalBackdrop">
-          <div className="Modal">
-            <h2>Order Details</h2>
-            <div className="oderdetails">
-              <p><strong>Date:</strong> {viewingOrder.date}</p>
-              <p><strong>Rep Name:</strong> {viewingOrder.repName}</p>
-              <p><strong>Shop Name:</strong> {viewingOrder.shop}</p>
-              
-             
-              <p><strong>Total Amount:</strong> Rs. {viewingOrder.items.reduce((total, item) => total + (item.orderQty * parseFloat(item.unitPrice)), 0).toFixed(2)}</p>
-            </div>
-            <table className="confirmedOrderTable">
-              <thead>
-                <tr>
-                  <th>Item</th>
-                  <th>Qty</th>
-                 
-                  <th>Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                {viewingOrder.items.map((item, index) => (
-                  <tr key={index}>
-                    <td>{item.item}</td>
-                    <td>{item.orderQty}</td>
-                   
-                    <td>{(item.orderQty * parseFloat(item.unitPrice)).toFixed(2)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <div className="Action">
-              <button onClick={() => setViewingOrder(null)}>Close</button>
+          <div className="ModalBackdrop">
+            <div className="Modal">
+              <h2>Order Details</h2>
+              <div className="ScrollableContent"> {/* Add this wrapper */}
+                <div className="orderdetails">
+                  <div className='orderdetails1'>
+                    <p><strong>Date:</strong> {viewingOrder.date}</p>
+                    <div className='repname'>
+                      <p><strong>Rep Name:</strong> {viewingOrder.repName}</p>
+                    </div>
+                    
+                  </div>
+                  <div className='orderdetails2'>
+                    <p><strong>Shop Name:</strong> {viewingOrder.shop}</p>
+                    <p><strong>Total Amount:</strong> Rs. {viewingOrder.items.reduce((total, item) => total + (item.orderQty * parseFloat(item.unitPrice)), 0).toFixed(2)}</p>
+                  </div>
+                </div>
+                <table className="customtable">
+                  <thead>
+                    <tr>
+                      <th>Item</th>
+                      <th>Qty</th>
+                      <th>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {viewingOrder.items.map((item, index) => (
+                      <tr key={index}>
+                        <td>{item.item}</td>
+                        <td>{item.orderQty}</td>
+                        <td>{(item.orderQty * parseFloat(item.unitPrice)).toFixed(2)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <div className="Action">
+                <button onClick={() => setViewingOrder(null)}>Close</button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
 
       {/* Items Modal */}
@@ -389,7 +394,10 @@ const Orders = () => {
       {orderToEdit && (
         <div className="ModalBackdrop">
           <div className='Modal'>
-            <h3>Order</h3>
+            <div className='abc'>
+            <span class="order-number">Order</span>
+
+            </div>
             <table className="confirmedOrderTable">
               <thead>
                 <tr>
