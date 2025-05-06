@@ -570,3 +570,55 @@ th{
 td {
   color: #333; /* Change this to your desired text color */
 }
+
+
+
+.orderdetails1{
+  color: #0056b3;
+  display: flex;
+  flex-direction: column;
+  margin-left: -40%;
+}
+.orderdetails2{
+  color: #0056b3;
+  display: flex;
+  flex-direction: column;
+  margin-left: 25%;
+  margin-top: -15.3%;
+}
+
+.repname{
+  margin-left: 4%;
+}
+
+
+
+.customtable{
+  width: 100%;
+  min-width: 600px; /* or any width you need */
+  border-collapse: collapse;
+  margin-top: 5%;
+}
+
+.customtable th,
+.customtable td {
+  border: 1px solid #ccc;
+  padding: 8px;
+}
+
+.order-number {
+  font-size: 24px;       /* Adjust size as needed */
+  color: #131414;        /* Bright reddish-orange */
+  position: absolute;
+  top: 3%;             
+  left: 45%;             /* Adjust left position */
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+
+
+
+
+
+
