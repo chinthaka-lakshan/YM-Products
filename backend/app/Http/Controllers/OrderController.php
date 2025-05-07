@@ -10,6 +10,8 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
+use App\Models\ProductReturn;
+
 class OrderController extends Controller
 {
     public function index()
@@ -20,19 +22,56 @@ class OrderController extends Controller
     // Create new order
     public function store(Request $request)
     {
-        $request->validate([
+        \Log::info('Authorization Header:',['token'=>$request->header('Authorization')]);
+        
+        $validated = $request->validate([
             'total_price' => 'required|numeric',
             'return_balance' => 'nullable|numeric',
             'shop_id' => 'required|exists:shops,id',
             'user_name' => 'required|string|max:255',
         ]);
 
-        $order = Order::create($request->all());
+        //check for good return
+        $goodReturnValue = ProductReturn::where('shop_id',$request->shop_id)
+                                 ->where('type','good')
+                                 ->sum('return_cost');
 
+        $totPrice=$request->total_price;
+       
+        if($totPrice < $goodReturnValue){
+            $goodReturnValue=$goodReturnValue-$totPrice; 
+            $totPrice=0;
+            ProductReturn::where('shop_id',$request->shop_id)
+                  ->where('type','good')
+                  ->update(['return_cost'=> $goodReturnValue]);
+        }
+        elseif($totPrice>=$goodReturnValue){
+            $totPrice=$totPrice-$goodReturnValue;
+            $goodReturnValue=0;
+            ProductReturn::where('shop_id',$request->shop_id)
+                  ->where('type','good')
+                  ->update(['return_cost'=> $goodReturnValue]);
+        }
+       // $order = Order::create($request->all());
+
+       try{
+        // $order = Order:: create([
+        //     'total_price'=>$totPrice,
+        //     'return_balance'=>$goodReturnValue,
+        //     'shop_id'=>$request->shop_id,
+        //     'user_name'=>$request->user_name,
+        //    ]);
+        $order = Order:: create($validated);
+            return response()->json([
+                'message' => 'Order created successfully',
+                'order' => $order
+            ], 201);
+       }catch(\Exception $e){
         return response()->json([
-            'message' => 'Order created successfully',
-            'order' => $order
-        ], 201);
+            'error'=>"Failed to create order",
+        'message'=> $e->getMessage()
+        ],500);
+       }
     }
 
     // Show single order
@@ -77,4 +116,6 @@ class OrderController extends Controller
 
         return response()->json(['message' => 'Order deleted successfully']);
     }
+
+    //
 }

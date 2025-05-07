@@ -4,35 +4,9 @@ import AdminNavbar from "../../components/AdminNavbar/AdminNavbar.jsx";
 import AdminSidebar from "../../components/Sidebar/AdminSidebar/AdminSidebar.jsx";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import axios from "axios";
-const DistributionStock = () => {
-  const [items, setItems] = useState([
-    { item: "Chilli Powder 50g", unitPrice: "250.50", quantity: 52 },
-    { item: "Chilli Powder 100g", unitPrice: "480.50", quantity: 22 },
-    { item: "Curry Powder 50g", unitPrice: "200.00", quantity: 42 },
-    { item: "Curry Powder 100g", unitPrice: "400.00", quantity: 72 },
-    { item: "Chilli Pieces 50g", unitPrice: "180.75", quantity: 12 },
-    { item: "Chilli Powder 50g", unitPrice: "250.50", quantity: 52 },
-    { item: "Chilli Powder 100g", unitPrice: "480.50", quantity: 22 },
-    { item: "Curry Powder 50g", unitPrice: "200.00", quantity: 42 },
-    { item: "Curry Powder 100g", unitPrice: "400.00", quantity: 72 },
-    { item: "Chilli Pieces 50g", unitPrice: "180.75", quantity: 12 },
-    { item: "Chilli Powder 50g", unitPrice: "250.50", quantity: 52 },
-    { item: "Chilli Powder 100g", unitPrice: "480.50", quantity: 22 },
-    { item: "Curry Powder 50g", unitPrice: "200.00", quantity: 42 },
-    { item: "Curry Powder 100g", unitPrice: "400.00", quantity: 72 },
-    { item: "Chilli Pieces 50g", unitPrice: "180.75", quantity: 12 },
-    { item: "Chilli Powder 50g", unitPrice: "250.50", quantity: 52 },
-    { item: "Chilli Powder 100g", unitPrice: "480.50", quantity: 22 },
-    { item: "Curry Powder 50g", unitPrice: "200.00", quantity: 42 },
-    { item: "Curry Powder 100g", unitPrice: "400.00", quantity: 72 },
-    { item: "Chilli Pieces 50g", unitPrice: "180.75", quantity: 12 },
-    { item: "Chilli Powder 50g", unitPrice: "250.50", quantity: 52 },
-    { item: "Chilli Powder 100g", unitPrice: "480.50", quantity: 22 },
-    { item: "Curry Powder 50g", unitPrice: "200.00", quantity: 42 },
-    { item: "Curry Powder 100g", unitPrice: "400.00", quantity: 72 },
-    { item: "Chilli Pieces 50g", unitPrice: "180.75", quantity: 12 },
-  ]);
 
+const DistributionStock = () => {
+  const [items, setItems] = useState([]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [newItem, setNewItem] = useState({
@@ -41,50 +15,41 @@ const DistributionStock = () => {
     quantity: "",
   });
   const [editItem, setEditItem] = useState({
+    id: null,
     item: "",
     unitPrice: "",
     quantity: "",
   });
   const [editIndex, setEditIndex] = useState(null);
 
+  useEffect(() => {
+    axios
+      .get("http://127.0.0.1:8000/api/items")
+      .then((response) => setItems(response.data))
+      .catch((error) => console.error("Error fetching items:", error));
+  }, []);
+
   const handleAddItem = async () => {
     try {
-      const response = await axios.post(
-        "http://127.0.0.1:8000/api/items",
-        newItem
-      );
-      //setItems([...items, newItem]);
+      const response = await axios.post("http://127.0.0.1:8000/api/items", newItem);
       setItems([...items, response.data.item]);
-      setNewItem({ item: "", unitPrice: 0, quantity: 0 });
+      setNewItem({ item: "", unitPrice: "", quantity: "" });
+      alert("Item added successfully!");
       setShowAddModal(false);
     } catch (error) {
       console.error("Error adding item:", error);
+      alert("Failed to add item.");
     }
   };
 
   const handleEditClick = (item) => {
-    setShowEditModal(true);
-    // setEditIndex(index);
-    // setEditShop(shops[index]);
-    // setShowEditModal(true);
-    console.log(item.id);
-
     const index = items.findIndex((i) => i.id === item.id);
-
     setEditIndex(index);
     setEditItem(item);
-    console.log(item.id, editIndex);
+    setShowEditModal(true);
   };
 
   const handleEditItem = async () => {
-    // try {
-    //   const updatedItems = [...items];
-    //   updatedItems[editIndex] = editItem;
-    //   setItems(updatedItems);
-    //   setShowEditModal(false);
-    // } catch (error) {
-    //   console.error("Error updating Item");
-    // }
     try {
       const response = await axios.put(
         `http://127.0.0.1:8000/api/items/${editItem.id}`,
@@ -95,48 +60,27 @@ const DistributionStock = () => {
         updatedItems[editIndex] = editItem;
         setItems(updatedItems);
         setShowEditModal(false);
-      } else {
-        alert("Error!!!");
+        alert("Item updated successfully!");
       }
     } catch (error) {
-      console.error("Error updating Item");
+      console.error("Error updating item:", error);
+      alert("Failed to update item.");
     }
   };
 
   const handleDeleteItem = async (id) => {
-    console.log(id);
-
-    if (!id) {
-      console.error("Invalid item ID for deletion");
-    }
+    if (!window.confirm("Are you sure you want to delete this item?")) return;
 
     try {
-      console.log(items[editIndex].id);
-
       await axios.delete(`http://127.0.0.1:8000/api/items/${id}`);
-      setItems(items.filter((item) => item.id != id));
+      setItems(items.filter((item) => item.id !== id));
+      alert("Item deleted successfully!");
     } catch (error) {
-      console.error(
-        "Error delete Item",
-        error.response ? error.response.data : error.message
-      );
+      console.error("Error deleting item:", error);
+      alert("Failed to delete item.");
     }
   };
 
-  useEffect(() => {
-    axios
-      .get("http://127.0.0.1:8000/api/items")
-      .then((response) => setItems(response.data))
-      .catch((error) => console.error("Error fetching shops:", error));
-  }, []);
-  // useEffect(()=>{
-  //     axios.post("http://127.0.0.1:8000/api/items")
-  //     .then(response=> setItems(response))
-  // })
-  //   const ItemManager = () => {
-  //     const [items, setItems] = useState([]);
-  //     const [newItem, setNewItem] = useState({ item: "", unitPrice: 0 });
-  //   };
   return (
     <div className="DistributionStock">
       <AdminSidebar />
@@ -150,20 +94,14 @@ const DistributionStock = () => {
             </button>
           </div>
           <div className="DistributionStockGrid">
-            {items.map((item, index) => (
-              <div key={index} className="DistributionItemCard">
+            {items.map((item) => (
+              <div key={item.id} className="DistributionItemCard">
                 <h2>{item.item}</h2>
                 <div className="DistributionItemCardMiddle">
                   <ShoppingCartIcon className="DistributionItemCardIcon" />
                   <div className="DistributionItemCardDetails">
-                    <span>
-                      <strong>Price (LKR) : </strong>
-                      {item.unitPrice}
-                    </span>
-                    <span>
-                      <strong>Quantity : </strong>
-                      {item.quantity}
-                    </span>
+                    <span><strong>Price (LKR):</strong> {item.unitPrice}</span>
+                    <span><strong>Quantity:</strong> {item.quantity}</span>
                   </div>
                 </div>
                 <div className="DistributionItemCardButtons">
@@ -186,6 +124,7 @@ const DistributionStock = () => {
         </div>
       </div>
 
+      {/* Add Modal */}
       {showAddModal && (
         <div className="ModalBackdrop">
           <div className="Modal">
@@ -202,7 +141,7 @@ const DistributionStock = () => {
                   }
                 />
                 <input
-                  type="text"
+                  type="number"
                   placeholder="Enter Unit Price (LKR)"
                   value={newItem.unitPrice}
                   onChange={(e) =>
@@ -210,7 +149,7 @@ const DistributionStock = () => {
                   }
                 />
                 <input
-                  type="text"
+                  type="number"
                   placeholder="Enter Quantity"
                   value={newItem.quantity}
                   onChange={(e) =>
@@ -234,6 +173,7 @@ const DistributionStock = () => {
         </div>
       )}
 
+      {/* Edit Modal */}
       {showEditModal && (
         <div className="ModalBackdrop">
           <div className="Modal">
@@ -250,7 +190,7 @@ const DistributionStock = () => {
                   }
                 />
                 <input
-                  type="text"
+                  type="number"
                   placeholder="Enter Unit Price (LKR)"
                   value={editItem.unitPrice}
                   onChange={(e) =>
@@ -258,7 +198,7 @@ const DistributionStock = () => {
                   }
                 />
                 <input
-                  type="text"
+                  type="number"
                   placeholder="Enter Quantity"
                   value={editItem.quantity}
                   onChange={(e) =>
