@@ -50,4 +50,10 @@ Route::apiResource('items', ItemController::class);
 Route::apiResource('purchase_stock', PurchaseStockController::class);
 Route::apiResource('shops', ShopController::class);
 Route::apiResource('sales_reps', SalesRepController::class);
-Route::apiResource('orders', OrderController::class);
+Route::middleware('auth:sanctum')->group(function(){
+    Route::apiResource('orders', OrderController::class);
+});
+
+
+
+ //Route::post('orders',[ OrderController::class,'store']);
