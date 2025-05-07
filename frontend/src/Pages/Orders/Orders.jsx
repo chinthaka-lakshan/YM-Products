@@ -1,30 +1,84 @@
-import React, { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Sidebar from '../../components/Sidebar/AdminSidebar/AdminSidebar';
-import Navbar from '../../components/AdminNavbar/AdminNavbar';
+import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import Sidebar from "../../components/Sidebar/AdminSidebar/AdminSidebar";
+import Navbar from "../../components/AdminNavbar/AdminNavbar";
 import StoreFrontIcon from "@mui/icons-material/Store";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { Link } from 'react-router-dom';
-import './Orders.css';
+import { Link } from "react-router-dom";
+import "./Orders.css";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import logo from "../../assets/YMlogo.PNG";
+import axios from "axios";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
 
-  const [shops] = useState([
-    { shopName: "Lakshan Shop", location: "Nattandiya", contact: "076 21326548" },
-    { shopName: "Hasitha Shop", location: "Nattandiya", contact: "076 21326548" },
-    { shopName: "Lakshan Shop", location: "Nattandiya", contact: "076 21326548" },
-    { shopName: "Hasitha Shop", location: "Nattandiya", contact: "076 21326548" },
-    { shopName: "Lakshan Shop", location: "Nattandiya", contact: "076 21326548" },
-    { shopName: "Hasitha Shop", location: "Nattandiya", contact: "076 21326548" },
-    { shopName: "Lakshan Shop", location: "Nattandiya", contact: "076 21326548" },
-    { shopName: "Hasitha Shop", location: "Nattandiya", contact: "076 21326548" },
-    { shopName: "Lakshan Shop", location: "Nattandiya", contact: "076 21326548" },
-    { shopName: "Hasitha Shop", location: "Nattandiya", contact: "076 21326548" },
+  const [shops, setShops] = useState([
+    // {
+    //   shopName: "Lakshan Shop",
+    //   location: "Nattandiya",
+    //   contact: "076 21326548",
+    // },
+    // {
+    //   shopName: "Hasitha Shop",
+    //   location: "Nattandiya",
+    //   contact: "076 21326548",
+    // },
+    // {
+    //   shopName: "Lakshan Shop",
+    //   location: "Nattandiya",
+    //   contact: "076 21326548",
+    // },
+    // {
+    //   shopName: "Hasitha Shop",
+    //   location: "Nattandiya",
+    //   contact: "076 21326548",
+    // },
+    // {
+    //   shopName: "Lakshan Shop",
+    //   location: "Nattandiya",
+    //   contact: "076 21326548",
+    // },
+    // {
+    //   shopName: "Hasitha Shop",
+    //   location: "Nattandiya",
+    //   contact: "076 21326548",
+    // },
+    // {
+    //   shopName: "Lakshan Shop",
+    //   location: "Nattandiya",
+    //   contact: "076 21326548",
+    // },
+    // {
+    //   shopName: "Hasitha Shop",
+    //   location: "Nattandiya",
+    //   contact: "076 21326548",
+    // },
+    // {
+    //   shopName: "Lakshan Shop",
+    //   location: "Nattandiya",
+    //   contact: "076 21326548",
+    // },
+    // {
+    //   shopName: "Hasitha Shop",
+    //   location: "Nattandiya",
+    //   contact: "076 21326548",
+    // },
   ]);
+
+  //fetch shops
+  useEffect(() => {
+    const fetchShops = async () => {
+      try {
+        const response = await axios.get("http://localhost:8000/api/shops");
+        setShops(response.data);
+      } catch (error) {
+        console.error("Error fetching shops: ", error);
+      }
+    };
+    fetchShops();
+  }, []);
 
   const [items] = useState([
     { item: "Chilli Powder 50g", unitPrice: "250.50", quantity: 52 },
@@ -62,9 +116,11 @@ const Orders = () => {
   const navigate = useNavigate();
 
   const handleStatusChange = (id, newStatus) => {
-    setOrders(orders.map((order) =>
-      order.id === id ? { ...order, status: newStatus } : order
-    ));
+    setOrders(
+      orders.map((order) =>
+        order.id === id ? { ...order, status: newStatus } : order
+      )
+    );
   };
 
   const indexOfLastOrder = currentPage * ordersPerPage;
@@ -81,35 +137,65 @@ const Orders = () => {
   };
 
   const handleItemSelect = (item) => {
-    const exists = selectedItems.find(i => i.item === item.item);
+    const exists = selectedItems.find((i) => i.item === item.item);
     if (!exists) {
       setSelectedItems([...selectedItems, { ...item, orderQty: 1 }]);
     }
   };
 
   const updateItemQuantity = (itemName, newQty) => {
-    setSelectedItems(selectedItems.map(item =>
-      item.item === itemName ? { ...item, orderQty: parseInt(newQty) || 0 } : item
-    ));
+    setSelectedItems(
+      selectedItems.map((item) =>
+        item.item === itemName
+          ? { ...item, orderQty: parseInt(newQty) || 0 }
+          : item
+      )
+    );
   };
 
   const removeSelectedItem = (itemName) => {
-    setSelectedItems(selectedItems.filter(item => item.item !== itemName));
+    setSelectedItems(selectedItems.filter((item) => item.item !== itemName));
   };
 
-  const handleConfirmOrder = () => {
+  const checkAdjustedOrderCost = async (shopId, orderAmount) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8000/api/calculate-order-cost/${shopId}/${orderAmount}`
+      );
+      const data = await response.json();
+      return data.return_balance;
+    } catch (error) {
+      console.error("Error fetching order cost", error);
+      return orderAmount;
+    }
+  };
+
+  const userToken = localStorage.getItem("admin_token");
+  const handleConfirmOrder = async () => {
+    if (!selectedShop || selectedItems.length == 0) return;
+    const totalOrderAmount = selectedItems.reduce(
+      (sum, item) => sum + item.unitPrice * item.orderQty,
+      0
+    );
+
+    const getCost = await checkAdjustedOrderCost(
+      selectedShop.id,
+      totalOrderAmount
+    );
+
     if (editingOrderId !== null) {
-      const updatedOrders = orders.map(order =>
+      const updatedOrders = orders.map((order) =>
         order.id === editingOrderId
           ? {
               ...order,
               shop: selectedShop.shopName,
               date: new Date().toLocaleDateString(),
-              items: selectedItems.filter(item => item.orderQty > 0),
+              items: selectedItems.filter((item) => item.orderQty > 0),
+              total_price: getCost,
             }
           : order
       );
-      const updatedOrder = updatedOrders.find(o => o.id === editingOrderId);
+      const updatedOrder = updatedOrders.find((o) => o.id === editingOrderId);
       setOrders(updatedOrders);
       setOrderToEdit(updatedOrder);
       setCurrentInvoiceItems(updatedOrder.items);
@@ -117,15 +203,57 @@ const Orders = () => {
     } else {
       const newOrder = {
         id: orders.length + 1,
-        shop: selectedShop.shopName,
+        shop_id: selectedShop.id,
         date: new Date().toLocaleDateString(),
-        repName: 'Raheem',
-        status: 'Pending',
-        items: selectedItems.filter(item => item.orderQty > 0),
+        repName: "Raheem",
+        status: "Pending",
+        total_price: getCost,
+        items: selectedItems.filter((item) => item.orderQty > 0),
       };
-      setOrders([...orders, newOrder]);
-      setOrderToEdit(newOrder);
-      setCurrentInvoiceItems(newOrder.items);
+      console.log(getCost);
+      console.log(selectedShop.id);
+      console.log(selectedShop);
+
+      //store in DB
+      try {
+        console.log(userToken);
+
+        const controller = new AbortController();
+
+        const response = await axios.post(
+          "http://localhost:8000/api/orders",
+          newOrder,
+          {
+            // method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${userToken}`,
+            },
+            //body: JSON.stringify(newOrder),
+            //signal: controller.signal,
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(
+            `Server responded with ${response.status}:${
+              response.status
+            }:${await response.text()}`
+          );
+        }
+        const data = await response.json();
+        console.log("Order saved:", data);
+
+        // setOrders([...orders, newOrder]);
+        // setOrderToEdit(newOrder);
+        // setCurrentInvoiceItems(newOrder.items);
+
+        setOrders([...orders, newOrder]);
+        setOrderToEdit(data);
+        setCurrentInvoiceItems(data.items);
+      } catch (error) {
+        console.error("Error saving order:", error);
+      }
     }
     setShowItemsModal(false);
     setSelectedShop(null);
@@ -135,13 +263,13 @@ const Orders = () => {
   const handleCancelOrder = () => {
     if (editingOrderId !== null) {
       // Show the Order to Edit modal if updating
-      const originalOrder = orders.find(order => order.id === editingOrderId);
+      const originalOrder = orders.find((order) => order.id === editingOrderId);
       setOrderToEdit(originalOrder); // Show confirmed order
       setEditingOrderId(null);
       setShowItemsModal(false); // Close items modal
     } else {
       // Navigate to the initial Orders page when adding a new order
-      navigate('/adminOrders');
+      navigate("/adminOrders");
       setShowItemsModal(false);
       setSelectedShop(null);
       setSelectedItems([]);
@@ -175,21 +303,26 @@ const Orders = () => {
   return (
     <div className="Orders">
       <Sidebar />
-      <div className='OrdersContainer'>
+      <div className="OrdersContainer">
         <Navbar />
-        <div className='order-title'>
+        <div className="order-title">
           <h1>Orders</h1>
         </div>
-        <div className='btn1'>
+        <div className="btn1">
           <Link to="/adminOrdersHistory">
-            <button className='history-btn'>History</button>
+            <button className="history-btn">History</button>
           </Link>
         </div>
-        <div className='btn2'>
-          <button className='add-new-btn' onClick={() => setShowShopsModal(true)}>Add New</button>
+        <div className="btn2">
+          <button
+            className="add-new-btn"
+            onClick={() => setShowShopsModal(true)}
+          >
+            Add New
+          </button>
         </div>
 
-        <div className='orders-table-container'>
+        <div className="orders-table-container">
           <table className="tableO">
             <thead>
               <tr>
@@ -198,7 +331,9 @@ const Orders = () => {
                 <th>Rep Name</th>
                 <th>Status</th>
                 <th>Items</th>
-                <th className="text-center" colSpan="3">Actions</th>
+                <th className="text-center" colSpan="3">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -208,15 +343,29 @@ const Orders = () => {
                   <td>{order.date}</td>
                   <td>{order.repName}</td>
                   <td>{order.status}</td>
-                  <td>{order.items ? order.items.map(i => `${i.item} (${i.orderQty})`).join(', ') : '—'}</td>
-                  <td><button className="btn view-btn">View</button></td>
                   <td>
-                    <button className="btn accept-btn" onClick={() => handleStatusChange(order.id, 'Accepted')}>
+                    {order.items
+                      ? order.items
+                          .map((i) => `${i.item} (${i.orderQty})`)
+                          .join(", ")
+                      : "—"}
+                  </td>
+                  <td>
+                    <button className="btn view-btn">View</button>
+                  </td>
+                  <td>
+                    <button
+                      className="btn accept-btn"
+                      onClick={() => handleStatusChange(order.id, "Accepted")}
+                    >
                       Accept
                     </button>
                   </td>
                   <td>
-                    <button className="btn cancel-btn" onClick={() => handleStatusChange(order.id, 'Cancelled')}>
+                    <button
+                      className="btn cancel-btn"
+                      onClick={() => handleStatusChange(order.id, "Cancelled")}
+                    >
                       Cancel
                     </button>
                   </td>
@@ -227,20 +376,42 @@ const Orders = () => {
 
           <div className="pagination-container-O">
             <ul className="pagination-O">
-              <li className={`page-item-O ${currentPage === 1 ? 'disabled' : ''}`}>
-                <button className="page-link" onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}>
+              <li
+                className={`page-item-O ${currentPage === 1 ? "disabled" : ""}`}
+              >
+                <button
+                  className="page-link"
+                  onClick={() => paginate(currentPage - 1)}
+                  disabled={currentPage === 1}
+                >
                   &lt;
                 </button>
               </li>
               {[...Array(totalPages).keys()].map((number) => (
-                <li key={number + 1} className={`page-item ${currentPage === number + 1 ? 'active' : ''}`}>
-                  <button className="page-link-O" onClick={() => paginate(number + 1)}>
+                <li
+                  key={number + 1}
+                  className={`page-item ${
+                    currentPage === number + 1 ? "active" : ""
+                  }`}
+                >
+                  <button
+                    className="page-link-O"
+                    onClick={() => paginate(number + 1)}
+                  >
                     {number + 1}
                   </button>
                 </li>
               ))}
-              <li className={`page-item-O ${currentPage === totalPages ? 'disabled' : ''}`}>
-                <button className="page-link-O" onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages}>
+              <li
+                className={`page-item-O ${
+                  currentPage === totalPages ? "disabled" : ""
+                }`}
+              >
+                <button
+                  className="page-link-O"
+                  onClick={() => paginate(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                >
                   &gt;
                 </button>
               </li>
@@ -257,7 +428,11 @@ const Orders = () => {
             <div className="ScrollableContent">
               <div className="ShopsGrid">
                 {shops.map((shop, index) => (
-                  <div key={index} className="ShopCard" onClick={() => handleShopSelect(shop)}>
+                  <div
+                    key={index}
+                    className="ShopCard"
+                    onClick={() => handleShopSelect(shop)}
+                  >
                     <h2>{shop.shopName}</h2>
                     <div className="ShopCardMiddle">
                       <StoreFrontIcon className="ShopCardIcon" />
@@ -271,7 +446,12 @@ const Orders = () => {
               </div>
             </div>
             <div className="ModalButtons">
-              <button className="CancelButton" onClick={() => setShowShopsModal(false)}>Cancel</button>
+              <button
+                className="CancelButton"
+                onClick={() => setShowShopsModal(false)}
+              >
+                Cancel
+              </button>
             </div>
           </div>
         </div>
@@ -285,15 +465,23 @@ const Orders = () => {
             <div className="ScrollableContent">
               <div className="DistributionStockGrid">
                 {items.map((item, index) => {
-                  const selected = selectedItems.find(i => i.item === item.item);
+                  const selected = selectedItems.find(
+                    (i) => i.item === item.item
+                  );
                   return (
                     <div key={index} className="DistributionItemCard">
                       <h2>{item.item}</h2>
                       <div className="DistributionItemCardMiddle">
                         <ShoppingCartIcon className="DistributionItemCardIcon" />
                         <div className="DistributionItemCardDetails">
-                          <span><strong>Price (LKR): </strong>{item.unitPrice}</span>
-                          <span><strong>In Stock: </strong>{item.quantity}</span>
+                          <span>
+                            <strong>Price (LKR): </strong>
+                            {item.unitPrice}
+                          </span>
+                          <span>
+                            <strong>In Stock: </strong>
+                            {item.quantity}
+                          </span>
                           {selected ? (
                             <div className="SelectedItemControl">
                               <input
@@ -301,7 +489,9 @@ const Orders = () => {
                                 min="1"
                                 className="QtyInput"
                                 value={selected.orderQty}
-                                onChange={(e) => updateItemQuantity(item.item, e.target.value)}
+                                onChange={(e) =>
+                                  updateItemQuantity(item.item, e.target.value)
+                                }
                               />
                               <button
                                 className="RemoveItemBtn"
@@ -312,7 +502,12 @@ const Orders = () => {
                               </button>
                             </div>
                           ) : (
-                            <button className="SelectItemBtn" onClick={() => handleItemSelect(item)}>Select</button>
+                            <button
+                              className="SelectItemBtn"
+                              onClick={() => handleItemSelect(item)}
+                            >
+                              Select
+                            </button>
                           )}
                         </div>
                       </div>
@@ -322,9 +517,11 @@ const Orders = () => {
               </div>
             </div>
             <div className="ModalButtons">
-              <button className="CancelButton" onClick={handleCancelOrder}>Cancel</button>
+              <button className="CancelButton" onClick={handleCancelOrder}>
+                Cancel
+              </button>
               <button className="ConfirmButton" onClick={handleConfirmOrder}>
-                {editingOrderId ? 'Update Order' : 'Confirm'}
+                {editingOrderId ? "Update Order" : "Confirm"}
               </button>
             </div>
           </div>
@@ -334,7 +531,7 @@ const Orders = () => {
       {/* Confirmed Order View */}
       {orderToEdit && (
         <div className="ModalBackdrop">
-          <div className='Modal'>
+          <div className="Modal">
             <h3>Order</h3>
             <table className="confirmedOrderTable">
               <thead>
@@ -356,7 +553,7 @@ const Orders = () => {
                 ))}
               </tbody>
             </table>
-            <div className='Action'>
+            <div className="Action">
               <button onClick={handleEditOrder}>Edit Order</button>
               <button onClick={handleGenerateInvoice}>Generate Invoice</button>
               <button onClick={() => setOrderToEdit(false)}>Cancel</button>
@@ -368,7 +565,7 @@ const Orders = () => {
       {/* Invoice Popup */}
       {showPopup && (
         <div className="ModalBackdrop">
-          <div className='Modal'>
+          <div className="Modal">
             <div className="invoice-content" ref={invoiceRef}>
               <div className="invoice-header">
                 <img src={logo} alt="Invoice Logo" className="invoice-logo" />
@@ -404,12 +601,18 @@ const Orders = () => {
               <div className="invoice-total">
                 <p>Sub Total: Rs. 150,000</p>
                 <p>Discount: 10%</p>
-                <p><strong>Total Due: Rs. 135,000</strong></p>
+                <p>
+                  <strong>Total Due: Rs. 135,000</strong>
+                </p>
               </div>
             </div>
             <div className="invoice-buttons">
-              <button className="print-btn" onClick={handlePrint}>Print</button>
-              <button className="close-btn" onClick={() => setShowPopup(false)}>Close</button>
+              <button className="print-btn" onClick={handlePrint}>
+                Print
+              </button>
+              <button className="close-btn" onClick={() => setShowPopup(false)}>
+                Close
+              </button>
             </div>
           </div>
         </div>
