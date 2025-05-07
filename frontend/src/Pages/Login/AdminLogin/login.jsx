@@ -1,14 +1,13 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./login.css";
-import logo from "../../../assets/YM.png"; // Adjust the path to your logo image
-
-
+import logo from "../../../assets/YM.png";
 
 const AdminLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -19,22 +18,35 @@ const AdminLogin = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:8000/api/admin-login", { email, password });
-      console.log("Response Data:", response.data);
+      const response = await axios.post(
+        "http://localhost:8000/api/admin-login",
+        { email, password },
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-      if (response.data.success) {
-        localStorage.setItem("token", response.data.token);
-        sessionStorage.setItem("user", JSON.stringify({ email, role: "admin" }));
-        navigate("/admin-dashboard");
+      if (response.data.token) {
+        localStorage.setItem("admin_token", response.data.token);
+        localStorage.setItem("admin_user", JSON.stringify(response.data.admin));
+        alert(response.data.message); // Show success message
+        navigate("/admindashboard");
       } else {
-        setError(response.data.message || "Invalid email or password");
+        setError(response.data.message || "Login failed");
       }
     } catch (error) {
-      console.error("Error:", error);
-      setError("Login failed. Please check the server or your network connection.");
+      console.error("Login error:", error.response?.data || error.message);
+      setError(
+        error.response?.data?.message ||
+          error.response?.data?.error ||
+          "Login failed. Please try again."
+      );
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (
@@ -44,35 +56,35 @@ const AdminLogin = () => {
           <h1>Welcome Back, Admin!</h1>
           <h3>Enter your credentials to access your account</h3>
 
-          {error && <p className="error-message">{error}</p>}
+          {error && <div className="error-message">{error}</div>}
 
-          <h2>Email Address</h2>
-          <div className="input-box">
+          <div className="form-group">
+            <label>Email Address</label>
             <input
               type="email"
               required
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              className="form-input"
             />
           </div>
 
-          <h2>Password</h2>
-          <div className="input-box">
+          <div className="form-group">
+            <label>Password</label>
             <input
               type="password"
               required
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              className="form-input"
             />
           </div>
 
-          <Link to={"/admindashboard"}>
-            <button type="submit" className="btn" disabled={loading}>
-              {loading ? "Logging in..." : "Login"}
-            </button>
-          </Link>
+          <button type="submit" className="btn" disabled={loading}>
+            {loading ? "Logging in..." : "Login"}
+          </button>
         </form>
 
         <div className="logo-container">
