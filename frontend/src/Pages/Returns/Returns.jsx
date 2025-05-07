@@ -13,6 +13,12 @@ import logo from "../../assets/YMlogo.PNG";
 const Returns = () => {
   const [returns, setReturns] = useState([]);
 
+   const [viewingReturns, setViewingReturns] = useState(null); // For viewing returns popup
+
+   const handleViewReturns = (returns) => {
+    setViewingReturns(returns);
+  };
+
   const [shops] = useState([
     { shopName: "Lakshan Shop", location: "Nattandiya", contact: "076 21326548" },
     { shopName: "Hasitha Shop", location: "Nattandiya", contact: "076 21326548" },
@@ -209,9 +215,17 @@ const Returns = () => {
                   <td>{rtn.date}</td>
                   <td>{rtn.repName}</td>
                   <td>{rtn.items ? rtn.items.map(i => `${i.item} (${i.returnQty})`).join(', ') : '—'}</td>
-                  <td><button className="btn view-btn">View</button></td>
+                   <td>
+                    {" "}
+                    <button
+                      className="btn view-btn"
+                      onClick={() => handleViewReturns(rtn)}
+                    >
+                      View
+                    </button>
+                  </td>
                   <td>
-                    <button className="dlt-btn" onClick={() => handleDelete(returnItem.id)}>
+                    <button className="dlt-btn" onClick={() => handleDelete(rtn.id)}>
                       Delete
                     </button>
                   </td>
@@ -289,6 +303,54 @@ const Returns = () => {
         </div>
       )}
 
+    {/* View Order Popup */}
+    {viewingReturns && (
+          <div className="ModalBackdrop">
+            <div className="Modal">
+              <h2>Return Details</h2>
+              <div className="ScrollableContent"> {/* Add this wrapper */}
+                <div className="orderdetails">
+                  <div className='orderdetails1'>
+                    <div className='type'>
+                      <p><strong>Type:</strong>{viewingReturns.type}</p>
+                    </div>
+                    <p><strong>Date:</strong> {viewingReturns.date}</p>
+                    <div className='repname'>
+                      <p><strong>Rep Name:</strong> {viewingReturns.repName}</p>
+                    </div>
+                    
+                  </div>
+                  <div className='orderdetails2'>
+                    <p><strong>Shop Name:</strong> {viewingReturns.shop}</p>
+                    <p><strong>Total Amount:</strong> Rs. {viewingReturns.items.reduce((total, item) => total + (item.returnQty * parseFloat(item.unitPrice)), 0).toFixed(2)}</p>
+                  </div>
+                </div>
+                <table className="customtable">
+                  <thead>
+                    <tr>
+                      <th>Item</th>
+                      <th>Qty</th>
+                      <th>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {viewingReturns.items.map((item, index) => (
+                      <tr key={index}>
+                        <td>{item.item}</td>
+                        <td>{item.returnQty}</td>
+                        <td>{(item.returnQty * parseFloat(item.unitPrice)).toFixed(2)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <div className="Action">
+                <button onClick={() => setViewingReturns(null)}>Close</button>
+              </div>
+            </div>
+          </div>
+        )}
+
       {/* Items Modal */}
       {showItemsModal && (
         <div className="ModalBackdrop">
@@ -347,27 +409,29 @@ const Returns = () => {
       {returnToEdit && (
         <div className="ModalBackdrop">
           <div className='Modal'>
-            <h3>Return</h3>
-            <table className="confirmedReturnTable">
-              <thead>
-                <tr>
-                  <th>Item</th>
-                  <th>Qty</th>
-                  <th>Unit Price</th>
-                  <th>Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                {returnToEdit.items.map((item, index) => (
-                  <tr key={index}>
-                    <td>{item.item}</td>
-                    <td>{item.returnQty}</td>
-                    <td>{item.unitPrice}</td>
-                    <td>{item.returnQty * item.unitPrice}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <h2>Return</h2>
+            <div className='ScrollableContent'>
+                <table className="confirmedReturnTable">
+                  <thead>
+                    <tr>
+                      <th>Item</th>
+                      <th>Qty</th>
+                      <th>Unit Price</th>
+                      <th>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {returnToEdit.items.map((item, index) => (
+                      <tr key={index}>
+                        <td>{item.item}</td>
+                        <td>{item.returnQty}</td>
+                        <td>{item.unitPrice}</td>
+                        <td>{item.returnQty * item.unitPrice}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+            </div>
             <div className='Action'>
               <button onClick={handleEditReturn}>Edit Return</button>
               <button onClick={handleGenerateReturnInvoice}>Generate Return Invoice</button>
