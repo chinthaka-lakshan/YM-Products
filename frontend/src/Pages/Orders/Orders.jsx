@@ -343,6 +343,10 @@ const Orders = () => {
                   <td>{order.date}</td>
                   <td>{order.repName}</td>
                   <td>{order.status}</td>
+                  <td>{order.items ? order.items.map(i => `${i.item} (${i.orderQty})`).join(', ') : '—'}</td>
+                  <td> <button className="btn view-btn" onClick={() => handleViewOrder(order)}>View</button></td>
+
+
                   <td>
                     {order.items
                       ? order.items
@@ -457,6 +461,52 @@ const Orders = () => {
         </div>
       )}
 
+      {/* View Order Popup */}
+        {viewingOrder && (
+          <div className="ModalBackdrop">
+            <div className="Modal">
+              <h2>Order Details</h2>
+              <div className="ScrollableContent"> {/* Add this wrapper */}
+                <div className="orderdetails">
+                  <div className='orderdetails1'>
+                    <p><strong>Date:</strong> {viewingOrder.date}</p>
+                    <div className='repname'>
+                      <p><strong>Rep Name:</strong> {viewingOrder.repName}</p>
+                    </div>
+                    
+                  </div>
+                  <div className='orderdetails2'>
+                    <p><strong>Shop Name:</strong> {viewingOrder.shop}</p>
+                    <p><strong>Total Amount:</strong> Rs. {viewingOrder.items.reduce((total, item) => total + (item.orderQty * parseFloat(item.unitPrice)), 0).toFixed(2)}</p>
+                  </div>
+                </div>
+                <table className="customtable">
+                  <thead>
+                    <tr>
+                      <th>Item</th>
+                      <th>Qty</th>
+                      <th>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {viewingOrder.items.map((item, index) => (
+                      <tr key={index}>
+                        <td>{item.item}</td>
+                        <td>{item.orderQty}</td>
+                        <td>{(item.orderQty * parseFloat(item.unitPrice)).toFixed(2)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <div className="Action">
+                <button onClick={() => setViewingOrder(null)}>Close</button>
+              </div>
+            </div>
+          </div>
+        )}
+
+
       {/* Items Modal */}
       {showItemsModal && (
         <div className="ModalBackdrop">
@@ -498,7 +548,7 @@ const Orders = () => {
                                 title="Remove item"
                                 onClick={() => removeSelectedItem(item.item)}
                               >
-                                ❌
+                                
                               </button>
                             </div>
                           ) : (
@@ -516,6 +566,8 @@ const Orders = () => {
                 })}
               </div>
             </div>
+
+            
             <div className="ModalButtons">
               <button className="CancelButton" onClick={handleCancelOrder}>
                 Cancel
@@ -527,12 +579,16 @@ const Orders = () => {
           </div>
         </div>
       )}
+      
 
       {/* Confirmed Order View */}
       {orderToEdit && (
         <div className="ModalBackdrop">
-          <div className="Modal">
-            <h3>Order</h3>
+          <div className='Modal'>
+            <div className='abc'>
+            <span class="order-number">Order</span>
+
+            </div>
             <table className="confirmedOrderTable">
               <thead>
                 <tr>
