@@ -15,22 +15,58 @@ class AuthController extends Controller
     // Admin Registration (Only for Admins)
     public function registerRep(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:admins',
             'password' => 'required|string|min:6',
+            'nic' => 'required|string|max:20|unique:admins',
+            'contact_number' => 'required|string|max:20'
         ]);
-
+    
         $admin = Admin::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => 'sales_rep',
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+            'nic' => $validated['nic'],
+            'contact_number' => $validated['contact_number'],
+            'role' => 'sales_rep'
         ]);
-
-        return response()->json(['message' => 'Sales Representative registered successfully']);
+    
+        return response()->json([
+            'message' => 'Sales rep created successfully',
+            'data' => $admin
+        ], 201);
     }
-
+    // Get sells rep list
+    public function getSalesReps()
+    {
+        // Verify admin authentication first
+        if (!auth()->user() || auth()->user()->role !== 'admin') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized access'
+            ], 403);
+        }
+    
+        try {
+            $salesReps = Admin::where('role', 'sales_rep')
+                             ->select('id', 'name', 'email', 'nic', 'contact_number', 'created_at')
+                             ->get();
+    
+            return response()->json([
+                'success' => true,
+                'count' => count($salesReps),
+                'data' => $salesReps
+            ]);
+    
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to fetch sales reps',
+                'error' => config('app.debug') ? $e->getMessage() : null
+            ], 500);
+        }
+    }
     // Admin Login
     public function adminLogin(Request $request)
     {

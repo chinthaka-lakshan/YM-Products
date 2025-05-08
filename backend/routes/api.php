@@ -23,14 +23,15 @@ use App\Http\Controllers\OrderController;
 // Public routes
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
-Route::post('/admin-login', [AuthController::class, 'adminLogin']);
-Route::post('/rep-login', [AuthController::class, 'repLogin']);
+Route::post('/admin/login', [AuthController::class, 'adminLogin']);
+Route::post('/sales-rep/login', [AuthController::class, 'repLogin']);
+Route::post('/sales-rep/register', [AuthController::class, 'registerRep']);
+Route::get('/sales-reps', [AdminController::class, 'getSalesReps']);
 
 // Protected admin routes
 Route::middleware(['auth:sanctum', 'ability:admin'])->group(function () {
-    Route::post('/register-rep', [AuthController::class, 'registerRep']);
+    
     Route::post('/admin/logout', [AuthController::class, 'logout']);
-    // Add other admin-only routes here
 });
 
 // Protected sales rep routes
