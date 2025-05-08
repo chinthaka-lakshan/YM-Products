@@ -17,6 +17,8 @@ class Admin extends Authenticatable
         'name',
         'email',
         'password',
+        'nic',          // Add these if missing
+        'contact_number',
         'role',
     ];
 

@@ -25,7 +25,7 @@ const RepRegistration = () => {
     try {
       const response = await fetch(
         // 🌐 Connects to Laravel backend store() function
-        "http://localhost:8000/api/sales_reps",
+        "http://localhost:8000/api/sales-rep/register",
         {
           method: "POST",
           headers: {
