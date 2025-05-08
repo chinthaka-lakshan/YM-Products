@@ -26,7 +26,10 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/admin/login', [AuthController::class, 'adminLogin']);
 Route::post('/sales-rep/login', [AuthController::class, 'repLogin']);
 Route::post('/sales-rep/register', [AuthController::class, 'registerRep']);
-Route::get('/sales-reps', [AdminController::class, 'getSalesReps']);
+Route::get('/sales-reps', [AuthController::class, 'getSalesReps']);
+Route::put('/sales-reps/{id}', [AuthController::class, 'updateSalesRep']);
+Route::delete('/sales-reps/{id}', [AuthController::class, 'deleteSalesRep']);
+Route::get('/sales-reps/{id}', [AuthController::class, 'getSalesRepById']);
 
 // Protected admin routes
 Route::middleware(['auth:sanctum', 'ability:admin'])->group(function () {

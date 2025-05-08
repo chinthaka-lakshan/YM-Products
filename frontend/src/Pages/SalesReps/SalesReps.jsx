@@ -14,7 +14,7 @@ const SalesReps = () => {
   useEffect(() => {
     const fetchRepresentatives = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/sales_reps");
+        const response = await axios.get("http://localhost:8000/api/sales-reps");
         setRepresentatives(response.data);
       } catch (error) {
         console.error("Error fetching sales representatives:", error);
@@ -31,7 +31,7 @@ const SalesReps = () => {
     if (!confirmDelete) return;
 
     try {
-      await axios.delete(`http://localhost:8000/api/sales_reps/${id}`);
+      await axios.delete(`http://localhost:8000/api/sales-reps/${id}`);
       setRepresentatives(prev => prev.filter(rep => rep.id !== id));
     } catch (error) {
       console.error("Error deleting representative:", error);
