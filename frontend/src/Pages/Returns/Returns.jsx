@@ -9,6 +9,8 @@ import { Link } from 'react-router-dom';
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import logo from "../../assets/YMlogo.PNG";
+import Switch from "@mui/material/Switch";
+import FormControlLabel from "@mui/material/FormControlLabel";
 
 const Returns = () => {
   const [returns, setReturns] = useState([]);
@@ -49,6 +51,8 @@ const Returns = () => {
     { item: "Curry Powder 125g", unitPrice: "400.00", quantity: 72 },
     { item: "Chilli Pieces 700g", unitPrice: "180.75", quantity: 12 },
   ]);
+
+  const [showGoodReturns, setShowGoodReturns] = useState(true);
 
   const [currentPage, setCurrentPage] = useState(1);
   const returnsPerPage = 5;
@@ -194,45 +198,100 @@ const Returns = () => {
           <button className='bad-btn' onClick={() => { setReturnType('Bad'); setShowShopsModal(true); }}>Add Bad Return</button>
         </div>
 
-
         <div className="returns-table-container">
-          <table className="returns-table">
-            <thead>
-              <tr>
-                <th>Type</th>
-                <th>Shop</th>
-                <th>Date</th>
-                <th>Rep Name</th>
-                <th>Items</th>
-                <th className="text-center" colSpan="3">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentReturns.map(rtn => (
-                <tr key={rtn.id}>
-                  <td>{rtn.type}</td>
-                  <td>{rtn.shop}</td>
-                  <td>{rtn.date}</td>
-                  <td>{rtn.repName}</td>
-                  <td>{rtn.items ? rtn.items.map(i => `${i.item} (${i.returnQty})`).join(', ') : '—'}</td>
-                   <td>
-                    {" "}
-                    <button
-                      className="btn view-btn"
-                      onClick={() => handleViewReturns(rtn)}
-                    >
-                      View
-                    </button>
-                  </td>
-                  <td>
-                    <button className="dlt-btn" onClick={() => handleDelete(rtn.id)}>
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="return-switch-container">
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={showGoodReturns}
+                  onChange={() => setShowGoodReturns(!showGoodReturns)}
+                  color="primary"
+                />
+              }
+              label={
+                <span className="return-switch-label">
+                  {showGoodReturns ? "Good Returns" : "Bad Returns"}
+                </span>
+              }
+            />
+          </div>
+          {showGoodReturns ? (
+            <div id="good-return-table">
+              <table className="returns-table">
+                <thead>
+                  <tr>
+                    <th>Shop</th>
+                    <th>Date</th>
+                    <th>Rep Name</th>
+                    <th>Items</th>
+                    <th className="text-center" colSpan="3">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {currentReturns.map(rtn => (
+                    <tr key={rtn.id}>
+                      <td>{rtn.shop}</td>
+                      <td>{rtn.date}</td>
+                      <td>{rtn.repName}</td>
+                      <td>{rtn.items ? rtn.items.map(i => `${i.item} (${i.returnQty})`).join(', ') : '—'}</td>
+                      <td>
+                        {" "}
+                        <button
+                          className="btn view-btn"
+                          onClick={() => handleViewReturns(rtn)}
+                        >
+                          View
+                        </button>
+                      </td>
+                      <td>
+                        <button className="dlt-btn" onClick={() => handleDelete(rtn.id)}>
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div id="bad-return-table">
+              <table className="returns-table">
+                <thead>
+                  <tr>
+                    <th>Shop</th>
+                    <th>Date</th>
+                    <th>Rep Name</th>
+                    <th>Items</th>
+                    <th className="text-center" colSpan="3">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {currentReturns.map(rtn => (
+                    <tr key={rtn.id}>
+                      <td>{rtn.shop}</td>
+                      <td>{rtn.date}</td>
+                      <td>{rtn.repName}</td>
+                      <td>{rtn.items ? rtn.items.map(i => `${i.item} (${i.returnQty})`).join(', ') : '—'}</td>
+                      <td>
+                        {" "}
+                        <button
+                          className="btn view-btn"
+                          onClick={() => handleViewReturns(rtn)}
+                        >
+                          View
+                        </button>
+                      </td>
+                      <td>
+                        <button className="dlt-btn" onClick={() => handleDelete(rtn.id)}>
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
           
           <div className="pagination-container-returns">
             <button 
