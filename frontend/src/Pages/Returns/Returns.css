@@ -1,5 +1,5 @@
 .Returns{
-    font-family: Arial, sans-serif;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     display: flex;
     width: 100%;
     height: 100vh;
@@ -67,6 +67,31 @@
     position: absolute;
     top: 25%
 }
+
+.return-switch-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+}
+  
+.return-switch-label {
+    font-weight: 600;
+    font-size: 16px;
+    margin-left: 8px;
+    color: #0b0b0b;
+}
+  
+.MuiSwitch-root {
+    color: #1976d2; /* Primary color */
+}
+  
+.Mui-checked {
+    color: #1976d2 !important;
+}
+  
+.MuiSwitch-track {
+    background-color: #90caf9 !important; /* Lighter blue track */
+}  
   
 .returns-table {
     border: 1px solid #e1e6f0;
@@ -508,3 +533,48 @@ th{
         justify-content: center;
     }
 }
+
+
+.orderdetails1{
+    color: #0056b3;
+    display: flex;
+    flex-direction: column;
+    margin-left: -40%;
+  }
+  .orderdetails2{
+    color: #0056b3;
+    display: flex;
+    flex-direction: column;
+    margin-left: 25%;
+    margin-top: -15.3%;
+  }
+  
+  .repname{
+    margin-left: 4%;
+  }
+  
+  
+  
+  .customtable{
+    width: 100%;
+    min-width: 600px; /* or any width you need */
+    border-collapse: collapse;
+    margin-top: 5%;
+  }
+  
+  .customtable th,
+  .customtable td {
+    border: 1px solid #ccc;
+    padding: 8px;
+  }
+  
+  
+
+.confirmedReturnTable{
+    margin-top: 3%;
+}
+.type{
+   margin-left: 25%;
+    
+}
+  
