@@ -20,58 +20,7 @@ const Orders = () => {
     setViewingOrder(order);
   };
 
-  const [shops, setShops] = useState([
-    // {
-    //   shopName: "Lakshan Shop",
-    //   location: "Nattandiya",
-    //   contact: "076 21326548",
-    // },
-    // {
-    //   shopName: "Hasitha Shop",
-    //   location: "Nattandiya",
-    //   contact: "076 21326548",
-    // },
-    // {
-    //   shopName: "Lakshan Shop",
-    //   location: "Nattandiya",
-    //   contact: "076 21326548",
-    // },
-    // {
-    //   shopName: "Hasitha Shop",
-    //   location: "Nattandiya",
-    //   contact: "076 21326548",
-    // },
-    // {
-    //   shopName: "Lakshan Shop",
-    //   location: "Nattandiya",
-    //   contact: "076 21326548",
-    // },
-    // {
-    //   shopName: "Hasitha Shop",
-    //   location: "Nattandiya",
-    //   contact: "076 21326548",
-    // },
-    // {
-    //   shopName: "Lakshan Shop",
-    //   location: "Nattandiya",
-    //   contact: "076 21326548",
-    // },
-    // {
-    //   shopName: "Hasitha Shop",
-    //   location: "Nattandiya",
-    //   contact: "076 21326548",
-    // },
-    // {
-    //   shopName: "Lakshan Shop",
-    //   location: "Nattandiya",
-    //   contact: "076 21326548",
-    // },
-    // {
-    //   shopName: "Hasitha Shop",
-    //   location: "Nattandiya",
-    //   contact: "076 21326548",
-    // },
-  ]);
+  const [shops, setShops] = useState([]);
 
   //fetch shops
   useEffect(() => {
@@ -320,12 +269,7 @@ const Orders = () => {
           </Link>
         </div>
         <div className="btn2">
-          <button
-            className="add-new-btn"
-            onClick={() => setShowShopsModal(true)}
-          >
-            Add New
-          </button>
+          <button className="add-new-btn" onClick={() => setShowShopsModal(true)}>Add New</button>
         </div>
 
         <div className="orders-table-container">
@@ -443,43 +387,6 @@ const Orders = () => {
         </div>
       </div>
 
-      {/* Shops Modal */}
-      {showShopsModal && (
-        <div className="ModalBackdrop">
-          <div className="Modal">
-            <h2>Select Shop</h2>
-            <div className="ScrollableContent">
-              <div className="ShopsGrid">
-                {shops.map((shop, index) => (
-                  <div
-                    key={index}
-                    className="ShopCard"
-                    onClick={() => handleShopSelect(shop)}
-                  >
-                    <h2>{shop.shopName}</h2>
-                    <div className="ShopCardMiddle">
-                      <StoreFrontIcon className="ShopCardIcon" />
-                      <div className="ShopCardDetails">
-                        <span>{shop.location}</span>
-                        <span>{shop.contact}</span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="ModalButtons">
-              <button
-                className="CancelButton"
-                onClick={() => setShowShopsModal(false)}
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* View Order Popup */}
       {viewingOrder && (
         <div className="ModalBackdrop">
@@ -545,6 +452,34 @@ const Orders = () => {
         </div>
       )}
 
+      {/* Shops Modal */}
+      {showShopsModal && (
+        <div className="ModalBackdrop">
+          <div className="Modal">
+            <h2>Select Shop</h2>
+            <div className="ScrollableContent">
+              <div className="ShopsGrid">
+                {shops.map((shop, index) => (
+                  <div key={index} className="ShopCard" onClick={() => handleShopSelect(shop)}>
+                    <h2>{shop.shop_name}</h2>
+                    <div className="ShopCardMiddle">
+                      <StoreFrontIcon className="ShopCardIcon"/>
+                      <div className="ShopCardDetails">
+                        <span>{shop.location}</span>
+                        <span>{shop.contact}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="ModalButtons">
+              <button className="CancelButton" onClick={() => setShowShopsModal(false)}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Items Modal */}
       {showItemsModal && (
         <div className="ModalBackdrop">
@@ -602,7 +537,6 @@ const Orders = () => {
                 })}
               </div>
             </div>
-
             <div className="ModalButtons">
               <button className="CancelButton" onClick={handleCancelOrder}>
                 Cancel
