@@ -136,6 +136,7 @@ const RepDashboard = () => {
       <RepSidebar />
       <div className="RepDashboardContainer">
         <RepNavbar />
+
         <div className="RepButtonsContainer">
           <div className="RepButton" onClick={handleAddOrderClick}>
             <img src={orderIcon} alt="Add Order" />
@@ -146,158 +147,157 @@ const RepDashboard = () => {
             <p>Add Return</p>
           </div>
         </div>
-      </div>
 
-      {/* Return Type Modal */}
-      {showReturnModal && (
-        <div className="ModalBackdrop">
-          <div className="Modal">
-            <h2>Select Return Type</h2>
-            <div className="ScrollableContent">
-              <div className="ReturnButtonsContainer">
-                <div className="ReturnButton" onClick={handleAddGoodReturnClick}>
-                  <img src={GoodReturnIcon} alt="Good Return" />
-                  <p>Good Return</p>
-                </div>
-                <div className="ReturnButton" onClick={handleAddBadReturnClick}>
-                  <img src={BadReturnIcon} alt="Bad Return" />
-                  <p>Bad Return</p>
-                </div>
-              </div>
-            </div>
-            <div className="ModalButtons">
-              <button className="CancelButton" onClick={() => setShowReturnModal(false)}>Cancel</button>
-            </div>
-          </div>
-        </div>
-      )}
-
-
-      {/* Shops Modal */}
-      {showShopsModal && (
-        <div className="ModalBackdrop">
-          <div className="Modal">
-            <h2>Select Shop</h2>
-            <div className="ScrollableContent">
-              <div className="ShopsGrid">
-                {shops.map((shop, index) => (
-                  <div
-                    key={index}
-                    className="ShopCard"
-                    onClick={() => handleShopSelect(shop)}
-                  >
-                    <h2>{shop.shop_name}</h2>
-                    <div className="ShopCardMiddle">
-                      <StoreFrontIcon className="ShopCardIcon" />
-                      <div className="ShopCardDetails">
-                        <span>{shop.location}</span>
-                        <span>{shop.contact}</span>
-                      </div>
-                    </div>
+        {/* Return Type Modal */}
+        {showReturnModal && (
+          <div className="ModalBackdrop">
+            <div className="Modal">
+              <h2>Select Return Type</h2>
+              <div className="ScrollableContent">
+                <div className="ReturnButtonsContainer">
+                  <div className="ReturnButton" onClick={handleAddGoodReturnClick}>
+                    <img src={GoodReturnIcon} alt="Good Return" />
+                    <p>Good Return</p>
                   </div>
-                ))}
+                  <div className="ReturnButton" onClick={handleAddBadReturnClick}>
+                    <img src={BadReturnIcon} alt="Bad Return" />
+                    <p>Bad Return</p>
+                  </div>
+                </div>
+              </div>
+              <div className="ModalButtons">
+                <button className="CancelButton" onClick={() => setShowReturnModal(false)}>Cancel</button>
               </div>
             </div>
-            <div className="ModalButtons">
-              <button className="CancelButton" onClick={() => setShowShopsModal(false)}>Cancel</button>
-            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Items Modal */}
-      {showItemsModal && (
-        <div className="ModalBackdrop">
-          <div className="Modal">
-            <h2>{isReturn ? "Select Return Items" : `Select Items for ${selectedShop?.shop_name}`}</h2>
-            <div className="ScrollableContent">
-              <div className="DistributionStockGrid">
-                {items.map((item, index) => {
-                  const selected = selectedItems.find((i) => i.item === item.item);
-                  return (
-                    <div key={index} className="DistributionItemCard">
-                      <h2>{item.item}</h2>
-                      <div className="DistributionItemCardMiddle">
-                        <ShoppingCartIcon className="DistributionItemCardIcon" />
-                        <div className="DistributionItemCardDetails">
-                          <span><strong>Price (LKR): </strong>{item.unitPrice}</span>
-                          <span><strong>In Stock: </strong>{item.quantity}</span>
-                          {selected ? (
-                            <div className="SelectedItemControl">
-                              <input
-                                type="number"
-                                min="1"
-                                className="QtyInput"
-                                value={selected.orderQty}
-                                onChange={(e) => updateItemQuantity(item.item, e.target.value)}
-                              />
-                              <button
-                                className="RemoveItemBtn"
-                                title="Remove item"
-                                onClick={() => removeSelectedItem(item.item)}
-                              ></button>
-                            </div>
-                          ) : (
-                            <button
-                              className="SelectItemBtn"
-                              onClick={() => handleItemSelect(item)}
-                            >
-                              Select
-                            </button>
-                          )}
+        {/* Shops Modal */}
+        {showShopsModal && (
+          <div className="ModalBackdrop">
+            <div className="Modal">
+              <h2>Select Shop</h2>
+              <div className="ScrollableContent">
+                <div className="ShopsGrid">
+                  {shops.map((shop, index) => (
+                    <div
+                      key={index}
+                      className="ShopCard"
+                      onClick={() => handleShopSelect(shop)}
+                    >
+                      <h2>{shop.shop_name}</h2>
+                      <div className="ShopCardMiddle">
+                        <StoreFrontIcon className="ShopCardIcon" />
+                        <div className="ShopCardDetails">
+                          <span>{shop.location}</span>
+                          <span>{shop.contact}</span>
                         </div>
                       </div>
                     </div>
-                  );
-                })}
+                  ))}
+                </div>
+              </div>
+              <div className="ModalButtons">
+                <button className="CancelButton" onClick={() => setShowShopsModal(false)}>Cancel</button>
               </div>
             </div>
-            <div className="ModalButtons">
-              <button className="CancelButton" onClick={handleCancelOrder}>Cancel</button>
-              <button className="ConfirmButton" onClick={handleConfirmOrder}>
-                {editingOrderId ? "Update Order" : isReturn ? "Confirm Return" : "Confirm Order"}
-              </button>
+          </div>
+        )}
+
+        {/* Items Modal */}
+        {showItemsModal && (
+          <div className="ModalBackdrop">
+            <div className="Modal">
+              <h2>{isReturn ? `Select Return Items for ${selectedShop?.shop_name}` : `Select Items for ${selectedShop?.shop_name}`}</h2>
+              <div className="ScrollableContent">
+                <div className="DistributionStockGrid">
+                  {items.map((item, index) => {
+                    const selected = selectedItems.find((i) => i.item === item.item);
+                    return (
+                      <div key={index} className="DistributionItemCard">
+                        <h2>{item.item}</h2>
+                        <div className="DistributionItemCardMiddle">
+                          <ShoppingCartIcon className="DistributionItemCardIcon" />
+                          <div className="DistributionItemCardDetails">
+                            <span><strong>Price (LKR): </strong>{item.unitPrice}</span>
+                            <span><strong>In Stock: </strong>{item.quantity}</span>
+                            {selected ? (
+                              <div className="SelectedItemControl">
+                                <input
+                                  type="number"
+                                  min="1"
+                                  className="QtyInput"
+                                  value={selected.orderQty}
+                                  onChange={(e) => updateItemQuantity(item.item, e.target.value)}
+                                />
+                                <button
+                                  className="RemoveItemBtn"
+                                  title="Remove item"
+                                  onClick={() => removeSelectedItem(item.item)}
+                                ></button>
+                              </div>
+                            ) : (
+                              <button
+                                className="SelectItemBtn"
+                                onClick={() => handleItemSelect(item)}
+                              >
+                                Select
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+              <div className="ModalButtons">
+                <button className="CancelButton" onClick={handleCancelOrder}>Cancel</button>
+                <button className="ConfirmButton" onClick={handleConfirmOrder}>
+                  {editingOrderId ? "Update Order" : isReturn ? "Confirm Return" : "Confirm Order"}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Confirmed Order View */}
-      {orderToEdit && (
-        <div className="ModalBackdrop">
-          <div className="Modal">
-            <div className="abc">
-              <span className="order-number">{orderToEdit.isReturn ? "Return" : "Order"}</span>
-            </div>
-            <table className="confirmedOrderTable">
-              <thead>
-                <tr>
-                  <th>Item</th>
-                  <th>Qty</th>
-                  <th>Unit Price</th>
-                  <th>Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                {orderToEdit.items.map((item, index) => (
-                  <tr key={index}>
-                    <td>{item.item}</td>
-                    <td>{item.orderQty}</td>
-                    <td>{item.unitPrice}</td>
-                    <td>{item.orderQty * item.unitPrice}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <div className="Action">
-              <button onClick={handleEditOrder}>Edit {orderToEdit.isReturn ? "Return" : "Order"}</button>
-              <button onClick={handleGenerateInvoice}>Generate Invoice</button>
-              <button onClick={() => setOrderToEdit(null)}>Cancel</button>
+        {/* Confirmed Order View */}
+        {orderToEdit && (
+          <div className="ModalBackdrop">
+            <div className="Modal">
+              <div className="AddedOrder">
+                <h1>{orderToEdit.isReturn ? "Return" : "Order"}</h1>
+                <h2>{selectedShop?.shop_name}</h2>
+                <table className="confirmedOrderTable">
+                  <thead>
+                    <tr>
+                      <th>Item</th>
+                      <th>Qty</th>
+                      <th>Unit Price</th>
+                      <th>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {orderToEdit.items.map((item, index) => (
+                      <tr key={index}>
+                        <td>{item.item}</td>
+                        <td>{item.orderQty}</td>
+                        <td>{item.unitPrice}</td>
+                        <td>{item.orderQty * item.unitPrice}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                <div className="Action">
+                  <button onClick={handleEditOrder}>Edit {orderToEdit.isReturn ? "Return" : "Order"}</button>
+                  <button onClick={handleGenerateInvoice}>Generate Invoice</button>
+                  <button onClick={() => setOrderToEdit(null)}>Cancel</button>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      )}
-
+        )}
+      </div>
     </div>
   );
 };
