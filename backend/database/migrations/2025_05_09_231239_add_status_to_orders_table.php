@@ -13,12 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('order_items', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('order_id')->constrained()->onDelete('cascade');
-            $table->foreignId('item_id')->constrained()->onDelete('cascade');
-            $table->integer('quantity');
-            $table->timestamps();
+        Schema::table('orders', function (Blueprint $table) {
+            if(!Schema::hasColumn('orders','status'))
+            $table->string('status')->default('Pending')->after('user_name');
         });
     }
 
@@ -29,6 +26,10 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('order_items');
+        Schema::table('orders', function (Blueprint $table) {
+            if(Schema::hasColumn('orders','status')){
+                $table->dropColumn('status');
+            }
+        });
     }
 };

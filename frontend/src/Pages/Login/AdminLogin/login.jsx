@@ -7,7 +7,7 @@ import logo from "../../../assets/YM.png";
 const AdminLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  
+
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -32,6 +32,9 @@ const AdminLogin = () => {
       if (response.data.token) {
         localStorage.setItem("admin_token", response.data.token);
         localStorage.setItem("admin_user", JSON.stringify(response.data.admin));
+        localStorage.setItem("username", response.data.admin.name);
+        console.log(localStorage.getItem("username"));
+
         alert(response.data.message); // Show success message
         navigate("/admindashboard");
       } else {

@@ -13,15 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('sales_reps', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->string('nic');
-            $table->string('contact_number');
-            $table->string('password');
-            $table->timestamps(); // Add this if missing
-        });
+        if(!Schema::hasTable('salesReps')){
+            Schema::create('sales_reps', function (Blueprint $table) {
+                $table->id();
+                $table->string('name');
+                $table->string('email')->unique();
+                $table->string('nic');
+                $table->string('contact_number');
+                $table->string('password');
+                $table->timestamps(); // Add this if missing
+            });
+        }
     }
 
     /**
