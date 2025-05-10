@@ -15,36 +15,37 @@ class PurchaseStockController extends Controller
 
     }
 
-   
+
     public function store(Request $request){
-        $validator = Validator::make($request->all(),[
-            'item'=>'required|string|max:255',
-            'weight'=>'required|numeric'
+        $validator = Validator::make($request->all(), [
+            'item' => 'required|string|max:255',
+            'weight' => [
+                'required',
+                'numeric',
+                'regex:/^\d+(\.\d{3})$/'
+            ],
         ]);
+    
         if($validator->fails()){
             return response()->json([
-                'message'=>'Validation failed',
-                'errors'=>$validator->errors()
-            ],422);
+                'message' => 'Validation failed',
+                'errors' => $validator->errors()
+            ], 422);
         }
-
-        try{
-            $purchase_stock=PurchaseStock::create($request->only(['item','weight']));
+    
+        try {
+            $purchase_stock = PurchaseStock::create($request->only(['item', 'weight']));
             return response()->json([
-                'mesage'=>'Item Added Successfully',
-                'purchase_stock'=>$purchase_stock
-            ],201);
-        }catch(\Exception $e){
+                'message' => 'Item Added Successfully',
+                'purchase_stock' => $purchase_stock
+            ], 201);
+        } catch (\Exception $e) {
             return response()->json([
-                'message'=> 'Error when Adding Item',
-                'purchase_stock'=>$e->getMessage()
-            ],500);
+                'message' => 'Error when Adding Item',
+                'purchase_stock' => $e->getMessage()
+            ], 500);
         }
-        
-
     }
-
-  
 
 
     public function update(Request $request,$id){

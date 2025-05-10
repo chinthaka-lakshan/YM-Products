@@ -13,7 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('sales_reps', function (Blueprint $table) {
+
+        Schema::create('SalesRep', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('email')->unique();

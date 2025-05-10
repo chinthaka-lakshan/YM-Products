@@ -19,6 +19,7 @@ return new class extends Migration
             $table->decimal('return_balance', 10, 2)->nullable();
             $table->unsignedBigInteger('shop_id'); // foreign key
             $table->string('user_name');
+            $table->string('status')->default('Pending');
             $table->timestamps();
 
             $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade');

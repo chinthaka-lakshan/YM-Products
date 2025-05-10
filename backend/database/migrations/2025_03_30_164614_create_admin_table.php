@@ -13,6 +13,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
+            $table->string('nic')->unique(); // Added NIC field
+            $table->string('contact_number'); // Added contact number
             $table->enum('role', ['admin', 'sales_rep'])->default('sales_rep');
             $table->rememberToken();
             $table->timestamps();

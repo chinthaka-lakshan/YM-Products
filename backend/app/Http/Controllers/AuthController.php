@@ -9,28 +9,71 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SalesRepCredentials;
 
 class AuthController extends Controller
 {
-    // Admin Registration (Only for Admins)
-    public function registerRep(Request $request)
-    {
-        $request->validate([
+        // Admin Registration (Only for Admins)
+public function registerRep(Request $request)
+{
+    try {
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:admins',
             'password' => 'required|string|min:6',
+            'nic' => 'required|string|max:20|unique:admins',
+            'contact_number' => 'required|string|max:20'
         ]);
 
         $admin = Admin::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => 'sales_rep',
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+            'nic' => $validated['nic'],
+            'contact_number' => $validated['contact_number'],
+            'role' => 'sales_rep'
         ]);
 
-        return response()->json(['message' => 'Sales Representative registered successfully']);
-    }
+        // Queue the email
+        Mail::to($validated['email'])
+            ->queue(new SalesRepCredentials(
+                $validated['name'],
+                $validated['email'],
+                $validated['password'] // Sending plain password only for initial setup
+            ));
 
+        return response()->json([
+            'success' => true,
+            'message' => 'Sales rep created successfully',
+            'data' => $admin,
+            'email_sent' => true
+        ], 201);
+
+    } catch (ValidationException $e) {
+        return response()->json([
+            'success' => false,
+            'errors' => $e->errors()
+        ], 422);
+    } catch (\Exception $e) {
+        \Log::error('Registration failed: '.$e->getMessage());
+        return response()->json([
+            'success' => false,
+            'message' => 'Registration completed but email failed to send',
+            'error' => env('APP_DEBUG') ? $e->getMessage() : null
+        ], 201); // Still return 201 as account was created
+    }
+}
+    // Get sells rep list
+    public function getSalesReps()
+    {
+        return response()->json(
+            Admin::where('role', 'sales_rep')
+                ->select('id', 'name', 'email', 'nic', 'contact_number', 'created_at')
+                ->get(), 
+            200
+        );
+    }
     // Admin Login
     public function adminLogin(Request $request)
     {
@@ -84,6 +127,55 @@ class AuthController extends Controller
         ]);
     }
 
+    /**
+     * Update a sales representative
+     */
+    public function updateSalesRep(Request $request, $id)
+    {
+        try {
+            $salesRep = Admin::where('id', $id)
+                        ->where('role', 'sales_rep')
+                        ->firstOrFail();
+
+            $validated = $request->validate([
+                'name' => 'sometimes|string|max:255',
+                'email' => 'sometimes|string|email|max:255|unique:admins,email,'.$id,
+                'password' => 'sometimes|string|min:6',
+                'nic' => 'sometimes|string|max:20|unique:admins,nic,'.$id,
+                'contact_number' => 'sometimes|string|max:20'
+            ]);
+
+            if (isset($validated['password'])) {
+                $validated['password'] = Hash::make($validated['password']);
+            }
+
+            $salesRep->update($validated);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Sales representative updated successfully',
+                'data' => $salesRep->only(['id', 'name', 'email', 'nic', 'contact_number', 'role'])
+            ]);
+
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Sales representative not found'
+            ], 404);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            \Log::error('Failed to update sales rep: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update sales representative'
+            ], 500);
+        }
+    }
+
     // Regular User Registration
     public function register(Request $request)
     {
@@ -110,6 +202,66 @@ class AuthController extends Controller
             'user' => $user,
             'token' => $token
         ], 201);
+    }
+    /**
+     * Get a single sales representative by ID
+     */
+    public function getSalesRepById($id)
+    {
+        try {
+            $salesRep = Admin::where('id', $id)
+                        ->where('role', 'sales_rep')
+                        ->select('id', 'name', 'email', 'nic', 'contact_number', 'created_at')
+                        ->firstOrFail();
+
+            return response()->json([
+                'success' => true,
+                'data' => $salesRep
+            ]);
+
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Sales representative not found'
+            ], 404);
+        } catch (\Exception $e) {
+            \Log::error('Failed to fetch sales rep: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to retrieve sales representative'
+            ], 500);
+        }
+    }
+
+    /**
+     * Delete a sales representative
+     */
+    public function deleteSalesRep($id)
+    {
+        try {
+            $salesRep = Admin::where('id', $id)
+                        ->where('role', 'sales_rep')
+                        ->firstOrFail();
+
+            $salesRep->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Sales representative deleted successfully'
+            ]);
+
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Sales representative not found'
+            ], 404);
+        } catch (\Exception $e) {
+            \Log::error('Failed to delete sales rep: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete sales representative'
+            ], 500);
+        }
     }
 
     // Regular User Login

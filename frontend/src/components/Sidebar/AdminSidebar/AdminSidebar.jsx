@@ -46,7 +46,7 @@ const AdminSidebar = () => {
                         </li>
                     </Link>
                     <Link to="/returns" style={{textDecoration:"none"}}>
-                        <li className={location.pathname === "/adminReturns" ? "active" : ""}>
+                        <li className={location.pathname === "/returns" ? "active" : ""}>
                             <RepeatIcon className='Icon'/>
                             <span>Returns</span>
                         </li>

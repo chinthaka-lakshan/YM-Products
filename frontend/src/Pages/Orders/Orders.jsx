@@ -14,70 +14,37 @@ import axios from "axios";
 const Orders = () => {
   const [orders, setOrders] = useState([]);
 
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = await axios.get("http://127.0.0.1:8000/api/orders", {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+          withCredentials: true,
+        });
+        console.log("Fetch Orders: ", response.data);
+        setOrders(response.data);
+      } catch (error) {
+        console.error("Error fetching orders!", error);
+      }
+    };
+    fetchOrders();
+  }, []);
+
   const [viewingOrder, setViewingOrder] = useState(null); // For viewing order popup
 
   const handleViewOrder = (order) => {
     setViewingOrder(order);
   };
 
-  const [shops, setShops] = useState([
-    // {
-    //   shopName: "Lakshan Shop",
-    //   location: "Nattandiya",
-    //   contact: "076 21326548",
-    // },
-    // {
-    //   shopName: "Hasitha Shop",
-    //   location: "Nattandiya",
-    //   contact: "076 21326548",
-    // },
-    // {
-    //   shopName: "Lakshan Shop",
-    //   location: "Nattandiya",
-    //   contact: "076 21326548",
-    // },
-    // {
-    //   shopName: "Hasitha Shop",
-    //   location: "Nattandiya",
-    //   contact: "076 21326548",
-    // },
-    // {
-    //   shopName: "Lakshan Shop",
-    //   location: "Nattandiya",
-    //   contact: "076 21326548",
-    // },
-    // {
-    //   shopName: "Hasitha Shop",
-    //   location: "Nattandiya",
-    //   contact: "076 21326548",
-    // },
-    // {
-    //   shopName: "Lakshan Shop",
-    //   location: "Nattandiya",
-    //   contact: "076 21326548",
-    // },
-    // {
-    //   shopName: "Hasitha Shop",
-    //   location: "Nattandiya",
-    //   contact: "076 21326548",
-    // },
-    // {
-    //   shopName: "Lakshan Shop",
-    //   location: "Nattandiya",
-    //   contact: "076 21326548",
-    // },
-    // {
-    //   shopName: "Hasitha Shop",
-    //   location: "Nattandiya",
-    //   contact: "076 21326548",
-    // },
-  ]);
+  const [shops, setShops] = useState([]);
 
   //fetch shops
   useEffect(() => {
     const fetchShops = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/shops");
+        const response = await axios.get("http://127.0.0.1:8000/api/shops");
         setShops(response.data);
       } catch (error) {
         console.error("Error fetching shops: ", error);
@@ -86,23 +53,35 @@ const Orders = () => {
     fetchShops();
   }, []);
 
-  const [items] = useState([
-    { item: "Chilli Powder 50g", unitPrice: "250.50", quantity: 52 },
-    { item: "Chilli Powder 100g", unitPrice: "480.50", quantity: 22 },
-    { item: "Curry Powder 50g", unitPrice: "200.00", quantity: 42 },
-    { item: "Curry Powder 100g", unitPrice: "400.00", quantity: 72 },
-    { item: "Chilli Pieces 50g", unitPrice: "180.75", quantity: 12 },
-    { item: "Chilli Powder 150g", unitPrice: "250.50", quantity: 52 },
-    { item: "Chilli Powder 200g", unitPrice: "480.50", quantity: 22 },
-    { item: "Curry Powder 500g", unitPrice: "200.00", quantity: 42 },
-    { item: "Curry Powder 1000g", unitPrice: "400.00", quantity: 72 },
-    { item: "Chilli Pieces 250g", unitPrice: "180.75", quantity: 12 },
-    { item: "Chilli Powder 250g", unitPrice: "250.50", quantity: 52 },
-    { item: "Chilli Powder 300g", unitPrice: "480.50", quantity: 22 },
-    { item: "Curry Powder 150g", unitPrice: "200.00", quantity: 42 },
-    { item: "Curry Powder 125g", unitPrice: "400.00", quantity: 72 },
-    { item: "Chilli Pieces 700g", unitPrice: "180.75", quantity: 12 },
+  const [items, setItems] = useState([
+    // { item: "Chilli Powder 50g", unitPrice: "250.50", quantity: 52 },
+    // { item: "Chilli Powder 100g", unitPrice: "480.50", quantity: 22 },
+    // { item: "Curry Powder 50g", unitPrice: "200.00", quantity: 42 },
+    // { item: "Curry Powder 100g", unitPrice: "400.00", quantity: 72 },
+    // { item: "Chilli Pieces 50g", unitPrice: "180.75", quantity: 12 },
+    // { item: "Chilli Powder 150g", unitPrice: "250.50", quantity: 52 },
+    // { item: "Chilli Powder 200g", unitPrice: "480.50", quantity: 22 },
+    // { item: "Curry Powder 500g", unitPrice: "200.00", quantity: 42 },
+    // { item: "Curry Powder 1000g", unitPrice: "400.00", quantity: 72 },
+    // { item: "Chilli Pieces 250g", unitPrice: "180.75", quantity: 12 },
+    // { item: "Chilli Powder 250g", unitPrice: "250.50", quantity: 52 },
+    // { item: "Chilli Powder 300g", unitPrice: "480.50", quantity: 22 },
+    // { item: "Curry Powder 150g", unitPrice: "200.00", quantity: 42 },
+    // { item: "Curry Powder 125g", unitPrice: "400.00", quantity: 72 },
+    // { item: "Chilli Pieces 700g", unitPrice: "180.75", quantity: 12 },
   ]);
+
+  useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        const response = await axios.get("http://127.0.0.1:8000/api/items");
+        setItems(response.data);
+      } catch (error) {
+        console.error("Error fetching shops: ", error);
+      }
+    };
+    fetchItems();
+  }, []);
 
   const [currentPage, setCurrentPage] = useState(1);
   const ordersPerPage = 5;
@@ -163,20 +142,11 @@ const Orders = () => {
     setSelectedItems(selectedItems.filter((item) => item.item !== itemName));
   };
 
-  const checkAdjustedOrderCost = async (shopId, orderAmount) => {
-    try {
-      const response = await fetch(
-        `http://localhost:8000/api/calculate-order-cost/${shopId}/${orderAmount}`
-      );
-      const data = await response.json();
-      return data.return_balance;
-    } catch (error) {
-      console.error("Error fetching order cost", error);
-      return orderAmount;
-    }
-  };
-
   const userToken = localStorage.getItem("admin_token");
+
+  const loggedUser = localStorage.getItem("username");
+  console.log(loggedUser ? loggedUser + "" : "not found");
+
   const handleConfirmOrder = async () => {
     if (!selectedShop || selectedItems.length == 0) return;
     const totalOrderAmount = selectedItems.reduce(
@@ -184,86 +154,128 @@ const Orders = () => {
       0
     );
 
-    const getCost = await checkAdjustedOrderCost(
-      selectedShop.id,
-      totalOrderAmount
-    );
-
-    if (editingOrderId !== null) {
-      const updatedOrders = orders.map((order) =>
-        order.id === editingOrderId
-          ? {
-              ...order,
-              shop: selectedShop.shopName,
-              date: new Date().toLocaleDateString(),
-              items: selectedItems.filter((item) => item.orderQty > 0),
-              total_price: getCost,
-            }
-          : order
+    try {
+      const getCost = await checkAdjustedOrderCost(
+        selectedShop.id,
+        totalOrderAmount
       );
-      const updatedOrder = updatedOrders.find((o) => o.id === editingOrderId);
-      setOrders(updatedOrders);
-      setOrderToEdit(updatedOrder);
-      setCurrentInvoiceItems(updatedOrder.items);
-      setEditingOrderId(null);
-    } else {
-      const newOrder = {
-        id: orders.length + 1,
-        shop_id: selectedShop.id,
-        date: new Date().toLocaleDateString(),
-        repName: "Raheem",
-        status: "Pending",
-        total_price: getCost,
-        items: selectedItems.filter((item) => item.orderQty > 0),
-      };
-      console.log(getCost);
-      console.log(selectedShop.id);
-      console.log(selectedShop);
+      console.log("CCost::", getCost);
 
-      //store in DB
-      try {
-        console.log(userToken);
+      if (getCost === undefined || getCost === null) {
+        console.error("Failed to retrieve adjusted order cost");
 
-        const controller = new AbortController();
-
-        const response = await axios.post(
-          "http://localhost:8000/api/orders",
-          newOrder,
-          {
-            // method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${userToken}`,
-            },
-            //body: JSON.stringify(newOrder),
-            //signal: controller.signal,
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error(
-            `Server responded with ${response.status}:${
-              response.status
-            }:${await response.text()}`
-          );
-        }
-        const data = await response.json();
-        console.log("Order saved:", data);
-
-        // setOrders([...orders, newOrder]);
-        // setOrderToEdit(newOrder);
-        // setCurrentInvoiceItems(newOrder.items);
-
-        setOrders([...orders, newOrder]);
-        setOrderToEdit(data);
-        setCurrentInvoiceItems(data.items);
-      } catch (error) {
-        console.error("Error saving order:", error);
+        return;
       }
+      if (editingOrderId !== null) {
+        const updatedOrders = orders.map((order) =>
+          order.id === editingOrderId
+            ? {
+                ...order,
+                shop: selectedShop.shopName,
+                date: new Date().toLocaleDateString(),
+                items: selectedItems.filter((item) => item.orderQty > 0),
+                total_price: getCost,
+              }
+            : order
+        );
+        const updatedOrder = updatedOrders.find((o) => o.id === editingOrderId);
+        setOrders(updatedOrders);
+        setOrderToEdit(updatedOrder);
+        setCurrentInvoiceItems(updatedOrder.items);
+        setEditingOrderId(null);
+      } else {
+        const newOrder = {
+          id: orders.length + 1,
+          shop_id: selectedShop.id,
+          date: new Date().toLocaleDateString(),
+          user_name: loggedUser,
+          status: "Pending",
+          total_price: getCost,
+          items: selectedItems
+            //.filter((item) => item.orderQty > 0)
+            .map((item) => ({
+              item_id: item.id,
+              order_id: orders.length + 1,
+              quantity: item.orderQty,
+            })),
+        };
+        console.log(getCost);
+        console.log(selectedShop.id);
+        console.log(selectedShop);
+        console.log("koo" + newOrder);
+
+        //store in DB
+        try {
+          console.log(userToken);
+
+          const controller = new AbortController();
+
+          const response = await axios.post(
+            "http://127.0.0.1:8000/api/orders",
+            newOrder,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${userToken}`,
+              },
+              withCredentials: true,
+            }
+            // body: JSON.stringify(newOrder),
+          );
+          console.log("response: " + response);
+
+          if (!response.data) {
+            throw new Error(
+              `Server responded with ${response.status}:${
+                response.status
+              }:${await response.data}`
+            );
+          }
+          if (response.status === 200 || response.status === 201) {
+            const data = await response.data;
+            console.log("Order saved:", data.order);
+            console.log("Items saved:", data.order.items);
+            //setOrders([...orders, newOrder]);
+            setOrders((prevOrders) => [
+              ...prevOrders,
+              { ...data.order, items: data.order.items || [] },
+            ]);
+            setOrderToEdit({ ...data.order, items: data.order.items || [] });
+            setCurrentInvoiceItems(data.order.items || []);
+
+            // setOrders((orders) => [...orders, newOrder]);
+            // setOrderToEdit({ ...data.order, items: data.order.items || [] });
+            // setCurrentInvoiceItems(data.items);
+          } else {
+            throw new Error(`Unexpected status code:${response.status}`);
+          }
+        } catch (error) {
+          console.error("Error saving order:", error);
+        }
+      }
+      setShowItemsModal(false);
+      setSelectedShop(null);
+      setSelectedItems([]);
+    } catch (error) {
+      console.error("Error saving order:", error);
     }
-    setShowItemsModal(false);
-    setSelectedShop(null);
-    setSelectedItems([]);
+  };
+
+  const checkAdjustedOrderCost = async (shopId, orderAmount) => {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8000/api/calculate-order-cost/${shopId}/${orderAmount}`,
+        { withCredentials: true }
+      );
+      const data = response.data;
+      console.log("respons: ", data.return_balance);
+      console.log("kooo");
+
+      return data.return_balance ?? orderAmount;
+    } catch (error) {
+      console.error("Error fetching order cost", error);
+      return orderAmount;
+    }
   };
 
   const handleCancelOrder = () => {
@@ -306,6 +318,15 @@ const Orders = () => {
     });
   };
 
+  //subtotal
+  const subTotal = currentInvoiceItems.reduce(
+    (sum, item) => sum + item.quantity * item.unitPrice,
+    0
+  );
+  const disCountPresentage = 10;
+  const disCountAmount = (subTotal * disCountPresentage) / 100;
+  const totalDue = subTotal - disCountAmount;
+
   return (
     <div className="Orders">
       <Sidebar />
@@ -320,12 +341,7 @@ const Orders = () => {
           </Link>
         </div>
         <div className="btn2">
-          <button
-            className="add-new-btn"
-            onClick={() => setShowShopsModal(true)}
-          >
-            Add New
-          </button>
+          <button className="add-new-btn" onClick={() => setShowShopsModal(true)}>Add New</button>
         </div>
 
         <div className="orders-table-container">
@@ -343,57 +359,65 @@ const Orders = () => {
               </tr>
             </thead>
             <tbody>
-              {currentOrders.map((order) => (
-                <tr key={order.id}>
-                  <td>{order.shop}</td>
-                  <td>{order.date}</td>
-                  <td>{order.repName}</td>
-                  <td>{order.status}</td>
-                  <td>
-                    {order.items
-                      ? order.items
-                          .map((i) => `${i.item} (${i.orderQty})`)
-                          .join(", ")
-                      : "—"}
-                  </td>
-                  <td>
-                    {" "}
-                    <button
-                      className="btn view-btn"
-                      onClick={() => handleViewOrder(order)}
-                    >
-                      View
-                    </button>
-                  </td>
+              {currentOrders?.length > 0 ? (
+                currentOrders.map((order) => (
+                  <tr key={order.id}>
+                    <td>{order.shop_id}</td>
+                    <td>{order.created_at}</td>
+                    <td>{order.user_name}</td>
+                    <td>{order.status}</td>
+                    <td>
+                      {order.items
+                        ? order.items
+                            .map((i) => `${i.item} (${i.orderQty})`)
+                            .join(", ")
+                        : "—"}
+                    </td>
+                    <td>
+                      {" "}
+                      <button
+                        className="btn view-btn"
+                        onClick={() => handleViewOrder(order)}
+                      >
+                        View
+                      </button>
+                    </td>
 
-                  <td>
-                    {order.items
-                      ? order.items
-                          .map((i) => `${i.item} (${i.orderQty})`)
-                          .join(", ")
-                      : "—"}
-                  </td>
-                  <td>
-                    <button className="btn view-btn">View</button>
-                  </td>
-                  <td>
-                    <button
-                      className="btn accept-btn"
-                      onClick={() => handleStatusChange(order.id, "Accepted")}
-                    >
-                      Accept
-                    </button>
-                  </td>
-                  <td>
-                    <button
-                      className="btn cancel-btn"
-                      onClick={() => handleStatusChange(order.id, "Cancelled")}
-                    >
-                      Cancel
-                    </button>
-                  </td>
+                    <td>
+                      {order.items
+                        ? order.items
+                            .map((i) => `${i.item} (${i.orderQty})`)
+                            .join(", ")
+                        : "—"}
+                    </td>
+                    <td>
+                      <button className="btn view-btn">View</button>
+                    </td>
+                    <td>
+                      <button
+                        className="btn accept-btn"
+                        onClick={() => handleStatusChange(order.id, "Accepted")}
+                      >
+                        Accept
+                      </button>
+                    </td>
+                    <td>
+                      <button
+                        className="btn cancel-btn"
+                        onClick={() =>
+                          handleStatusChange(order.id, "Cancelled")
+                        }
+                      >
+                        Cancel
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="8">No Orders available</td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
 
@@ -442,43 +466,6 @@ const Orders = () => {
           </div>
         </div>
       </div>
-
-      {/* Shops Modal */}
-      {showShopsModal && (
-        <div className="ModalBackdrop">
-          <div className="Modal">
-            <h2>Select Shop</h2>
-            <div className="ScrollableContent">
-              <div className="ShopsGrid">
-                {shops.map((shop, index) => (
-                  <div
-                    key={index}
-                    className="ShopCard"
-                    onClick={() => handleShopSelect(shop)}
-                  >
-                    <h2>{shop.shopName}</h2>
-                    <div className="ShopCardMiddle">
-                      <StoreFrontIcon className="ShopCardIcon" />
-                      <div className="ShopCardDetails">
-                        <span>{shop.location}</span>
-                        <span>{shop.contact}</span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="ModalButtons">
-              <button
-                className="CancelButton"
-                onClick={() => setShowShopsModal(false)}
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* View Order Popup */}
       {viewingOrder && (
@@ -545,6 +532,34 @@ const Orders = () => {
         </div>
       )}
 
+      {/* Shops Modal */}
+      {showShopsModal && (
+        <div className="ModalBackdrop">
+          <div className="Modal">
+            <h2>Select Shop</h2>
+            <div className="ScrollableContent">
+              <div className="ShopsGrid">
+                {shops.map((shop, index) => (
+                  <div key={index} className="ShopCard" onClick={() => handleShopSelect(shop)}>
+                    <h2>{shop.shop_name}</h2>
+                    <div className="ShopCardMiddle">
+                      <StoreFrontIcon className="ShopCardIcon"/>
+                      <div className="ShopCardDetails">
+                        <span>{shop.location}</span>
+                        <span>{shop.contact}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="ModalButtons">
+              <button className="CancelButton" onClick={() => setShowShopsModal(false)}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Items Modal */}
       {showItemsModal && (
         <div className="ModalBackdrop">
@@ -602,7 +617,6 @@ const Orders = () => {
                 })}
               </div>
             </div>
-
             <div className="ModalButtons">
               <button className="CancelButton" onClick={handleCancelOrder}>
                 Cancel
@@ -632,14 +646,20 @@ const Orders = () => {
                 </tr>
               </thead>
               <tbody>
-                {orderToEdit.items.map((item, index) => (
-                  <tr key={index}>
-                    <td>{item.item}</td>
-                    <td>{item.orderQty}</td>
-                    <td>{item.unitPrice}</td>
-                    <td>{item.orderQty * item.unitPrice}</td>
+                {orderToEdit?.items?.length > 0 ? (
+                  orderToEdit.items.map((item, index) => (
+                    <tr key={index}>
+                      <td>{item.item}</td>
+                      <td>{item.quantity}</td>
+                      <td>{item.unitPrice}</td>
+                      <td>{item.quantity * item.unitPrice}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="4">No Items available</td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
             <div className="Action">
@@ -680,18 +700,18 @@ const Orders = () => {
                   {currentInvoiceItems.map((item, index) => (
                     <tr key={index}>
                       <td>{item.item}</td>
-                      <td>{item.orderQty}</td>
+                      <td>{item.quantity}</td>
                       <td>Rs. {item.unitPrice}</td>
-                      <td>Rs. {item.orderQty * item.unitPrice}</td>
+                      <td>Rs. {item.quantity * item.unitPrice}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
               <div className="invoice-total">
-                <p>Sub Total: Rs. 150,000</p>
-                <p>Discount: 10%</p>
+                <p>Sub Total: Rs. {subTotal.toFixed(2)}</p>
+                <p>Discount: {disCountPresentage}%</p>
                 <p>
-                  <strong>Total Due: Rs. 135,000</strong>
+                  <strong>Total Due: Rs. {totalDue.toFixed(2)}</strong>
                 </p>
               </div>
             </div>
