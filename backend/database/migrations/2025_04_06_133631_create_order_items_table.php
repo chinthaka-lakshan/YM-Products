@@ -13,15 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-
-        Schema::create('SalesRep', function (Blueprint $table) {
+        Schema::create('order_items', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->string('nic');
-            $table->string('contact_number');
-            $table->string('password');
-            $table->timestamps(); // Add this if missing
+            $table->foreignId('order_id')->constrained()->onDelete('cascade');
+            $table->foreignId('item_id')->constrained()->onDelete('cascade');
+            $table->integer('quantity');
+            $table->timestamps();
         });
     }
 
@@ -32,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('salesReps');
+        Schema::dropIfExists('order_items');
     }
 };
