@@ -9,12 +9,15 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SalesRepCredentials;
 
 class AuthController extends Controller
 {
-    // Admin Registration (Only for Admins)
-    public function registerRep(Request $request)
-    {
+        // Admin Registration (Only for Admins)
+public function registerRep(Request $request)
+{
+    try {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:admins',
@@ -22,7 +25,7 @@ class AuthController extends Controller
             'nic' => 'required|string|max:20|unique:admins',
             'contact_number' => 'required|string|max:20'
         ]);
-    
+
         $admin = Admin::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
@@ -31,12 +34,36 @@ class AuthController extends Controller
             'contact_number' => $validated['contact_number'],
             'role' => 'sales_rep'
         ]);
-    
+
+        // Queue the email
+        Mail::to($validated['email'])
+            ->queue(new SalesRepCredentials(
+                $validated['name'],
+                $validated['email'],
+                $validated['password'] // Sending plain password only for initial setup
+            ));
+
         return response()->json([
+            'success' => true,
             'message' => 'Sales rep created successfully',
-            'data' => $admin
+            'data' => $admin,
+            'email_sent' => true
         ], 201);
+
+    } catch (ValidationException $e) {
+        return response()->json([
+            'success' => false,
+            'errors' => $e->errors()
+        ], 422);
+    } catch (\Exception $e) {
+        \Log::error('Registration failed: '.$e->getMessage());
+        return response()->json([
+            'success' => false,
+            'message' => 'Registration completed but email failed to send',
+            'error' => env('APP_DEBUG') ? $e->getMessage() : null
+        ], 201); // Still return 201 as account was created
     }
+}
     // Get sells rep list
     public function getSalesReps()
     {
