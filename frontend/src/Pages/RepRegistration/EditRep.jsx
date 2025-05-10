@@ -3,70 +3,92 @@ import Sidebar from "../../components/Sidebar/AdminSidebar/AdminSidebar";
 import Navbar from "../../components/AdminNavbar/AdminNavbar";
 import "./EditRep.css";
 import axios from "axios";
-import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+
 const EditRep = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
   const [repData, setRepData] = useState({
     name: "",
     email: "",
     nic: "",
     contact_number: "",
-    
   });
 
-    const navigate = useNavigate(); 
-
   useEffect(() => {
-    if (!id) {
-      console.warn("No ID found in URL!");
-      return;
-    }
-
-    console.log("Fetching rep data for ID:", id);
-
-    axios
-      .get(`http://localhost:8000/api/sales_reps/${id}`) // update if your backend is on a different port
-      .then((res) => {
-        console.log("Fetched rep data:", res.data);
+    const fetchRepData = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(
+          `http://localhost:8000/api/sales-reps/${id}`,
+          {
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+            }
+          }
+        );
+        
         setRepData({
-          name: res.data.name || "",
-          email: res.data.email || "",
-          nic: res.data.nic || "",
-          contact_number: res.data.contact_number || "",
-           // usually keep password empty
+          name: response.data.data.name,
+          email: response.data.data.email,
+          nic: response.data.data.nic,
+          contact_number: response.data.data.contact_number
         });
-       
-      })
-      .catch((err) => {
-        console.error("Error fetching representative:", err);
-      });
-  }, [id]);
+        
+      } catch (error) {
+        console.error("Error fetching rep:", error);
+        alert("Failed to load representative data");
+        navigate("/salesreps");
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    fetchRepData();
+  }, [id, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setRepData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setRepData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("Submitting data:", repData);
-
-    axios
-      .put(`http://localhost:8000/api/sales_reps/${id}`, repData)
-      .then((res) => {
-        alert("Representative updated successfully!");
-        console.log("Update response:", res.data);
-      })
-      navigate("/salesreps")
-      .catch((err) => {
-        console.error("Error updating representative:", err);
-      });
+    try {
+      setLoading(true);
+      await axios.put(
+        `http://localhost:8000/api/sales-reps/${id}`,
+        repData,
+        {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+          }
+        }
+      );
+      
+      alert("Representative updated successfully!");
+      navigate("/salesreps");
+    } catch (error) {
+      console.error("Error updating representative:", error);
+      alert("Failed to update representative");
+    } finally {
+      setLoading(false);
+    }
   };
+
+  if (loading) {
+    return (
+      <div className="editrep-container">
+        <Sidebar />
+        <div className="main-content">
+          <Navbar />
+          <div className="loading-spinner">Loading representative data...</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="editrep-container">
@@ -85,8 +107,9 @@ const EditRep = () => {
                 name="name"
                 value={repData.name}
                 onChange={handleChange}
-                placeholder="Enter your name"
+                placeholder="Enter name"
                 required
+                disabled={loading}
               />
             </div>
 
@@ -99,6 +122,7 @@ const EditRep = () => {
                 onChange={handleChange}
                 placeholder="Enter email"
                 required
+                disabled={loading}
               />
             </div>
 
@@ -111,6 +135,7 @@ const EditRep = () => {
                 onChange={handleChange}
                 placeholder="Enter NIC"
                 required
+                disabled={loading}
               />
             </div>
 
@@ -123,14 +148,17 @@ const EditRep = () => {
                 onChange={handleChange}
                 placeholder="Enter contact number"
                 required
+                disabled={loading}
               />
             </div>
-
-           
           </div>
 
-          <button type="submit" className="editregister-btn">
-            Save Edit
+          <button 
+            type="submit" 
+            className="editregister-btn"
+            disabled={loading}
+          >
+            {loading ? "Saving..." : "Save Edit"}
           </button>
         </form>
       </div>
