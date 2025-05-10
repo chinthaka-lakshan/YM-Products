@@ -13,15 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-
-        Schema::create('SalesRep', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->string('nic');
-            $table->string('contact_number');
-            $table->string('password');
-            $table->timestamps(); // Add this if missing
+        Schema::table('orders', function (Blueprint $table) {
+            if(!Schema::hasColumn('orders','status'))
+            $table->string('status')->default('Pending')->after('user_name');
         });
     }
 
@@ -32,6 +26,10 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('salesReps');
+        Schema::table('orders', function (Blueprint $table) {
+            if(Schema::hasColumn('orders','status')){
+                $table->dropColumn('status');
+            }
+        });
     }
 };

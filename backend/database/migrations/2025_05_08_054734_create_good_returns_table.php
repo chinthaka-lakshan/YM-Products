@@ -13,15 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-
-        Schema::create('SalesRep', function (Blueprint $table) {
+        Schema::create('good_returns', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->string('nic');
-            $table->string('contact_number');
-            $table->string('password');
-            $table->timestamps(); // Add this if missing
+            $table->foreignId('shop_id')->constrained('shops')->onDelete('cascade');
+            $table->decimal('return_cost',10,2);
+            $table->timestamps();
         });
     }
 
@@ -32,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('salesReps');
+        Schema::dropIfExists('good_returns');
     }
 };
