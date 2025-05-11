@@ -35,28 +35,34 @@ const AdminShops = () => {
             alert("Failed to add item");
         }
     };
-      
-      
 
     // ✅ Open edit modal
     const handleEditClick = (index) => {
         setEditIndex(index);
         setEditShop(shops[index]);
         setShowEditModal(true);
-    
     };
 
     // ✅ Update shop details
     const handleEditShop = async () => {
         try {
-            const response = await axios.put(`http://127.0.0.1:8000/api/shops/${shops[editIndex].id}`, editShop);
+            const response = await axios.put(
+                `http://127.0.0.1:8000/api/shops/${shops[editIndex].id}`,
+                editShop
+            );
+
             console.log("Shop updated successfully:", response.data);
             alert(response.data.message || "Shop updated successfully!");
+
+            // ✅ Update the local `shops` state to reflect changes immediately
+            const updatedShops = [...shops];
+            updatedShops[editIndex] = response.data.shop || editShop;
+            setShops(updatedShops);
+
             setShowEditModal(false);
             setEditShop({ shop_name: "", location: "", contact: "" });
-            window.location.reload();
+
         } catch (error) {
-        
             if (error.response) {
                 console.error("Validation errors:", error.response.data.errors);
             } else {
