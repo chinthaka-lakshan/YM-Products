@@ -7,6 +7,9 @@ import logo from "../../../assets/YM.png";
 const AdminLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+
+  const [error, setError] = useState("");
   const [otp, setOTP] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
@@ -25,7 +28,7 @@ const AdminLogin = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/admin-login",
+        "http://localhost:8000/api/admin/login",
         { email, password },
         {
           headers: {
@@ -38,6 +41,10 @@ const AdminLogin = () => {
       if (response.data.token) {
         localStorage.setItem("admin_token", response.data.token);
         localStorage.setItem("admin_user", JSON.stringify(response.data.admin));
+        localStorage.setItem("username", response.data.admin.name);
+        console.log(localStorage.getItem("username"));
+
+        alert(response.data.message); // Show success message
         alert(response.data.message);
         navigate("/admindashboard");
       } else {
