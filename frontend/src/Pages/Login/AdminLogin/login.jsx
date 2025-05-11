@@ -44,7 +44,6 @@ const AdminLogin = () => {
         localStorage.setItem("username", response.data.admin.name);
         console.log(localStorage.getItem("username"));
 
-        alert(response.data.message); // Show success message
         alert(response.data.message);
         navigate("/admindashboard");
       } else {

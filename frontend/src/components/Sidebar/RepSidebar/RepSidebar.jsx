@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import "./RepSidebar.css";
 import Logo from "../../../assets/YM.png";
 import { Link, useLocation } from 'react-router-dom';
@@ -7,11 +7,11 @@ import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import RepeatIcon from "@mui/icons-material/Repeat";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 
-const RepSidebar = () => {
+const RepSidebar = forwardRef(({ isOpen }, ref) => {
     const location = useLocation();
 
     return (
-        <div className='RepSidebar'>
+        <div className={`RepSidebar ${isOpen ? "open" : ""}`} ref={ref}>
             <div className='Top'>
                 <img src={Logo} className='Logo'/>
             </div>
@@ -45,6 +45,6 @@ const RepSidebar = () => {
             </div>
         </div>
     );
-};
+});
 
 export default RepSidebar;
