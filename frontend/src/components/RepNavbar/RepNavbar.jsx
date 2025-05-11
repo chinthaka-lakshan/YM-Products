@@ -1,17 +1,40 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./RepNavbar.css";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import MenuIcon from '@mui/icons-material/Menu';
 
-const RepNavbar = () => {
+const RepNavbar = ({ onMenuClick }) => {
   const [showLogout, setShowLogout] = useState(false);
+  const popupRef = useRef(null);
 
   const toggleLogoutPopup = () => {
-    setShowLogout(!showLogout);
+    setShowLogout((prev) => !prev);
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (popupRef.current && !popupRef.current.contains(event.target)) {
+        setShowLogout(false);
+      }
+    };
+
+    if (showLogout) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showLogout]);
 
   return (
     <div className="RepNavbar">
       <div className="RepNavbarContainer">
+        <div className="HamburgerIcon" onClick={onMenuClick}>
+          <MenuIcon />
+        </div>
         <span className="RepNavbarTitle">SALES REP DASHBOARD</span>
         <div className="RepNavbarLog" onClick={toggleLogoutPopup}>
           <span>Rep1</span>
@@ -21,7 +44,7 @@ const RepNavbar = () => {
 
       {showLogout && (
         <div className="RepLogoutPopup">
-          <div className="RepPopupContent">
+          <div className="RepPopupContent" ref={popupRef}>
             <p>Are you sure you want to log out?</p>
             <button className="RepPopupLogoutButton">Logout</button>
             <button className="RepPopupCancelButton" onClick={toggleLogoutPopup}>Cancel</button>

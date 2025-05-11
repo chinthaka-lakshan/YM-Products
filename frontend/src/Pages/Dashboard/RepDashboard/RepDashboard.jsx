@@ -8,16 +8,47 @@ import orderIcon from "../../../assets/oder.png";
 import returnIcon from "../../../assets/return.png";
 import GoodReturnIcon from "../../../assets/GoodReturn.png";
 import BadReturnIcon from "../../../assets/BadReturn.png";
-import StoreFrontIcon from "@mui/icons-material/Storefront";
+import StoreFrontIcon from "@mui/icons-material/Store";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import axios from "axios";
 
 const RepDashboard = () => {
+  const [shops, setShops] = useState([]);
+  const [items, setItems] = useState([]);
+  const [selectedShop, setSelectedShop] = useState(null);
+  const [selectedItems, setSelectedItems] = useState([]);
+  const [editingOrderId, setEditingOrderId] = useState(null);
+  const [isReturn, setIsReturn] = useState(false); // To distinguish between order/return
+  const [isGood, setIsGood] = useState(false);
+  const [orderToEdit, setOrderToEdit] = useState(null); // For viewing confirmed order
+
   const [showReturnModal, setShowReturnModal] = useState(false);
   const [showShopsModal, setShowShopsModal] = useState(false);
   const [showItemsModal, setShowItemsModal] = useState(false);
 
-  const [shops, setShops] = useState([]);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const sidebarRef = useRef();
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
+  // Close sidebar when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        window.innerWidth <= 768 &&
+        sidebarRef.current &&
+        !sidebarRef.current.contains(event.target)
+      ) {
+        setSidebarOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   //fetch shops
   useEffect(() => {
     const fetchShops = async () => {
@@ -31,7 +62,6 @@ const RepDashboard = () => {
     fetchShops();
   }, []);
 
-  const [items, setItems] = useState([]);
   //fetch items
   useEffect(() => {
     const fetchItems = async () => {
@@ -44,13 +74,6 @@ const RepDashboard = () => {
     };
     fetchItems();
   }, []);
-
-  const [selectedShop, setSelectedShop] = useState(null);
-  const [selectedItems, setSelectedItems] = useState([]);
-  const [editingOrderId, setEditingOrderId] = useState(null);
-  const [isReturn, setIsReturn] = useState(false); // To distinguish between order/return
-  const [isGood, setIsGood] = useState(false);
-  const [orderToEdit, setOrderToEdit] = useState(null); // For viewing confirmed order
 
   const handleAddOrderClick = () => {
     setIsReturn(false);
@@ -133,9 +156,9 @@ const RepDashboard = () => {
 
   return (
     <div className="RepDashboard">
-      <RepSidebar />
+      <RepSidebar isOpen={sidebarOpen} ref={sidebarRef}/>
       <div className="RepDashboardContainer">
-        <RepNavbar />
+        <RepNavbar onMenuClick={toggleSidebar}/>
 
         <div className="RepButtonsContainer">
           <div className="RepButton" onClick={handleAddOrderClick}>
