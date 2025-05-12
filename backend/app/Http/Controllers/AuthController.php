@@ -11,9 +11,165 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SalesRepCredentials;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Support\Str;
+use App\Models\PasswordResetOtp;
+use App\Mail\SendOtpMail;
+use Illuminate\Support\Facades\DB;
+
 
 class AuthController extends Controller
 {
+
+    // ... your existing methods ...
+    
+    /**
+     * Send password reset link
+     */
+    public function sendOtp(Request $request)
+    {
+        $request->validate(['email' => 'required|email']);
+
+        try {
+            $otp = rand(100000, 999999);
+            $email = strtolower(trim($request->email)); // Normalize email
+            
+            \DB::beginTransaction();
+            
+            // Delete any existing OTPs for this email
+            PasswordResetOtp::where('email', $email)->delete();
+            
+            // Store new OTP
+            $otpRecord = PasswordResetOtp::create([
+                'email' => $email,
+                'otp' => (string)$otp, // Store as string
+                'created_at' => now()
+            ]);
+            
+            \DB::commit();
+            
+            \Log::info("OTP stored", [
+                'email' => $email,
+                'otp' => $otp,
+                'db_id' => $otpRecord->id
+            ]);
+            
+            Mail::to($email)->send(new SendOtpMail($otp));
+            
+            return response()->json([
+                'message' => 'OTP sent',
+                'debug' => [
+                    'stored_email' => $email,
+                    'stored_otp' => $otp
+                ]
+            ]);
+            
+        } catch (\Exception $e) {
+            \DB::rollBack();
+            \Log::error("OTP send failed: " . $e->getMessage());
+            return response()->json([
+                'error' => 'Failed to process OTP',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function verifyOtp(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'otp' => 'required|digits:6'
+        ]);
+
+        $otpRecord = PasswordResetOtp::where('email', $request->email)
+                                    ->where('otp', $request->otp)
+                                    ->first();
+
+        if (!$otpRecord) {
+            return response()->json([
+                'error' => 'Invalid OTP',
+                'debug' => [
+                    'received_email' => $request->email,
+                    'received_otp' => $request->otp,
+                    'db_otp' => PasswordResetOtp::where('email', $request->email)->value('otp')
+                ]
+            ], 400);
+        }
+
+        // Now this will work because created_at is Carbon instance
+        if ($otpRecord->created_at->addMinutes(15)->isPast()) {
+            return response()->json([
+                'error' => 'OTP expired',
+                'generated_at' => $otpRecord->created_at->format('Y-m-d H:i:s'),
+                'expired_at' => $otpRecord->created_at->addMinutes(15)->format('Y-m-d H:i:s'),
+                'current_time' => now()->format('Y-m-d H:i:s')
+            ], 400);
+        }
+
+        return response()->json([
+            'message' => 'OTP verified successfully',
+            'valid_until' => $otpRecord->created_at->addMinutes(15)->format('Y-m-d H:i:s')
+        ]);
+    }
+
+public function resetPasswordWithOtp(Request $request)
+{
+    $validated = $request->validate([
+        'email' => 'required|email',
+        'otp' => 'required|digits:6',
+        'password' => 'required|confirmed|min:6'
+    ]);
+
+    try {
+        // 1. Verify OTP exists first
+        $otpRecord = PasswordResetOtp::where('email', $validated['email'])
+                                    ->where('otp', $validated['otp'])
+                                    ->first();
+
+        if (!$otpRecord) {
+            return response()->json(['error' => 'Invalid OTP'], 400);
+        }
+
+        // 2. Check OTP expiration (15 minutes)
+        if ($otpRecord->created_at->addMinutes(15)->isPast()) {
+            return response()->json(['error' => 'OTP expired'], 400);
+        }
+
+        // 3. Find admin (using your Admin model)
+        $admin = Admin::where('email', $validated['email'])->first();
+
+        if (!$admin) {
+            return response()->json([
+                'error' => 'Admin account not found',
+                'suggestion' => 'Please contact system administrator'
+            ], 404);
+        }
+
+        // 4. Update admin password
+        $admin->password = Hash::make($validated['password']);
+        $admin->save();
+
+        // 5. Clean up OTP
+        PasswordResetOtp::where('email', $validated['email'])->delete();
+
+        return response()->json([
+            'message' => 'Admin password reset successfully',
+            'admin' => [
+                'id' => $admin->id,
+                'email' => $admin->email
+            ]
+        ]);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => 'Password reset failed',
+            'message' => $e->getMessage()
+        ], 500);
+    }
+}
+
+
         // Admin Registration (Only for Admins)
 public function registerRep(Request $request)
 {
