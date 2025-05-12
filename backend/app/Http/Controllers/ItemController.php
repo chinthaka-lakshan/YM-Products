@@ -96,4 +96,15 @@ class ItemController extends Controller
         }
     }
     
+    public function show($id)
+    {
+        \Log::info("Fetching item with ID: $id");
+
+        $item = Item::find($id);
+        if(!$item){
+            return response()->json(['message'=>'Item not found'],404);
+        }
+
+        return response()->json($item);
+    }
 }
