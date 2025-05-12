@@ -9,6 +9,7 @@ use App\Http\Controllers\SalesRepController;
 use App\Http\Controllers\PurchaseStockController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\GoodReturnController;
+use App\Http\Controllers\CashflowController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,10 @@ Route::get('/sales-reps', [AuthController::class, 'getSalesReps']);
 Route::put('/sales-reps/{id}', [AuthController::class, 'updateSalesRep']);
 Route::delete('/sales-reps/{id}', [AuthController::class, 'deleteSalesRep']);
 Route::get('/sales-reps/{id}', [AuthController::class, 'getSalesRepById']);
+
+Route::get('/cashflows', [CashflowController::class, 'index']);
+Route::post('/cashflows', [CashflowController::class, 'store']);
+Route::get('/cashflows/{id}', [CashflowController::class, 'show']);
 
 // Protected admin routes
 Route::middleware(['auth:sanctum', 'ability:admin'])->group(function () {
