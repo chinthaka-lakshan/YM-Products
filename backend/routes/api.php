@@ -31,6 +31,9 @@ Route::get('/sales-reps', [AuthController::class, 'getSalesReps']);
 Route::put('/sales-reps/{id}', [AuthController::class, 'updateSalesRep']);
 Route::delete('/sales-reps/{id}', [AuthController::class, 'deleteSalesRep']);
 Route::get('/sales-reps/{id}', [AuthController::class, 'getSalesRepById']);
+Route::post('/send-otp', [AuthController::class, 'sendOtp']);
+Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
+Route::post('/reset-password-with-otp', [AuthController::class, 'resetPasswordWithOtp']);
 
 // Protected admin routes
 Route::middleware(['auth:sanctum', 'ability:admin'])->group(function () {
@@ -56,28 +59,34 @@ Route::apiResource('purchase_stock', PurchaseStockController::class);
 Route::apiResource('shops', ShopController::class);
 Route::apiResource('sales_reps', SalesRepController::class);
 
-
-// routes/api.php
-Route::post('/test-email', function(Request $request) {
-    $validated = $request->validate([
-        'email' => 'required|email'
-    ]);
-
-    try {
-        Mail::raw('This is a test email from Postman', function($message) use ($validated) {
-            $message->to($validated['email'])
-                   ->subject('Postman Test Email');
-        });
-        
-        return response()->json(['success' => true]);
-    } catch (\Exception $e) {
-        return response()->json([
-            'success' => false,
-            'error' => $e->getMessage(),
-            'trace' => $e->getTraceAsString()
-        ], 500);
-    }
+Route::get('/test-mail', function() {
+    Mail::raw('This is a test email', function($message) {
+        $message->to('diluklakshan01@gmail.com')
+               ->subject('Test Email');
+    });
+    return 'Mail sent';
 });
+// routes/api.php
+// Route::post('/test-email', function(Request $request) {
+//     $validated = $request->validate([
+//         'email' => 'required|email'
+//     ]);
+
+//     try {
+//         Mail::raw('This is a test email from Postman', function($message) use ($validated) {
+//             $message->to($validated['email'])
+//                    ->subject('Postman Test Email');
+//         });
+        
+//         return response()->json(['success' => true]);
+//     } catch (\Exception $e) {
+//         return response()->json([
+//             'success' => false,
+//             'error' => $e->getMessage(),
+//             'trace' => $e->getTraceAsString()
+//         ], 500);
+//     }
+// });
 // Route::middleware('auth:sanctum')->group(function(){
 //     Route::apiResource('orders', OrderController::class);
     
