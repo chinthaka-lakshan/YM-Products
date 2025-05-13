@@ -17,7 +17,7 @@ import RepReturns from "./Pages/RepReturns/RepReturns.jsx";
 import RepRegistration from './Pages/RepRegistration/RepRegistration.jsx';
 import RepLogin from './Pages/Login/RepLogin/RepLogin.jsx';
 import RepDashboard from './Pages/Dashboard/RepDashboard/RepDashboard.jsx';
-import RepOrdersHistory from './Pages/RepOrdersHistory/RepOrdersHistory.jsx';
+import RepOrders from './Pages/RepOrders/RepOrders.jsx';
 import RepShops from './Pages/RepShops/RepShops.jsx';
 import EditRep from './Pages/RepRegistration/EditRep.jsx';
 
@@ -42,7 +42,7 @@ function App() {
           <Route path='/repRegistration' element={<RepRegistration />}/>
           <Route path="/repLogin" element={<RepLogin />}/>
           <Route path='/repDashboard' element={<RepDashboard/>}/>
-          <Route path='/repOrdersHistory' element={<RepOrdersHistory/>}/>
+          <Route path='/repOrders' element={<RepOrders/>}/>
           <Route path="/repinvoice" element={<RepInvoice />}/>
           <Route path="/invoice" element={<Invoice />}/>
           <Route path="/repReturns" element={<RepReturns />}/>
