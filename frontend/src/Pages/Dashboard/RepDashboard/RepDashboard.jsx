@@ -441,25 +441,30 @@ const RepDashboard = () => {
                       <td colSpan="2">
                         <label>Total Order Discount: </label>
                         <input
-                          type="number"
-                          min="0"
-                          value={totalOrderDiscount !== undefined ? totalOrderDiscount : Number(totalOrderDiscount).toFixed(2)}
+                          type="text"
+                          inputMode="decimal"
+                          value={totalOrderDiscount}
                           onChange={(e) => {
                             const value = e.target.value;
-                            // Allow empty input (clear the field)
+                            // Allow empty string to let user clear the input
                             if (value === "") {
-                              setTotalOrderDiscount(""); // Allow clearing the discount
+                              setTotalOrderDiscount("");
                               return;
                             }
-
-                            // Regex to allow up to 2 decimal places
+                            // Regex to allow only numbers with up to 2 decimal places
                             const regex = /^\d*\.?\d{0,2}$/;
                             if (regex.test(value)) {
-                              setTotalOrderDiscount(floatValue); // Set the discount as a number
+                              setTotalOrderDiscount(value);
                             }
                           }}
                           onBlur={() => {
-                            setTotalOrderDiscount(formattedValue); // Ensure it always shows 2 decimals
+                            // Format to 2 decimal places on blur if value is valid
+                            if (totalOrderDiscount !== "") {
+                              const parsed = parseFloat(totalOrderDiscount);
+                              if (!isNaN(parsed)) {
+                                setTotalOrderDiscount(parsed.toFixed(2));
+                              }
+                            }
                           }}
                           placeholder="0.00"
                           className="DiscountInput"
