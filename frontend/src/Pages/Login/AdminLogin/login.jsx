@@ -8,7 +8,6 @@ const AdminLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-
   const [error, setError] = useState("");
   const [otp, setOTP] = useState("");
   const [newPassword, setNewPassword] = useState("");
