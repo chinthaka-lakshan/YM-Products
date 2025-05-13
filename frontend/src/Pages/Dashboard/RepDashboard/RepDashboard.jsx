@@ -334,7 +334,7 @@ const RepDashboard = () => {
           <div className="ModalBackdrop">
             <div className="Modal">
               <h2 className="ModalTitle">{orderToEdit.isReturn ? "Return Items" : "Order Items" }</h2>
-              <h3 className="ModalSubTitle">{orderToEdit.shop?.shop_name}</h3>
+              <h3 className="ModalSubTitle">{orderToEdit.shop?.shop_name}{orderToEdit.shop.location ? ` - ${orderToEdit.shop.location}` : ""}</h3>
               <div className="ScrollableContent">
                 <table className="ConfirmedOrderTable">
                   <colgroup>
@@ -346,14 +346,14 @@ const RepDashboard = () => {
                   <thead>
                     <tr>
                       <th>Item</th>
-                      <th>Quantity</th>
+                      <th class="QuantityHeader">Quantity</th>
                       <th>Unit Price (LKR)</th>
                       <th>Total (LKR)</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {orderToEdit.items.map((item, index) => (
-                      <tr key={index}>
+                    {[...orderToEdit.items].sort((a, b) => a.item.localeCompare(b.item)).map((item, index) => (
+                      <tr key={item.index}>
                         <td>{item.item}</td>
                         <td>{item.orderQty}</td>
                         <td>
@@ -363,7 +363,6 @@ const RepDashboard = () => {
                             value={item.editedPrice !== undefined ? item.editedPrice : item.unitPrice} // Show editedPrice if available, else fallback to original unitPrice
                             onChange={(e) => {
                               const value = e.target.value;
-
                               // Allow empty input (clear the field)
                               if (value === "") {
                                 setOrderToEdit((prev) => {
@@ -373,7 +372,6 @@ const RepDashboard = () => {
                                 });
                                 return;
                               }
-
                               // Validate and allow numbers with up to 2 decimals
                               const regex = /^\d*\.?\d{0,2}$/;
                               if (regex.test(value)) {
@@ -388,7 +386,6 @@ const RepDashboard = () => {
                               setOrderToEdit((prev) => {
                                 const updatedItems = [...prev.items];
                                 const currentEdited = updatedItems[index].editedPrice;
-
                                 // If the field is empty, fallback to original price
                                 if (currentEdited === "" || currentEdited === undefined) {
                                   updatedItems[index].editedPrice = undefined; // This will allow the input to fallback to unitPrice
@@ -396,7 +393,6 @@ const RepDashboard = () => {
                                   const val = parseFloat(currentEdited);
                                   updatedItems[index].editedPrice = isNaN(val) ? "" : val.toFixed(2); // Ensure two decimal points
                                 }
-
                                 return { ...prev, items: updatedItems };
                               });
                             }}
@@ -417,15 +413,17 @@ const RepDashboard = () => {
                     <tr>
                       <td>Total Items: {orderToEdit.items.length}</td>
                       <td>Total Units: {orderToEdit.items.reduce((sum, item) => sum + Number(item.orderQty || 0), 0)}</td>
-                      <td>Item Discounts: {orderToEdit.items.reduce((sum, item) => {
-                        const originalPrice = item.unitPrice; // The original price from the inventory
-                        const editedUnitPrice = item.editedPrice || originalPrice; // The price entered by the user
-                        const priceDifference = originalPrice - editedUnitPrice; // Difference between original and edited price
-                        const itemDifference = priceDifference * item.orderQty; // Difference for this item based on quantity
-                        return sum + itemDifference;
-                      }, 0)
-                      .toFixed(2)
-                      }
+                      <td>
+                        {orderToEdit.isReturn ? "Return Difference" : "Item Discounts"}:{" "}
+                        {orderToEdit.items.reduce((sum, item) => {
+                          const originalPrice = item.unitPrice; // The original price from the inventory
+                          const editedUnitPrice = item.editedPrice || originalPrice; // The price entered by the user
+                          const priceDifference = originalPrice - editedUnitPrice; // Difference between original and edited price
+                          const itemDifference = priceDifference * item.orderQty; // Difference for this item based on quantity
+                          return sum + itemDifference;
+                        }, 0)
+                        .toFixed(2)
+                        }
                       </td>
                       <td>Sub Total: {orderToEdit.items.reduce((sum, item) => {
                         const unitPrice = item.editedPrice !== undefined && item.editedPrice !==""
@@ -438,38 +436,42 @@ const RepDashboard = () => {
                       </td>
                     </tr>
                     <tr>
-                      <td colSpan="2">
-                        <label>Total Order Discount: </label>
-                        <input
-                          type="text"
-                          inputMode="decimal"
-                          value={totalOrderDiscount}
-                          onChange={(e) => {
-                            const value = e.target.value;
-                            // Allow empty string to let user clear the input
-                            if (value === "") {
-                              setTotalOrderDiscount("");
-                              return;
-                            }
-                            // Regex to allow only numbers with up to 2 decimal places
-                            const regex = /^\d*\.?\d{0,2}$/;
-                            if (regex.test(value)) {
-                              setTotalOrderDiscount(value);
-                            }
-                          }}
-                          onBlur={() => {
-                            // Format to 2 decimal places on blur if value is valid
-                            if (totalOrderDiscount !== "") {
-                              const parsed = parseFloat(totalOrderDiscount);
-                              if (!isNaN(parsed)) {
-                                setTotalOrderDiscount(parsed.toFixed(2));
+                      {orderToEdit.isReturn ? (
+                        <td colSpan="2"></td>
+                      ) : (
+                        <td colSpan="2">
+                          <label>Order Discount: </label>
+                          <input
+                            type="text"
+                            inputMode="decimal"
+                            value={totalOrderDiscount}
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              // Allow empty string to let user clear the input
+                              if (value === "") {
+                                setTotalOrderDiscount("");
+                                return;
                               }
-                            }
-                          }}
-                          placeholder="0.00"
-                          className="DiscountInput"
-                        />
-                      </td>
+                              // Regex to allow only numbers with up to 2 decimal places
+                              const regex = /^\d*\.?\d{0,2}$/;
+                              if (regex.test(value)) {
+                                setTotalOrderDiscount(value);
+                              }
+                            }}
+                            onBlur={() => {
+                              // Format to 2 decimal places on blur if value is valid
+                              if (totalOrderDiscount !== "") {
+                                const parsed = parseFloat(totalOrderDiscount);
+                                if (!isNaN(parsed)) {
+                                  setTotalOrderDiscount(parsed.toFixed(2));
+                                }
+                              }
+                            }}
+                            placeholder="0.00"
+                            className="DiscountInput"
+                          />
+                        </td>
+                      )}
                       <td colSpan="2">
                         <strong>Grand Total:</strong>{" "}
                         {(

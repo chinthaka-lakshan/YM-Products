@@ -65,7 +65,7 @@
       width: 100%;
       height: 100%;
       background: rgba(0, 0, 0, 0.5);
-      z-index: 999;
+      z-index: 1999;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -80,7 +80,7 @@
         box-shadow: 4px 6px 20px rgba(0, 0, 0, 0.15);
         justify-content: center;
         align-items: center;
-        z-index: 1000;
+        z-index: 2000;
         gap: 15px;
         padding: 20px;
         overflow: hidden;
@@ -182,18 +182,18 @@
           font-size: 18px;
           margin-top: 20px;
 
-          .CancelButton, .ConfirmButton {
+          .CancelButton, .ConfirmButton, .EditButton, .GenerateInvoice {
             border: none;
             padding: 10px 16px;
             border-radius: 5px;
             cursor: pointer;
             font-weight: bold;
-            color: black;
+            color: #f4f4f4;
             transition: transform 0.3s ease;
           }
 
           .CancelButton {
-            background: orangered;
+            background: red;
           }
 
           .CancelButton:hover {
@@ -202,12 +202,30 @@
           }
 
           .ConfirmButton {
-            background: green;
+            background: darkgreen;
           }
 
           .ConfirmButton:hover {
             transform: scale(1.05);
-            background: darkgreen;
+            background: green;
+          }
+
+          .EditButton {
+            background: #333;
+          }
+
+          .EditButton:hover {
+            transform: scale(1.05);
+            background: #425060;
+          }
+
+          .GenerateInvoice {
+            background: #245490;
+          }
+
+          .GenerateInvoice:hover {
+            transform: scale(1.05);
+            background: #6b43da;
           }
         }
       }
@@ -582,8 +600,23 @@ th{
     height: 35% !important;
   }
 
-  .CancelButton, .ConfirmButton {
-    font-size: 25px;
+  .CancelButton, .ConfirmButton, .EditButton, .GenerateInvoice {
+    font-size: 22px !important;
+  }
+
+  .ConfirmedOrderTable td,
+  .ConfirmedOrderTable th {
+    font-size: 18px;
+  }
+
+  .UnitPriceInput,
+  .DiscountInput {
+    font-size: 20px;
+    padding: 10px 6px;
+  }
+
+  .ConfirmedOrderTable {
+    font-size: 18px;
   }
 }
 
@@ -615,6 +648,10 @@ th{
     font-size: 24px !important;
   }
 
+  .ModalSubTitle {
+    font-size: 16px !important;
+  }
+
   .ReturnButton p {
     font-size: 20px !important;
   }
@@ -644,7 +681,60 @@ th{
     font-size: 18px;
   }
 
-  .CancelButton, .ConfirmButton {
-    font-size: 16px;
+  .ConfirmedOrderTable td,
+  .ConfirmedOrderTable th {
+    font-size: 14px;
+    white-space: normal !important; /* Allow wrapping */
+    overflow-wrap: break-word !important; /* Wrap only at natural break points like spaces */
+    word-break: keep-all !important;     /* Prevent breaking inside words */
+    text-align: center; /* Optional: for better alignment on small screens */
+    padding: 6px 4px; /* Slightly reduce padding to save space */
+  }
+
+  .UnitPriceInput,
+  .DiscountInput {
+    width: 60px;
+    font-size: 14px;
+    padding: 8px 6px;
+  }
+
+  .ConfirmedOrderTable {
+    font-size: 14px;
+    table-layout: fixed !important; /* Let columns size naturally */
+  }
+
+  .ConfirmedOrderTable colgroup col:nth-child(1),
+  .ConfirmedOrderTable colgroup col:nth-child(3) {
+    width: 29% !important; /* Override fixed widths */
+  }
+
+  .ConfirmedOrderTable colgroup col:nth-child(2) {
+    width: 16% !important; /* Qty column – now shrunk */
+  }
+
+  .ConfirmedOrderTable colgroup col:nth-child(4) {
+    width: 26% !important; /* Override fixed widths */
+  }
+
+  .ConfirmedOrderTable th:nth-child(2) {
+    color: transparent; /* Hide original text */
+    position: relative;
+    vertical-align: middle;
+  }
+
+  .ConfirmedOrderTable th:nth-child(2)::before {
+    content: "Qty";
+    display: block;
+    color: #f4f4f4; /* Show replacement text */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Perfect center */
+    width: 100%;
+    text-align: center;
+  }
+
+  .CancelButton, .ConfirmButton, .EditButton, .GenerateInvoice {
+    font-size: 14px !important;
   }
 }
