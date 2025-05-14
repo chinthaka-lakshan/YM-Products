@@ -8,7 +8,6 @@ const AdminLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-
   const [error, setError] = useState("");
   const [otp, setOTP] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -44,7 +43,6 @@ const AdminLogin = () => {
         localStorage.setItem("username", response.data.admin.name);
         console.log(localStorage.getItem("username"));
 
-        alert(response.data.message); // Show success message
         alert(response.data.message);
         navigate("/admindashboard");
       } else {

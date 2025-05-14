@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-
 import axios from "axios";
 import "./AdminShops.css";
 import AdminSidebar from "../../components/Sidebar/AdminSidebar/AdminSidebar.jsx";
@@ -10,53 +9,58 @@ const AdminShops = () => {
     const [shops, setShops] = useState([]);
     const [showAddModal, setShowAddModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
-    const [newShop, setNewShop] = useState({ shopName: "", location: "", contact: "" });
+    const [newShop, setNewShop] = useState({ shop_name: "", location: "", contact: "" });
     const [editShop, setEditShop] = useState({ shop_name: "", location: "", contact: "" });
     const [editIndex, setEditIndex] = useState(null);
 
-
-    // ✅ Fetch shops from backend
+    //Fetch shops from backend
     useEffect(() => {
         axios.get("http://127.0.0.1:8000/api/shops")
             .then(response => setShops(response.data))
             .catch(error => console.error("Error fetching shops:", error));
     }, []);
 
-    // ✅ Add a new shop
+    //Add a new shop
     const handleAddShop = async () => {
         try {
           const response = await axios.post("http://127.0.0.1:8000/api/shops", newShop);
           setShops([...shops, response.data.shop]);
-          setNewShop({ shopName: "", location: "", contact: "" });
+          setNewShop({ shop_name: "", location: "", contact: "" });
           alert("Shop added successfully");
           setShowAddModal(false);
         } catch (error) {
             console.error("Error adding shop:", error);
-            alert("Failed to add item");
+            alert("Failed to add shop");
         }
     };
-      
-      
 
     // ✅ Open edit modal
     const handleEditClick = (index) => {
         setEditIndex(index);
         setEditShop(shops[index]);
         setShowEditModal(true);
-    
     };
 
     // ✅ Update shop details
     const handleEditShop = async () => {
         try {
-            const response = await axios.put(`http://127.0.0.1:8000/api/shops/${shops[editIndex].id}`, editShop);
+            const response = await axios.put(
+                `http://127.0.0.1:8000/api/shops/${shops[editIndex].id}`,
+                editShop
+            );
+
             console.log("Shop updated successfully:", response.data);
             alert(response.data.message || "Shop updated successfully!");
+
+            // ✅ Update the local `shops` state to reflect changes immediately
+            const updatedShops = [...shops];
+            updatedShops[editIndex] = response.data.shop || editShop;
+            setShops(updatedShops);
+
             setShowEditModal(false);
             setEditShop({ shop_name: "", location: "", contact: "" });
-            window.location.reload();
+
         } catch (error) {
-        
             if (error.response) {
                 console.error("Validation errors:", error.response.data.errors);
             } else {
@@ -181,7 +185,6 @@ const AdminShops = () => {
                     </div>
                 </div>
             )}
-
         </div>
     );
 };
