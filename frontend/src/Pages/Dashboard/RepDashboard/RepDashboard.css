@@ -9,7 +9,7 @@
     display: flex;
     margin-left: 16%;
     width: calc(100% - 16%);
-    height: 100%;
+    height: 100vh;
     align-items: center;
     justify-content: center;
 
@@ -65,7 +65,7 @@
       width: 100%;
       height: 100%;
       background: rgba(0, 0, 0, 0.5);
-      z-index: 999;
+      z-index: 1999;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -80,14 +80,43 @@
         box-shadow: 4px 6px 20px rgba(0, 0, 0, 0.15);
         justify-content: center;
         align-items: center;
-        z-index: 1000;
+        z-index: 2000;
         gap: 15px;
         padding: 20px;
         overflow: hidden;
 
-        .Modal h2 {
+        .ModalTitle {
           font-size: 35px;
           color: #616161;
+        }
+
+        .ModalSubTitle {
+          font-size: 25px;
+          color: #425060;
+          margin: 0 0;
+        }
+
+        .SearchInputWrapper {
+          position: relative;
+          width: 70%;
+          align-items: center;
+          justify-content: center;
+
+          .SearchInput {
+            width: 70%;
+            padding: 10px 36px 10px 12px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 18px;
+          }
+
+          .SearchIcon {
+            position: absolute;
+            right: 80px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+          }
         }
 
         .ScrollableContent {
@@ -143,6 +172,62 @@
             }
           }
         }
+
+        .ModalButtons {
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+          gap: 40px;
+          font-size: 18px;
+          margin-top: 20px;
+
+          .CancelButton, .ConfirmButton, .EditButton, .GenerateInvoice {
+            border: none;
+            padding: 10px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #f4f4f4;
+            transition: transform 0.3s ease;
+          }
+
+          .CancelButton {
+            background: red;
+          }
+
+          .CancelButton:hover {
+            transform: scale(1.05);
+            background: orange;
+          }
+
+          .ConfirmButton {
+            background: darkgreen;
+          }
+
+          .ConfirmButton:hover {
+            transform: scale(1.05);
+            background: green;
+          }
+
+          .EditButton {
+            background: #333;
+          }
+
+          .EditButton:hover {
+            transform: scale(1.05);
+            background: #425060;
+          }
+
+          .GenerateInvoice {
+            background: #245490;
+          }
+
+          .GenerateInvoice:hover {
+            transform: scale(1.05);
+            background: #6b43da;
+          }
+        }
       }
     }
   }
@@ -152,44 +237,69 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
-  width: 100%;
+  width: 98%;
   height: auto;
 }
 
-.ShopCard {
+.ShopCard, .DistributionItemCard {
   display: flex;
   flex-direction: column;
   width: 88%;
   height: 80%;
   align-items: center;
   justify-content: space-between;
-  background:#b7adad;
   padding: 15px;
   border-radius: 15px;
   -webkit-box-shadow: 1px 1px 5px 1px #425060;
   box-shadow: 1px 1px 5px 1px #a0afc1;
   gap: 10px;
+  transition: transform 0.3s ease;
+
+  .CardTitle {
+    font-size: 16px;
+    color: #000;
+    margin: 0 0;
+  }
+
+  .ShopCardMiddle, .DistributionItemCardMiddle {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+
+    .ShopCardIcon {
+      font-size: 50px;
+      color: #000;
+    }
+
+    .DistributionItemCardIcon {
+      font-size: 20px;
+      color: #6d4c41;
+      transform: translateY(-50%);
+    }
+
+    .ShopCardDetails, .DistributionItemCardDetails {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      font-size: 12px;
+      color: #000;
+      margin-top: 0;
+    }
+  }
+}
+
+.ShopCard {
+  background:#b7adad;
   border-right: 4px solid #826c6cd1;
   border-bottom: 4px solid #826c6cd1;
-  transition: transform 0.3s ease;
 }
 
 .DistributionItemCard {
-  display: flex;
-  flex-direction: column;
-  width: 88%;
-  height: 80%;
-  align-items: center;
-  justify-content: space-between;
   background: #ece5db;
-  padding: 15px;
-  border-radius: 15px;
-  -webkit-box-shadow: 1px 1px 5px 1px #425060;
-  box-shadow: 1px 1px 5px 1px #a0afc1;
-  gap: 10px;
   border-right: 4px solid #c26a00;
   border-bottom: 4px solid #c26a00;
-  transition: transform 0.3s ease;
 }
 
 .ShopCard:hover {
@@ -200,68 +310,21 @@
 }
 
 .DistributionItemCard:hover {
-  transform: scale(1.05);
+  transform: scale(1.02);
   box-shadow: 6px 10px 20px rgba(0, 0, 0, 0.12);
   border-right: 6px solid #c26a00;
   border-bottom: 6px solid #c26a00;
 }
 
-.ShopCard h2, .DistributionItemCard h2 {
-  font-size: 18px;
-  color: #000;
-}
-
-.ShopCardMiddle, .DistributionItemCardMiddle {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 15px;
-}
-
-.ShopCardIcon {
-  font-size: 60px;
-  color: #000;
-}
-
-.DistributionItemCardIcon {
-  font-size: 60px;
-  color: #6d4c41;
-}
-
-.ShopCardDetails {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  font-size: 15px;
-  color: #000;
-}
-
-.DistributionItemCardDetails {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  font-size: 15px;
-  color: #000;
-}
-
-.QtyInput {
-  width: 60px;
-  padding: 5px;
-  margin-top: 8px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
 .SelectItemBtn {
+  width: 80%;
   background-color: #333;
   color: white;
   border: none;
   padding: 6px 12px;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 16px;
   margin-top: 8px;
   transition: transform 0.3s ease;
 }
@@ -272,98 +335,69 @@
 
 .SelectedItemControl {
   display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.RemoveItemBtn {
-  background: none;
-  border: none;
-  font-size: 18px;
-  cursor: pointer;
-  color: red;
-  transition: transform 0.3s ease;
-}
-
-.RemoveItemBtn:hover {
-  transform: scale(1.2);
-}
-
-.ModalButtons {
-  display: flex;
   flex-direction: row;
-  justify-content: center;
   align-items: center;
-  gap: 40px;
+  justify-content: center;
+  gap: 10px;
+}
+
+.QtyInput {
+  width: 80px;
+  padding: 5px;
   font-size: 18px;
-  margin-top: 20px;
-}
-
-.CancelButton, .ConfirmButton {
-  border: none;
-  padding: 10px 16px;
   border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.ClearQtyBtn {
+  font-size: 22px;
+  padding: 0 0;
   cursor: pointer;
-  font-weight: bold;
-  color: black;
+  color: #b00020;
   transition: transform 0.3s ease;
+  margin-top: 8px;
 }
 
-.CancelButton {
-  background: orangered;
-}
-
-.CancelButton:hover {
+.ClearQtyBtn:hover {
   transform: scale(1.05);
-  background: orange;
 }
 
-.ConfirmButton {
-  background: green;
-}
-
-.ConfirmButton:hover {
-  transform: scale(1.05);
-  background: darkgreen;
-}
-
-.AddedOrder {
-  display: flex;
-  flex-direction: column;
+.ConfirmedOrderTable {
   width: 100%;
-  height: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 10px 20px;
-  gap: 40px;
-  align-items: center;
-  justify-content: center;
 
-  h1 {
-    font-size: 25px;
-    color: #616161;
+  thead tr th {
+    background-color: #333;
+    color: #f4f4f4;
+    text-align: center;
   }
 
-  h2 {
-    font-size: 20px;
-    color: black;
+  tfoot tr td {
+    background-color: #ccc;
+    color: #000;
+    text-align: center;
   }
-
-  .confirmedOrderTable {
-    width: 100%;
-    border-collapse: collapse;
-
-    th, td {
-      border: 1px solid #ddd;
-      padding: 10px;
-      text-align: center;
-    }
-  }
-
 }
 
+.UnitPriceInput {
+  width: 80px;
+  padding: 5px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
 
-.invoice-container {
+.TotalDiscountRow {
+  text-align: left;
+  padding-top: 10px;
+}
+
+.DiscountInput {
+  width: 100px;
+  padding: 5px;
+  margin-left: 10px;
+}
+
+/*.invoice-container {
   padding: 10px;
   background-color: #effbfd;
   border-radius: 8px;
@@ -423,7 +457,6 @@ th, td {
   background-color: green;
 }
 
-/* Popup Modal */
 .invoice-popup {
   position: absolute;
   top: 60%;
@@ -511,7 +544,7 @@ th{
 
 .close-btn:hover {
   background-color: darkred;
-}
+}*/
 
 
 @media (max-width: 768px) {
@@ -537,7 +570,24 @@ th{
   }
 
   .Modal {
-    width: 60% !important;
+    width: 80% !important;
+  }
+
+  .SearchInput {
+    font-size: 20px;
+  }
+
+  .SearchIcon {
+    right: 50px;
+  }
+
+  .ShopsGrid, .DistributionStockGrid {
+    grid-template-columns: repeat(2, 1fr);
+    width: 96%;
+  }
+
+  .DistributionItemCardDetails {
+    font-size: 14px !important;
   }
 
   .ReturnButtonsContainer {
@@ -546,12 +596,27 @@ th{
   }
 
   .ReturnButton {
-    width: 50% !important;
-    height: 40% !important;
+    width: 40% !important;
+    height: 35% !important;
   }
 
-  .CancelButton {
-    font-size: 25px;
+  .CancelButton, .ConfirmButton, .EditButton, .GenerateInvoice {
+    font-size: 22px !important;
+  }
+
+  .ConfirmedOrderTable td,
+  .ConfirmedOrderTable th {
+    font-size: 18px;
+  }
+
+  .UnitPriceInput,
+  .DiscountInput {
+    font-size: 20px;
+    padding: 10px 6px;
+  }
+
+  .ConfirmedOrderTable {
+    font-size: 18px;
   }
 }
 
@@ -575,14 +640,101 @@ th{
   }
 
   .Modal {
-    width: 70% !important;
+    width: 80% !important;
+    gap: 10px !important;
   }
 
-  .Modal h2 {
-    font-size: 25px !important;
+  .ModalTitle {
+    font-size: 24px !important;
+  }
+
+  .ModalSubTitle {
+    font-size: 16px !important;
   }
 
   .ReturnButton p {
     font-size: 20px !important;
+  }
+
+  .SearchInputWrapper {
+    width: 100% !important;
+  }
+
+  .SearchIcon {
+    right: 35px !important;
+  }
+
+  .ShopsGrid, .DistributionStockGrid {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .CardTitle {
+    font-size: 18px !important;
+  }
+
+  .DistributionItemCardDetails {
+    font-size: 15px;
+  }
+
+  .SelectItemBtn {
+    font-size: 18px;
+  }
+
+  .ConfirmedOrderTable td,
+  .ConfirmedOrderTable th {
+    font-size: 14px;
+    white-space: normal !important; /* Allow wrapping */
+    overflow-wrap: break-word !important; /* Wrap only at natural break points like spaces */
+    word-break: keep-all !important;     /* Prevent breaking inside words */
+    text-align: center; /* Optional: for better alignment on small screens */
+    padding: 6px 4px; /* Slightly reduce padding to save space */
+  }
+
+  .UnitPriceInput,
+  .DiscountInput {
+    width: 60px;
+    font-size: 14px;
+    padding: 8px 6px;
+  }
+
+  .ConfirmedOrderTable {
+    font-size: 14px;
+    table-layout: fixed !important; /* Let columns size naturally */
+  }
+
+  .ConfirmedOrderTable colgroup col:nth-child(1),
+  .ConfirmedOrderTable colgroup col:nth-child(3) {
+    width: 29% !important; /* Override fixed widths */
+  }
+
+  .ConfirmedOrderTable colgroup col:nth-child(2) {
+    width: 16% !important; /* Qty column – now shrunk */
+  }
+
+  .ConfirmedOrderTable colgroup col:nth-child(4) {
+    width: 26% !important; /* Override fixed widths */
+  }
+
+  .ConfirmedOrderTable th:nth-child(2) {
+    color: transparent; /* Hide original text */
+    position: relative;
+    vertical-align: middle;
+  }
+
+  .ConfirmedOrderTable th:nth-child(2)::before {
+    content: "Qty";
+    display: block;
+    color: #f4f4f4; /* Show replacement text */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Perfect center */
+    width: 100%;
+    text-align: center;
+  }
+
+  .CancelButton, .ConfirmButton, .EditButton, .GenerateInvoice {
+    font-size: 14px !important;
   }
 }

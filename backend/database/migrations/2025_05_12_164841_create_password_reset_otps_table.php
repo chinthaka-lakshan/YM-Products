@@ -13,15 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('items', function (Blueprint $table) {
-            $table->id();
-            $table->string('item');
-            $table->decimal('unitPrice',8,2);
-            $table->integer('quantity');
-            $table->decimal('itemCost',8,2);
-            
-            $table->timestamps();
-        });
+        Schema::create('password_reset_otps', function (Blueprint $table) {
+        $table->string('email')->index();
+        $table->string('otp');
+        $table->timestamp('created_at')->nullable();
+    });
     }
 
     /**
@@ -31,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('items');
+        Schema::dropIfExists('password_reset_otps');
     }
 };

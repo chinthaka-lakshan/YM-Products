@@ -23,8 +23,8 @@ const RepSidebar = forwardRef(({ isOpen }, ref) => {
                             <span>Rep Dashboard</span>
                         </li>
                     </Link>
-                    <Link to="/repOrdersHistory" style={{textDecoration:"none"}}>
-                        <li className={location.pathname === "/repOrdersHistory" ? "active" : ""}>
+                    <Link to="/repOrders" style={{textDecoration:"none"}}>
+                        <li className={location.pathname === "/repOrders" ? "active" : ""}>
                             <ShoppingBagIcon className='Icon'/>
                             <span>Orders</span>
                         </li>
