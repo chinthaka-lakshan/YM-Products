@@ -9,6 +9,7 @@ use App\Http\Controllers\SalesRepController;
 use App\Http\Controllers\PurchaseStockController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\GoodReturnController;
+use App\Http\Controllers\CashflowController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +35,10 @@ Route::get('/sales-reps/{id}', [AuthController::class, 'getSalesRepById']);
 Route::post('/send-otp', [AuthController::class, 'sendOtp']);
 Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
 Route::post('/reset-password-with-otp', [AuthController::class, 'resetPasswordWithOtp']);
+
+Route::get('/cashflows', [CashflowController::class, 'index']);
+Route::post('/cashflows', [CashflowController::class, 'store']);
+Route::get('/cashflows/{id}', [CashflowController::class, 'show']);
 
 // Protected admin routes
 Route::middleware(['auth:sanctum', 'ability:admin'])->group(function () {
