@@ -13,8 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('returns', function (Blueprint $table) {
-           // $table->string('rep_name')->notNull();
+        Schema::table('order_items', function (Blueprint $table) {
+           if(!Schema::hasColumn('order_items','item_expenses')){
+             $table->decimal('item_expenses',10,2)->default(0);
+           }
         });
     }
 
@@ -25,7 +27,7 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('returns', function (Blueprint $table) {
+        Schema::table('order_items', function (Blueprint $table) {
             //
         });
     }

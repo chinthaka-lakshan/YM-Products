@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Shop;
 use App\Models\Item;
-class Returns extends Model
+
+class ReturnItem extends Model
 {
     use HasFactory;
 
@@ -18,6 +19,7 @@ class Returns extends Model
         return $this->belongsTo(Shop::class);
     }
 
+    
     // public function items()
     // {
     //     return $this->hasMany(Item::class);

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\Returns;
+use App\Models\ReturnItem;
 use App\Models\Item;
 use App\Models\Shop;
 
@@ -34,7 +34,7 @@ class ReturnController extends Controller
                         'items.*.qty'=>'required|integer|min:1',
                     ]);
                     $returns = DB::transaction(function () use ($validated){
-                $returnRecord =  Returns::create([
+                $returnRecord =  ReturnItem::create([
                     'shop_id'=>$validated['shop_id'],
                     'type'=>$validated['type'],
                     'return_cost'=>$validated['return_cost'],
@@ -59,7 +59,7 @@ class ReturnController extends Controller
                  return $returnRecord;
             });
             }else{
-                $returns = Returns::create([
+                $returns = ReturnItem::create([
                     'shop_id'=>$validated['shop_id'],
                     'type'=>$validated['type'],
                     'return_cost'=>$validated['return_cost'],
@@ -81,7 +81,7 @@ class ReturnController extends Controller
         $validated = $request->validate([
             'return_cost'=>'required|numeric|min:0',
         ]);
-        $returnItem = Returns::where('id',$returnId)->where('shop_id',$shopId)->first();
+        $returnItem = ReturnItem::where('id',$returnId)->where('shop_id',$shopId)->first();
         
         if(!$returnItem){
             return response()->json(['message'=> 'Return item not found for this shop'],404);
@@ -97,7 +97,7 @@ class ReturnController extends Controller
     }
 
     public function destroy($id){
-        $returnItem = Returns::find($id);
+        $returnItem = ReturnItem::find($id);
         if(!$returnItem){
             return response()->json(['message'=> 'Return item not found'],404);
         }
@@ -106,7 +106,7 @@ class ReturnController extends Controller
     }
 
     public function show($shopId){
-        $returnData = Returns::with('shop')->where('shop_id',$shopId)->get();
+        $returnData = ReturnItem::with('shop')->where('shop_id',$shopId)->get();
 
         if($returnData->isEmpty()){
             return response()->json(['message'=> 'No return cost found for this shop.'],404);
@@ -122,7 +122,9 @@ class ReturnController extends Controller
 
     public function index()
     {
-        $returns = Returns::all();
+        $returns = ReturnItem::all();
         return response()->json(['message'=> 'Return fetched successfully','data'=>$returns]);
     }
+
+    
 }

@@ -157,7 +157,7 @@ const Orders = () => {
           )
         );
         fetchOrders();
-        acptOdr;
+
         return response.data;
       } catch (error) {
         console.error("Error updating order status", error);
@@ -179,128 +179,7 @@ const Orders = () => {
     }
   };
 
-  // const handleAcceptOrder = async (id) => {
-  //   const orderToCheck = await axios.get(
-  //     `http://127.0.0.1:8000/api/orders/${id}/items`
-  //   ); //orders.find((order) => order.id == id);
-  //   console.log("find Order", orderToCheck.data);
-  //   console.log("find Order", orderToCheck.data.items);
-
-  //   if (!orderToCheck) return;
-
-  //   if (!orderToCheck.data.items || !Array.isArray(orderToCheck.data.items)) {
-  //     console.error(
-  //       "Error: Items not found or not an array",
-  //       orderToCheck.items
-  //     );
-  //     return;
-  //   }
-  //   let insufficientStock = [];
-  //   for (const item of orderToCheck.data.items) {
-  //     try {
-  //       console.log("Accep", item);
-
-  //       const response = await axios.get(
-  //         `http://127.0.0.1:8000/api/items/${item.id}`
-  //       );
-  //       const stockQuantity = response.data.quantity;
-
-  //       if (item.quantity > stockQuantity) {
-  //         insufficientStock.push({
-  //           item: item.item,
-  //           needed: item.quantity - stockQuantity,
-  //         });
-  //       }
-  //     } catch (error) {
-  //       console.error(`Error fetching stock for item${item.item}:`, error);
-  //       return;
-  //     }
-  //   }
-  //   if (insufficientStock.length > 0) {
-  //     alert(
-  //       `Stock needs to be increased for:\n${insufficientStock
-  //         .map((i) => `${i.item}: Need ${i.needed} more`)
-  //         .join("\n")}`
-  //     );
-  //     return;
-  //   }
-
-  //   setOrders(
-  //     orders.map((order) =>
-  //       order.id == id ? { ...order, status: "Accepted" } : order
-  //     )
-  //   );
-
-  //   const orderToUpdate = orders.find((order) => order.id == id);
-
-  //   console.log("eddd:", orderToEdit);
-
-  //   if (!orderToUpdate) {
-  //     console.error("Error: Order not found");
-  //     return;
-  //   }
-  //   console.log("stt", orderToUpdate);
-  //   const goodReturnCost = await checkAdjustedOrderCost(
-  //     orderToUpdate.shop_id,
-  //     orderToUpdate.total_price
-  //   );
-  //   console.log("gdc:", goodReturnCost);
-
-  //   const returnCost = await axios
-  //     .get(`http://127.0.0.1:8000/api/good-returns/${orderToUpdate.shop_id}`)
-  //     .then((response) => response.data.data.return_cost)
-
-  //     .catch((error) => {
-  //       console.error("Error fetching return cost:", error);
-  //       return 0;
-  //     });
-  //   console.log(returnCost);
-
-  //   const itemsArray = Array.isArray(orderToUpdate?.items)
-  //     ? orderToUpdate.items.map((item) => ({
-  //         item_id: item.item_id,
-  //         quantity: item.quantity,
-  //       }))
-  //     : [];
-
-  //   const uo = {
-  //     shop_id: orderToUpdate?.shop_id,
-  //     return_balance: returnCost,
-  //     user_name: loggedUser,
-  //     status: "Accepted",
-  //     total_price: goodReturnCost,
-  //     items: itemsArray,
-  //     // items: orderToUpdate?.items?.map((item) => ({
-  //     //   item_id: item.item_id,
-  //     //   quantity: item.quantity,
-  //     // })),
-  //     //orderToUpdate
-  //   };
-  //   console.log("update Order:", uo);
-
-  //   await axios.put(
-  //     `http://127.0.0.1:8000/api/orders/${id}/status`,
-  //     {status:}
-  //     // {
-  //     //   shop_id: orderToUpdate?.shop_id,
-  //     //   return_balance: returnCost,
-  //     //   user_name: loggedUser,
-  //     //   status: "Accepted",
-  //     //   total_price: goodReturnCost,
-  //     //   items: itemsArray,
-  //     //   //orderToUpdate
-  //     // },
-  //     {
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: `Bearer ${userToken}`,
-  //       },
-  //     }
-  //   );
-
-  //   console.log(`Order ${id} has been accepted.`, uo);
-  // };
-
+  
   const indexOfLastOrder = currentPage * ordersPerPage;
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
   const currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder);
@@ -380,7 +259,7 @@ const Orders = () => {
         const updatedOrder = {
           ...orders.find((o) => o.id === editingOrderId),
           shop_id: afterShopSelected?.id ?? 0,
-          shop: afterShopSelected.shopName,
+          // shop: afterShopSelected.shopName,
           date: new Date().toLocaleDateString(),
           user_name: loggedUser,
           status: "Pending",
@@ -393,6 +272,7 @@ const Orders = () => {
               unitPrice: item.unitPrice,
               order_id: editingOrderId,
               quantity: item.orderQty,
+              item_expenses: item.itemExpenses || 0,
             })),
         };
         setOrders(updatedOrders);
@@ -422,20 +302,21 @@ const Orders = () => {
         }
         setEditingOrderId(null);
       } else {
+        console.log("papapap", afterShopSelected);
+
         const newOrder = {
-          id: orders.length + 1,
+          // id: orders.length + 1,
           shop_id: afterShopSelected.id,
-          date: new Date().toLocaleDateString(),
+          // created_at: new Date().toLocaleDateString(),
           user_name: loggedUser,
           status: "Pending",
-
+          //return_balance: getCost,
           items: selectedItems
             //.filter((item) => item.orderQty > 0)
             .map((item) => ({
               item_id: item.id,
-              item: item.item,
-              order_id: orders.length + 1,
               quantity: item.orderQty,
+              item_expenses: item.itemExpenses || 0,
             })),
           total_price: getCost,
         };
@@ -443,7 +324,7 @@ const Orders = () => {
         console.log(selectedShop.id);
         console.log(selectedShop);
         // afterShopSelect = selectedShop;
-        console.log("koo" + newOrder);
+        console.log("koo", newOrder);
 
         //store in DB
         try {
@@ -459,7 +340,7 @@ const Orders = () => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${userToken}`,
               },
-              withCredentials: true,
+              //withCredentials: true,
             }
             // body: JSON.stringify(newOrder),
           );

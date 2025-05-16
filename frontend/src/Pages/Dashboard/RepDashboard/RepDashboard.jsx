@@ -82,7 +82,10 @@ const RepDashboard = () => {
   };
 
   const handleItemSelect = (item) => {
-    setSelectedItems([...selectedItems, { item: item.item, orderQty: 1, unitPrice: item.unitPrice }]);
+    setSelectedItems([
+      ...selectedItems,
+      { item: item.item, orderQty: 1, unitPrice: item.unitPrice },
+    ]);
   };
 
   const updateItemQuantity = (itemName, quantity) => {
@@ -107,7 +110,7 @@ const RepDashboard = () => {
       shop: selectedShop,
       items: selectedItems,
       isReturn: isReturn,
-      isGood: isGood
+      isGood: isGood,
     };
 
     setOrderToEdit(confirmedOrder); // Show confirmed view
@@ -125,10 +128,151 @@ const RepDashboard = () => {
       setOrderToEdit(null);
     }
   };
+  const username = localStorage.getItem("username");
+  const userToken = localStorage.getItem("admin_token");
+  const checkAdjustedOrderCost = async (shopId, orderAmount) => {
+    try {
+      console.log("se;", selectedShop);
+
+      console.log("id", shopId);
+
+      if (shopId != null) {
+        const response = await axios.get(
+          `http://127.0.0.1:8000/api/calculate-order-cost/${shopId}/${orderAmount}`,
+          { withCredentials: true }
+        );
+        const data = response.data;
+        console.log("respons: ", data.return_balance);
+        console.log("kooo");
+
+        return data.return_balance ?? orderAmount;
+      }
+    } catch (error) {
+      console.error("Error fetching order cost", error);
+      return orderAmount;
+    }
+  };
+  let itemsArray;
+  const setItemsAfterSelection = () => {
+    if (selectedItems != null) {
+      itemsArray = Array.isArray(selectedItems?.items)
+        ? selectedItems.items
+        : [];
+    }
+    console.log("itemssss: ", itemsArray);
+  };
+  let readyToSaveOrder;
+  const setReadyToSaveOrder = () => {
+    readyToSaveOrder = {
+      shop_id: orderToEdit?.shop.id,
+      total_price: 0,
+      items: itemsArray.map((item) => ({
+        item_id: item.id,
+        quantity: item.orderQty,
+        item_expenses: item.itemExpenses || 0,
+      })),
+      user_name: username,
+      status: "Pending",
+      return_balance: 0,
+    };
+  };
 
   const handleGenerateInvoice = () => {
+    setItemsAfterSelection();
+    setReadyToSaveOrder();
+    console.log("ko", orderToEdit);
+    console.log(selectedShop);
+
+    console.log("save", readyToSaveOrder);
+
+    //if (selectedShop != null) {
+    const totalPrice = orderToEdit?.items.reduce(
+      (sum, item) => sum + item.unitPrice * item.orderQty,
+      0
+    );
+    console.log("tot", totalPrice);
+
+    const afterTot = checkAdjustedOrderCost(selectedShop?.id, totalPrice);
+
+    if (orderToEdit.isReturn) {
+      const remainBalance = axios
+        .get(`http://127.0.0.1:8000/api/returns/${selectedShop.id}`)
+        .then((data) => {
+          if (data != null) {
+            return data;
+          }
+        });
+      const returnRecord = {
+        shop_id: orderToEdit?.shop.id,
+        type: "",
+        return_cost: totalPrice,
+        user_name: username,
+        items: itemsArray.map((item) => ({
+          item_id: item.id,
+          qty: item.orderQty,
+          weight: item.itemExpenses || 0,
+        })),
+      };
+      if (orderToEdit.isGood) {
+        returnRecord.type = "good";
+      } else {
+        returnRecord.type = "bad";
+      }
+      console.log("newR: ", newReturn);
+      readyToSaveOrder.total_price = afterTot;
+      readyToSaveOrder.return_balance = remainBalance;
+      try {
+        if (returnRecord.type === "good" || returnRecord.type === "bad") {
+          const response = axios.post(
+            "http://127.0.0.1:8000/api/returns",
+            returnRecord,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${userToken}`,
+              },
+            }
+          );
+          console.log("Return saved Successfully!", response.data);
+          console.log("Return data:!", response.data.data);
+
+          if (response != null) {
+            console.log("erres:", response);
+
+            setCurrentReturnInvoiceItems(response.data?.items);
+          }
+        }
+      } catch (error) {
+        console.error("Error saving Return!", error);
+      }
+    } else {
+      console.log("order:", readyToSaveOrder);
+
+      const response = axios.post(
+        "http://127.0.0.1:8000/api/orders",
+        readyToSaveOrder,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userToken}`,
+          },
+          //withCredentials: true,
+        }
+        // body: JSON.stringify(newOrder),
+      );
+      if (response != null) {
+        console.log(response.data);
+        setCurrentReturnInvoiceItems(response.data.data?.items);
+      }
+    }
+    //setReturnToEdit(newReturn);
     console.log("Generating invoice for:", orderToEdit);
     // Logic to generate invoice (PDF/download/API call)
+
+    console.log("selt", orderToEdit.items);
+    console.log(orderToEdit);
+    console.log("Ready to save: ", readyToSaveOrder);
+    // }
   };
 
   return (
@@ -155,18 +299,29 @@ const RepDashboard = () => {
               <h2>Select Return Type</h2>
               <div className="ScrollableContent">
                 <div className="ReturnButtonsContainer">
-                  <div className="ReturnButton" onClick={handleAddGoodReturnClick}>
+                  <div
+                    className="ReturnButton"
+                    onClick={handleAddGoodReturnClick}
+                  >
                     <img src={GoodReturnIcon} alt="Good Return" />
                     <p>Good Return</p>
                   </div>
-                  <div className="ReturnButton" onClick={handleAddBadReturnClick}>
+                  <div
+                    className="ReturnButton"
+                    onClick={handleAddBadReturnClick}
+                  >
                     <img src={BadReturnIcon} alt="Bad Return" />
                     <p>Bad Return</p>
                   </div>
                 </div>
               </div>
               <div className="ModalButtons">
-                <button className="CancelButton" onClick={() => setShowReturnModal(false)}>Cancel</button>
+                <button
+                  className="CancelButton"
+                  onClick={() => setShowReturnModal(false)}
+                >
+                  Cancel
+                </button>
               </div>
             </div>
           </div>
@@ -198,7 +353,12 @@ const RepDashboard = () => {
                 </div>
               </div>
               <div className="ModalButtons">
-                <button className="CancelButton" onClick={() => setShowShopsModal(false)}>Cancel</button>
+                <button
+                  className="CancelButton"
+                  onClick={() => setShowShopsModal(false)}
+                >
+                  Cancel
+                </button>
               </div>
             </div>
           </div>
@@ -208,19 +368,31 @@ const RepDashboard = () => {
         {showItemsModal && (
           <div className="ModalBackdrop">
             <div className="Modal">
-              <h2>{isReturn ? `Select Return Items for ${selectedShop?.shop_name}` : `Select Items for ${selectedShop?.shop_name}`}</h2>
+              <h2>
+                {isReturn
+                  ? `Select Return Items for ${selectedShop?.shop_name}`
+                  : `Select Items for ${selectedShop?.shop_name}`}
+              </h2>
               <div className="ScrollableContent">
                 <div className="DistributionStockGrid">
                   {items.map((item, index) => {
-                    const selected = selectedItems.find((i) => i.item === item.item);
+                    const selected = selectedItems.find(
+                      (i) => i.item === item.item
+                    );
                     return (
                       <div key={index} className="DistributionItemCard">
                         <h2>{item.item}</h2>
                         <div className="DistributionItemCardMiddle">
                           <ShoppingCartIcon className="DistributionItemCardIcon" />
                           <div className="DistributionItemCardDetails">
-                            <span><strong>Price (LKR): </strong>{item.unitPrice}</span>
-                            <span><strong>In Stock: </strong>{item.quantity}</span>
+                            <span>
+                              <strong>Price (LKR): </strong>
+                              {item.unitPrice}
+                            </span>
+                            <span>
+                              <strong>In Stock: </strong>
+                              {item.quantity}
+                            </span>
                             {selected ? (
                               <div className="SelectedItemControl">
                                 <input
@@ -228,7 +400,12 @@ const RepDashboard = () => {
                                   min="1"
                                   className="QtyInput"
                                   value={selected.orderQty}
-                                  onChange={(e) => updateItemQuantity(item.item, e.target.value)}
+                                  onChange={(e) =>
+                                    updateItemQuantity(
+                                      item.item,
+                                      e.target.value
+                                    )
+                                  }
                                 />
                                 <button
                                   className="RemoveItemBtn"
@@ -252,9 +429,15 @@ const RepDashboard = () => {
                 </div>
               </div>
               <div className="ModalButtons">
-                <button className="CancelButton" onClick={handleCancelOrder}>Cancel</button>
+                <button className="CancelButton" onClick={handleCancelOrder}>
+                  Cancel
+                </button>
                 <button className="ConfirmButton" onClick={handleConfirmOrder}>
-                  {editingOrderId ? "Update Order" : isReturn ? "Confirm Return" : "Confirm Order"}
+                  {editingOrderId
+                    ? "Update Order"
+                    : isReturn
+                    ? "Confirm Return"
+                    : "Confirm Order"}
                 </button>
               </div>
             </div>
@@ -289,8 +472,12 @@ const RepDashboard = () => {
                   </tbody>
                 </table>
                 <div className="Action">
-                  <button onClick={handleEditOrder}>Edit {orderToEdit.isReturn ? "Return" : "Order"}</button>
-                  <button onClick={handleGenerateInvoice}>Generate Invoice</button>
+                  <button onClick={handleEditOrder}>
+                    Edit {orderToEdit.isReturn ? "Return" : "Order"}
+                  </button>
+                  <button onClick={handleGenerateInvoice}>
+                    Generate Invoice
+                  </button>
                   <button onClick={() => setOrderToEdit(null)}>Cancel</button>
                 </div>
               </div>
@@ -301,5 +488,4 @@ const RepDashboard = () => {
     </div>
   );
 };
-
 export default RepDashboard;
