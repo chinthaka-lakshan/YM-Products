@@ -201,7 +201,7 @@ const RepDashboard = () => {
     readyToSaveOrder = {
       shop_id: orderToEdit?.shop.id,
       total_price: 0,
-      items: itemsArray.map((item) => ({
+      items: orderToEdit?.map((item) => ({
         item_id: item.id,
         quantity: item.orderQty,
         item_expenses: item.itemExpenses || 0,
@@ -209,6 +209,7 @@ const RepDashboard = () => {
       user_name: username,
       status: "Pending",
       return_balance: 0,
+      discount: 0.0,
     };
   };
 
