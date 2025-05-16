@@ -56,7 +56,7 @@ class OrderController extends Controller
 
         \Log::info("Incoming order request:",$request->all());
         //check for good return
-        $goodReturnValue = ReturnItem::where('shop_id',$validated['shop_id'])->sum('return_cost');
+        $goodReturnValue = Returns::where('shop_id',$validated['shop_id'])->sum('return_cost');
                               
 
         
