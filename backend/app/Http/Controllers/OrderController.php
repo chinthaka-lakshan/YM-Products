@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use App\Models\ReturnItem;
+use App\Models\Returns;
 
 // use App\Models\GoodReturn;
 
@@ -65,7 +65,7 @@ class OrderController extends Controller
         if($totPrice < $goodReturnValue){
             $goodReturnValue=$goodReturnValue-$totPrice;
             $totPrice=0;
-            ReturnItem::where('shop_id',$validated['shop_id'])->update([
+            Returns::where('shop_id',$validated['shop_id'])->update([
                 'return_cost'=>$goodReturnValue
             ]);
 
@@ -76,7 +76,7 @@ class OrderController extends Controller
             // ]);
         }
         elseif($totPrice>=$goodReturnValue){
-            ReturnItem::where('shop_id',$validated['shop_id'])->delete();
+            Returns::where('shop_id',$validated['shop_id'])->delete();
             $goodReturnValue=0;
             // return response()->json([
             //     'message'=>'Good Return cost Fully Claimed',
@@ -158,7 +158,7 @@ class OrderController extends Controller
             'items.*.quantity'=>'required|integer|min:1',
             'items.*.item_expenses'=>'nullable|numeric|min:0',
         ]);
-        $goodReturnValue = ReturnItem::where('shop_id',$validated['shop_id'])->sum('return_cost');
+        $goodReturnValue = Returns::where('shop_id',$validated['shop_id'])->sum('return_cost');
         $orderCost = max(0,$validated['total_price']-$goodReturnValue);
 
         $order->update([
@@ -232,12 +232,12 @@ class OrderController extends Controller
         }
 
         // $goodReturnValue = GoodReturn::where('shop_id',$shopId)->sum('return_cost');
-        $goodReturnValue = ReturnItem::where('shop_id',$shopId)->sum('return_cost');
+        $goodReturnValue = Returns::where('shop_id',$shopId)->sum('return_cost');
 
         $orderCost = max(0,$orderAmount-$goodReturnValue);
 
         if($orderAmount>=$goodReturnValue){
-            ReturnItem::where('shop_id',$shopId)->delete();
+            Returns::where('shop_id',$shopId)->delete();
             $remainingGoodReturn=0;
         }else{
             $remainingGoodReturn=$goodReturnValue-$orderAmount;
