@@ -110,10 +110,7 @@ const RepDashboard = () => {
   };
 
   const handleItemSelect = (item) => {
-    setSelectedItems([
-      ...selectedItems,
-      { item: item.item, orderQty: 1, unitPrice: item.unitPrice },
-    ]);
+    setSelectedItems([...selectedItems, { item: item.item, orderQty: 1, unitPrice: item.unitPrice }]);
   };
 
   const updateItemQuantity = (itemName, quantity) => {
@@ -160,8 +157,10 @@ const RepDashboard = () => {
       setOrderToEdit(null);
     }
   };
+
   const username = localStorage.getItem("username");
   const userToken = localStorage.getItem("admin_token");
+
   const checkAdjustedOrderCost = async (shopId, orderAmount) => {
     try {
       console.log("se;", selectedShop);
@@ -184,6 +183,7 @@ const RepDashboard = () => {
       return orderAmount;
     }
   };
+
   let itemsArray;
   const setItemsAfterSelection = () => {
     if (selectedItems != null) {
@@ -412,47 +412,6 @@ const RepDashboard = () => {
         {showItemsModal && (
           <div className="ModalBackdrop">
             <div className="Modal">
-
-              <h2>
-                {isReturn
-                  ? `Select Return Items for ${selectedShop?.shop_name}`
-                  : `Select Items for ${selectedShop?.shop_name}`}
-              </h2>
-              <div className="ScrollableContent">
-                <div className="DistributionStockGrid">
-                  {items.map((item, index) => {
-                    const selected = selectedItems.find(
-                      (i) => i.item === item.item
-                    );
-                    return (
-                      <div key={index} className="DistributionItemCard">
-                        <h2>{item.item}</h2>
-                        <div className="DistributionItemCardMiddle">
-                          <ShoppingCartIcon className="DistributionItemCardIcon" />
-                          <div className="DistributionItemCardDetails">
-                            <span>
-                              <strong>Price (LKR): </strong>
-                              {item.unitPrice}
-                            </span>
-                            <span>
-                              <strong>In Stock: </strong>
-                              {item.quantity}
-                            </span>
-                            {selected ? (
-                              <div className="SelectedItemControl">
-                                <input
-                                  type="number"
-                                  min="1"
-                                  className="QtyInput"
-                                  value={selected.orderQty}
-                                  onChange={(e) =>
-                                    updateItemQuantity(
-                                      item.item,
-                                      e.target.value
-                                    )
-                                  }
-                                />
-
               <h2 className="ModalTitle">{isReturn ? "Select Return Items" : "Select Items" }</h2>
               <div className="SearchInputWrapper">
                 <input
@@ -522,19 +481,9 @@ const RepDashboard = () => {
                 </div>
               </div>
               <div className="ModalButtons">
-                <button className="CancelButton" onClick={handleCancelOrder}>
-                  Cancel
-                </button>
+                <button className="CancelButton" onClick={handleCancelOrder}>Cancel</button>
                 <button className="ConfirmButton" onClick={handleConfirmOrder}>
-
-                  {editingOrderId
-                    ? "Update Order"
-                    : isReturn
-                    ? "Confirm Return"
-                    : "Confirm Order"}
-
                   {editingOrderId ? "Update" : isReturn ? "Confirm" : "Confirm"}
-
                 </button>
               </div>
             </div>
@@ -699,23 +648,11 @@ const RepDashboard = () => {
                     </tr>
                   </tfoot>
                 </table>
-
-                <div className="Action">
-                  <button onClick={handleEditOrder}>
-                    Edit {orderToEdit.isReturn ? "Return" : "Order"}
-                  </button>
-                  <button onClick={handleGenerateInvoice}>
-                    Generate Invoice
-                  </button>
-                  <button onClick={() => setOrderToEdit(null)}>Cancel</button>
-                </div>
-
               </div>
               <div className="ModalButtons">
                 <button className="CancelButton" onClick={() => setOrderToEdit(null)}>Cancel</button>
                 <button className="EditButton" onClick={handleEditOrder}>Edit {orderToEdit.isReturn ? "Return" : "Order"}</button>
                 <button className="GenerateInvoice" onClick={handleGenerateInvoice}>Generate Invoice</button>
-
               </div>
             </div>
           </div>
@@ -724,4 +661,5 @@ const RepDashboard = () => {
     </div>
   );
 };
+
 export default RepDashboard;
