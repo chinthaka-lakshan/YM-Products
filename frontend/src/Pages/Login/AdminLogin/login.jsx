@@ -98,8 +98,14 @@ const handleOTP = async () => {
     return;
   }
 
+  if (newPassword !== repeatPassword) {
+    alert("Passwords do not match!");
+    return;
+  }
+
   try {
     setLoading(true);
+
     const response = await axios.post(
       "http://localhost:8000/api/verify-otp",
       { email, otp },
@@ -111,20 +117,16 @@ const handleOTP = async () => {
       }
     );
 
-
-    if (newPassword !== repeatPassword) {
-      // Throw a browser error if passwords don't match
-      alert("Passwords do not match!"); // You can use console.error if you prefer logging to console
-      return;
-
-    if (response.data.message === "OTP verified successfully") {
+    if (response.data?.message === "OTP verified successfully") {
       alert("OTP verified!");
       setChangePasswordMode(true);
-
+    } else {
+      alert("OTP Verification Failed!");
     }
+
   } catch (error) {
     console.error("OTP verification error:", error);
-    alert(error.response?.data?.error || "Invalid OTP");
+    alert(error.response?.data?.error || "An unexpected error occurred during OTP verification.");
   } finally {
     setLoading(false);
   }
