@@ -32,6 +32,8 @@ const RepDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const sidebarRef = useRef();
 
+  const [returnBalance, setReturnBalance] = useState(0);
+
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
@@ -101,12 +103,22 @@ const RepDashboard = () => {
     setIsGood(false);
   };
 
-  const handleShopSelect = (shop) => {
+  // Modify the handleShopSelect function to fetch return balance
+  const handleShopSelect = async (shop) => {
     setSelectedShop(shop);
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8000/api/returns/${shop.id}`,
+        { withCredentials: true }
+      );
+      setReturnBalance(response.data.return_balance || 0);
+    } catch (error) {
+      console.error("Error fetching return balance", error);
+      setReturnBalance(0);
+    }
     setShowShopsModal(false);
     setSearchShopTerm("");
     setShowItemsModal(true);
-    // Load items from backend if needed
   };
 
   const handleItemSelect = (item) => {
@@ -531,8 +543,8 @@ const RepDashboard = () => {
               <div className="ScrollableContent">
                 <table className="ConfirmedOrderTable">
                   <colgroup>
-                    <col style={{ width: "30%" }} />
-                    <col style={{ width: "20%" }} />
+                    <col style={{ width: "28%" }} />
+                    <col style={{ width: "22%" }} />
                     <col style={{ width: "25%" }} />
                     <col style={{ width: "25%" }} />
                   </colgroup>
@@ -663,8 +675,8 @@ const RepDashboard = () => {
                       {orderToEdit.isReturn ? (
                         <td colSpan="2"></td>
                       ) : (
-                        <td colSpan="2">
-                          <label>Order Discount: </label>
+                        <td>
+                          <label>Order Discount:</label>
                           <input
                             type="text"
                             inputMode="decimal"
@@ -696,7 +708,25 @@ const RepDashboard = () => {
                           />
                         </td>
                       )}
-                      <td colSpan="2">
+                      <td>
+                        <label>Total Discount: </label>
+                        {(() => {
+                          const itemDiscount = orderToEdit.items.reduce((sum, item) => {
+                            const originalPrice = parseFloat(item.unitPrice);
+                            const editedPrice =
+                              item.editedPrice !== undefined && item.editedPrice !== ""
+                                ? parseFloat(item.editedPrice)
+                                : originalPrice;
+                            return sum + (originalPrice - editedPrice) * item.orderQty;
+                          }, 0);
+                          const orderDiscount = parseFloat(totalOrderDiscount || 0);
+                          return (itemDiscount + orderDiscount).toFixed(2);
+                        })()}
+                      </td>
+                      <td>
+                        <div>Return Balance: {returnBalance.toFixed(2)}</div>
+                      </td>
+                      <td>
                         <strong>Grand Total:</strong>{" "}
                         {(
                           (orderToEdit?.items?.reduce((sum, item) => {
