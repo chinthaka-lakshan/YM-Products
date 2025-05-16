@@ -14,30 +14,79 @@ import axios from "axios";
 const Orders = () => {
   const [orders, setOrders] = useState([]);
 
+  // useEffect(() => {
+  //   const fetchOrders = async () => {
+  //     try {
+  //       const response = await axios.get("http://127.0.0.1:8000/api/orders", {
+  //         headers: {
+  //           Authorization: `Bearer ${userToken}`,
+  //         },
+  //         withCredentials: true,
+  //       });
+  //       console.log("Fetch Orders: ", response.data);
+
+  //       //filter Pending orders
+  //       const filterOrders = [];
+  //       response.data.forEach((element) => {
+  //         if (element.status === "Pending" || element.status === "PENDING") {
+  //           filterOrders.push(element);
+  //         }
+  //         console.log(filterOrders);
+  //       });
+  //       setOrders(filterOrders);
+  //     } catch (error) {
+  //       console.error("Error fetching orders!", error);
+  //     }
+  //   };
+  //   fetchOrders();
+  // }, []);
+
+  const fetchOrders = async () => {
+    try {
+      const response = await axios.get("http://127.0.0.1:8000/api/orders", {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+        withCredentials: true,
+      });
+      console.log("Fetch Orders: ", response.data);
+
+      //filter Pending orders
+      const filterOrders = [];
+      response.data.forEach((element) => {
+        if (element.status === "Pending" || element.status === "PENDING") {
+          filterOrders.push(element);
+        }
+        console.log(filterOrders);
+      });
+      setOrders(filterOrders);
+    } catch (error) {
+      console.error("Error fetching orders!", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const response = await axios.get("http://127.0.0.1:8000/api/orders", {
-          headers: {
-            Authorization: `Bearer ${userToken}`,
-          },
-          withCredentials: true,
-        });
-        console.log("Fetch Orders: ", response.data);
-        setOrders(response.data);
-      } catch (error) {
-        console.error("Error fetching orders!", error);
-      }
-    };
     fetchOrders();
   }, []);
 
   const [viewingOrder, setViewingOrder] = useState(null); // For viewing order popup
 
+  useEffect(() => {
+    console.log("Viewing Order:", viewingOrder);
+  }, [viewingOrder]);
   const handleViewOrder = (order) => {
-    setViewingOrder(order);
-  };
+    const response = axios
+      .get(`http://127.0.0.1:8000/api/orders/${order.id}/items`)
+      .then((res) => {
+        if (res.data.items && res.data.items.length > 0) {
+          setViewingOrder(res.data);
+          console.log("rpp:", res.data);
+        }
+      });
 
+    console.log("curnt:", response.data);
+  };
+  console.log("vieww:", viewingOrder);
   const [shops, setShops] = useState([]);
 
   //fetch shops
@@ -55,20 +104,6 @@ const Orders = () => {
 
   const [items, setItems] = useState([
     // { item: "Chilli Powder 50g", unitPrice: "250.50", quantity: 52 },
-    // { item: "Chilli Powder 100g", unitPrice: "480.50", quantity: 22 },
-    // { item: "Curry Powder 50g", unitPrice: "200.00", quantity: 42 },
-    // { item: "Curry Powder 100g", unitPrice: "400.00", quantity: 72 },
-    // { item: "Chilli Pieces 50g", unitPrice: "180.75", quantity: 12 },
-    // { item: "Chilli Powder 150g", unitPrice: "250.50", quantity: 52 },
-    // { item: "Chilli Powder 200g", unitPrice: "480.50", quantity: 22 },
-    // { item: "Curry Powder 500g", unitPrice: "200.00", quantity: 42 },
-    // { item: "Curry Powder 1000g", unitPrice: "400.00", quantity: 72 },
-    // { item: "Chilli Pieces 250g", unitPrice: "180.75", quantity: 12 },
-    // { item: "Chilli Powder 250g", unitPrice: "250.50", quantity: 52 },
-    // { item: "Chilli Powder 300g", unitPrice: "480.50", quantity: 22 },
-    // { item: "Curry Powder 150g", unitPrice: "200.00", quantity: 42 },
-    // { item: "Curry Powder 125g", unitPrice: "400.00", quantity: 72 },
-    // { item: "Chilli Pieces 700g", unitPrice: "180.75", quantity: 12 },
   ]);
 
   useEffect(() => {
@@ -81,6 +116,7 @@ const Orders = () => {
       }
     };
     fetchItems();
+    console.log("items:", items);
   }, []);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -90,6 +126,7 @@ const Orders = () => {
   const [showItemsModal, setShowItemsModal] = useState(false);
 
   const [selectedShop, setSelectedShop] = useState(null);
+  const [afterShopSelected, setAfterShopSelected] = useState(null);
   const [selectedItems, setSelectedItems] = useState([]);
 
   const [showPopup, setShowPopup] = useState(false);
@@ -100,14 +137,49 @@ const Orders = () => {
   const invoiceRef = useRef();
   const navigate = useNavigate();
 
-  const handleStatusChange = (id, newStatus) => {
-    setOrders(
-      orders.map((order) =>
-        order.id === id ? { ...order, status: newStatus } : order
-      )
-    );
+  const handleStatusChange = async (id, newStatus) => {
+    if (newStatus === "Accepted") {
+      // handleAcceptOrder(id);
+      try {
+        const response = await axios.put(
+          `http://127.0.0.1:8000/api/orders/${id}/status`,
+          { status: newStatus },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${userToken}`,
+            },
+          }
+        );
+        setOrders(
+          orders.map((order) =>
+            order.id === id ? { ...order, status: newStatus } : order
+          )
+        );
+        fetchOrders();
+
+        return response.data;
+      } catch (error) {
+        console.error("Error updating order status", error);
+      }
+    } else if (newStatus === "Cancelled") {
+      const response = await axios.delete(
+        `http://127.0.0.1:8000/api/orders/${id}`,
+
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userToken}`,
+          },
+        }
+      );
+      console.log("deleted successfully", response.data);
+      setOrders(orders.filter((order) => order.id != id));
+      return response.data;
+    }
   };
 
+  
   const indexOfLastOrder = currentPage * ordersPerPage;
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
   const currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder);
@@ -148,7 +220,9 @@ const Orders = () => {
   console.log(loggedUser ? loggedUser + "" : "not found");
 
   const handleConfirmOrder = async () => {
+    console.log("itemsss:", items);
     if (!selectedShop || selectedItems.length == 0) return;
+    setAfterShopSelected(selectedShop);
     const totalOrderAmount = selectedItems.reduce(
       (sum, item) => sum + item.unitPrice * item.orderQty,
       0
@@ -167,6 +241,8 @@ const Orders = () => {
         return;
       }
       if (editingOrderId !== null) {
+        console.log("Shop");
+
         const updatedOrders = orders.map((order) =>
           order.id === editingOrderId
             ? {
@@ -178,15 +254,12 @@ const Orders = () => {
               }
             : order
         );
-        const updatedOrder = updatedOrders.find((o) => o.id === editingOrderId);
-        setOrders(updatedOrders);
-        setOrderToEdit(updatedOrder);
-        setCurrentInvoiceItems(updatedOrder.items);
-        setEditingOrderId(null);
-      } else {
-        const newOrder = {
-          id: orders.length + 1,
-          shop_id: selectedShop.id,
+        console.log("SelectedShop : ", afterShopSelected);
+        console.log("SelectedShop ID: ", afterShopSelected.id);
+        const updatedOrder = {
+          ...orders.find((o) => o.id === editingOrderId),
+          shop_id: afterShopSelected?.id ?? 0,
+          // shop: afterShopSelected.shopName,
           date: new Date().toLocaleDateString(),
           user_name: loggedUser,
           status: "Pending",
@@ -195,14 +268,63 @@ const Orders = () => {
             //.filter((item) => item.orderQty > 0)
             .map((item) => ({
               item_id: item.id,
-              order_id: orders.length + 1,
+              item: item.item,
+              unitPrice: item.unitPrice,
+              order_id: editingOrderId,
               quantity: item.orderQty,
+              item_expenses: item.itemExpenses || 0,
             })),
+        };
+        setOrders(updatedOrders);
+        setOrderToEdit(updatedOrder);
+        setCurrentInvoiceItems(updatedOrder.items);
+        console.log("editID: ", editingOrderId);
+        if (!editingOrderId || editingOrderId <= 0) {
+          console.log("Invalid editingOrderId:", editingOrderId);
+          return;
+        }
+        try {
+          console.log("updated Order: ", updatedOrder);
+
+          const response = await axios.put(
+            `http://127.0.0.1:8000/api/orders/${editingOrderId}`,
+            updatedOrder,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${userToken}`,
+              },
+            }
+          );
+          console.log("Edit : ", response.data);
+        } catch (error) {
+          console.error("Error upfating order: ", error);
+        }
+        setEditingOrderId(null);
+      } else {
+        console.log("papapap", afterShopSelected);
+
+        const newOrder = {
+          // id: orders.length + 1,
+          shop_id: afterShopSelected.id,
+          // created_at: new Date().toLocaleDateString(),
+          user_name: loggedUser,
+          status: "Pending",
+          //return_balance: getCost,
+          items: selectedItems
+            //.filter((item) => item.orderQty > 0)
+            .map((item) => ({
+              item_id: item.id,
+              quantity: item.orderQty,
+              item_expenses: item.itemExpenses || 0,
+            })),
+          total_price: getCost,
         };
         console.log(getCost);
         console.log(selectedShop.id);
         console.log(selectedShop);
-        console.log("koo" + newOrder);
+        // afterShopSelect = selectedShop;
+        console.log("koo", newOrder);
 
         //store in DB
         try {
@@ -218,7 +340,7 @@ const Orders = () => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${userToken}`,
               },
-              withCredentials: true,
+              //withCredentials: true,
             }
             // body: JSON.stringify(newOrder),
           );
@@ -253,16 +375,18 @@ const Orders = () => {
           console.error("Error saving order:", error);
         }
       }
-      setShowItemsModal(false);
-      setSelectedShop(null);
-      setSelectedItems([]);
     } catch (error) {
       console.error("Error saving order:", error);
     }
+    setShowItemsModal(false);
+    setSelectedShop(null);
+    setSelectedItems([]);
   };
 
   const checkAdjustedOrderCost = async (shopId, orderAmount) => {
     try {
+      console.log("id", shopId);
+
       const response = await axios.get(
         `http://127.0.0.1:8000/api/calculate-order-cost/${shopId}/${orderAmount}`,
         { withCredentials: true }
@@ -301,6 +425,10 @@ const Orders = () => {
   const handleEditOrder = () => {
     if (orderToEdit) {
       const originalOrder = orderToEdit;
+      setAfterShopSelected({
+        id: originalOrder.shop_id,
+        shopName: originalOrder.shop,
+      });
       setSelectedShop({ shopName: originalOrder.shop });
       setSelectedItems(originalOrder.items);
       setEditingOrderId(originalOrder.id); // set edit mode
@@ -341,7 +469,12 @@ const Orders = () => {
           </Link>
         </div>
         <div className="btn2">
-          <button className="add-new-btn" onClick={() => setShowShopsModal(true)}>Add New</button>
+          <button
+            className="add-new-btn"
+            onClick={() => setShowShopsModal(true)}
+          >
+            Add New
+          </button>
         </div>
 
         <div className="orders-table-container">
@@ -359,8 +492,8 @@ const Orders = () => {
               </tr>
             </thead>
             <tbody>
-              {currentOrders?.length > 0 ? (
-                currentOrders.map((order) => (
+              {orders?.length > 0 ? (
+                orders.map((order) => (
                   <tr key={order.id}>
                     <td>{order.shop_id}</td>
                     <td>{order.created_at}</td>
@@ -390,9 +523,9 @@ const Orders = () => {
                             .join(", ")
                         : "—"}
                     </td>
-                    <td>
+                    {/* <td>
                       <button className="btn view-btn">View</button>
-                    </td>
+                    </td> */}
                     <td>
                       <button
                         className="btn accept-btn"
@@ -478,27 +611,20 @@ const Orders = () => {
               <div className="orderdetails">
                 <div className="orderdetails1">
                   <p>
-                    <strong>Date:</strong> {viewingOrder.date}
+                    <strong>Date:</strong> {viewingOrder.created_at}
                   </p>
                   <div className="repname">
                     <p>
-                      <strong>Rep Name:</strong> {viewingOrder.repName}
+                      <strong>Rep Name:</strong> {viewingOrder.user_name}
                     </p>
                   </div>
                 </div>
                 <div className="orderdetails2">
                   <p>
-                    <strong>Shop Name:</strong> {viewingOrder.shop}
+                    <strong>Shop Name:</strong> {viewingOrder.shop_id}
                   </p>
                   <p>
-                    <strong>Total Amount:</strong> Rs.{" "}
-                    {viewingOrder.items
-                      .reduce(
-                        (total, item) =>
-                          total + item.orderQty * parseFloat(item.unitPrice),
-                        0
-                      )
-                      .toFixed(2)}
+                    <strong>Total Amount:</strong> Rs.{viewingOrder.total_price}
                   </p>
                 </div>
               </div>
@@ -514,9 +640,9 @@ const Orders = () => {
                   {viewingOrder.items.map((item, index) => (
                     <tr key={index}>
                       <td>{item.item}</td>
-                      <td>{item.orderQty}</td>
+                      <td>{item.quantity}</td>
                       <td>
-                        {(item.orderQty * parseFloat(item.unitPrice)).toFixed(
+                        {(item.quantity * parseFloat(item.unitPrice)).toFixed(
                           2
                         )}
                       </td>
@@ -540,10 +666,14 @@ const Orders = () => {
             <div className="ScrollableContent">
               <div className="ShopsGrid">
                 {shops.map((shop, index) => (
-                  <div key={index} className="ShopCard" onClick={() => handleShopSelect(shop)}>
+                  <div
+                    key={index}
+                    className="ShopCard"
+                    onClick={() => handleShopSelect(shop)}
+                  >
                     <h2>{shop.shop_name}</h2>
                     <div className="ShopCardMiddle">
-                      <StoreFrontIcon className="ShopCardIcon"/>
+                      <StoreFrontIcon className="ShopCardIcon" />
                       <div className="ShopCardDetails">
                         <span>{shop.location}</span>
                         <span>{shop.contact}</span>
@@ -554,7 +684,12 @@ const Orders = () => {
               </div>
             </div>
             <div className="ModalButtons">
-              <button className="CancelButton" onClick={() => setShowShopsModal(false)}>Cancel</button>
+              <button
+                className="CancelButton"
+                onClick={() => setShowShopsModal(false)}
+              >
+                Cancel
+              </button>
             </div>
           </div>
         </div>
