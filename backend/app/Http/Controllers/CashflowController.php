@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BadReturn;
+use App\Models\Item;
 use Illuminate\Http\Request;
 use App\Models\Cashflow;
 use App\Models\Order; // ✅ Import Order model
@@ -16,18 +18,32 @@ class CashflowController extends Controller
 
     public function store(Request $request)
     {
-        // ✅ Step 1: Get the total income from the orders table
+        // get the total expenses from the badreturn table
+        $BadreturnExpenses = BadReturn::sum('return_cost');
+        $itemExpenses = Item::all()->sum(function ($item) {
+        return $item->quantity * $item->itemCost;
+        });
+
+        $transport = (float) $request->input('transport');
+        $other = (float) $request->input('other');
+        //   Get the total income from the orders table
         $totalIncome = Order::sum('total_price');
+        $totalExpenses = $BadreturnExpenses + $itemExpenses + $transport + $other;
+        $totalProfit = $totalIncome - $totalExpenses;
 
-        // ✅ Step 2: Replace income in the request with $totalIncome
+        //  Replace income in the request with $totalIncome
         $request->merge(['income' => $totalIncome]);
+        $request->merge(['expenses' => $totalExpenses]);
+        $request->merge(['profit' => $totalProfit]);
 
-        // ✅ Step 3: Validate the rest of the fields (no need to validate income anymore)
+
+        // replace expenses in the request with $totalExpenses
+        // $request->merge(['expenses' => $totalExpenses]);
+
+        // Validate the rest of the fields (no need to validate income anymore)
         $validator = Validator::make($request->all(), [
             'transport' => 'required|string|max:225',
-            'other' => 'required|string|max:255',
-            'expenses' => 'required|string|max:255',
-            'profit' => 'required|string|max:255',
+            'other' => 'required|string|max:255'
         ]);
 
         if ($validator->fails()) {

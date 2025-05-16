@@ -111,9 +111,16 @@ const handleOTP = async () => {
       }
     );
 
+
+    if (newPassword !== repeatPassword) {
+      // Throw a browser error if passwords don't match
+      alert("Passwords do not match!"); // You can use console.error if you prefer logging to console
+      return;
+
     if (response.data.message === "OTP verified successfully") {
       alert("OTP verified!");
       setChangePasswordMode(true);
+
     }
   } catch (error) {
     console.error("OTP verification error:", error);
@@ -195,7 +202,11 @@ const handleChangePassword = async () => {
               <button type="submit" className="LoginButton" disabled={loading}>
                 {loading ? "Logging In..." : "Login"}
               </button>
-              <button type="button" className="ForgotPassword" onClick={() => setForgotPasswordMode(true)}>
+              <button
+                type="button"
+                className="ForgotPassword"
+                onClick={() => setForgotPasswordMode(true)}
+              >
                 Forgot Password
               </button>
             </div>
@@ -214,10 +225,18 @@ const handleChangePassword = async () => {
               />
             </div>
             <div className="AdminLoginButtons">
-              <button type="button" className="BackButton" onClick={() => setForgotPasswordMode(false)}>
+              <button
+                type="button"
+                className="BackButton"
+                onClick={() => setForgotPasswordMode(false)}
+              >
                 Back
               </button>
-              <button type="button" className="SendEmailButton" onClick={handleSendResetEmail}>
+              <button
+                type="button"
+                className="SendEmailButton"
+                onClick={handleSendResetEmail}
+              >
                 Send Email
               </button>
             </div>
@@ -235,7 +254,11 @@ const handleChangePassword = async () => {
               />
             </div>
             <div className="AdminLoginButtons">
-              <button type="button" className="BackButton" onClick={() => setEnterOTPMode(false)}>
+              <button
+                type="button"
+                className="BackButton"
+                onClick={() => setEnterOTPMode(false)}
+              >
                 Back
               </button>
               <button type="button" className="ConfirmOTP" onClick={handleOTP}>
@@ -264,10 +287,18 @@ const handleChangePassword = async () => {
               />
             </div>
             <div className="AdminLoginButtons">
-              <button type="button" className="BackButton" onClick={() => setChangePasswordMode(false)}>
+              <button
+                type="button"
+                className="BackButton"
+                onClick={() => setChangePasswordMode(false)}
+              >
                 Back
               </button>
-              <button type="button" className="ChangePassword" onClick={handleChangePassword}>
+              <button
+                type="button"
+                className="ChangePassword"
+                onClick={handleChangePassword}
+              >
                 Confirm
               </button>
             </div>
