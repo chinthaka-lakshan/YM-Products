@@ -12,8 +12,8 @@ return new class extends Migration
             $table->id();
             $table->string('income');
             $table->string('transport'); // removed 'unique' unless needed
-            $table->string('other');
-            $table->string('expenses');
+            $table->float('other');
+            $table->float('expenses');
             $table->string('profit'); // fixed typo
             $table->timestamps();
         });
