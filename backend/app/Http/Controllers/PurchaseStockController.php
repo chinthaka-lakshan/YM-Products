@@ -10,31 +10,36 @@ use Illuminate\Validation\ValidationException;
 
 class PurchaseStockController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         return response()->json(PurchaseStock::all());
-
     }
 
-
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'item' => 'required|string|max:255',
             'weight' => [
                 'required',
                 'numeric',
-                'regex:/^\d+(\.\d{3})$/'
+                'regex:/^\d+(\.\d{1,3})?$/'
             ],
         ]);
-    
-        if($validator->fails()){
+
+        if ($validator->fails()) {
             return response()->json([
                 'message' => 'Validation failed',
                 'errors' => $validator->errors()
             ], 422);
         }
-    
+
         try {
-            $purchase_stock = PurchaseStock::create($request->only(['item', 'weight']));
+            $weight = number_format((float) $request->weight, 3, '.', '');
+            $purchase_stock = PurchaseStock::create([
+                'item' => $request->item,
+                'weight' => $weight
+            ]);
+
             return response()->json([
                 'message' => 'Item Added Successfully',
                 'purchase_stock' => $purchase_stock
@@ -42,60 +47,72 @@ class PurchaseStockController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Error when Adding Item',
-                'purchase_stock' => $e->getMessage()
+                'error' => $e->getMessage()
             ], 500);
         }
     }
 
-
-    public function update(Request $request,$id){
+    public function update(Request $request, $id)
+    {
         $purchase_stock = PurchaseStock::find($id);
-        if(!$purchase_stock){
-            return response()->json(['message'=>'Item not found'],404);
+
+        if (!$purchase_stock) {
+            return response()->json(['message' => 'Item not found'], 404);
         }
-        $validator = Validator::make($request->all(),[
-            'item'=>'sometimes|string|max:255',
-            'weight'=>'sometimes|numeric'
+
+        $validator = Validator::make($request->all(), [
+            'item' => 'sometimes|string|max:255',
+            'weight' => [
+                'sometimes',
+                'numeric',
+                'regex:/^\d+(\.\d{1,3})?$/'
+            ]
         ]);
-        
-        if($validator->fails()){
+
+        if ($validator->fails()) {
             return response()->json([
-                'errors'=>$validator->errors()
-            ],422);
-        }
-        try{
-           
-            $purchase_stock->update($request->only(['item','weight']));
-        return response()->json([
-            'message'=>'Stock  Updated Successfully',
-            'item'=>$purchase_stock
-        ],200);
-        }catch(\Exception $e){
-            return respons()->json([
-                'message'=>'Error when  Updating Purchase Stock',
-                'error'=>$e->getMessage()
-            ],500);
-        }
+                'message' => 'Validation failed',
+                'errors' => $validator->errors()
+            ], 422);
         }
 
-        public function destroy($id)
-        {
-            $purchase_stock = PurchaseStock::find($id);
+        try {
+            $updateData = $request->only(['item', 'weight']);
 
-            if (!$purchase_stock) {
-                return response()->json(['message' => 'Item Not found'], 404);
+            if (isset($updateData['weight'])) {
+                $updateData['weight'] = number_format((float) $updateData['weight'], 3, '.', '');
             }
 
-            try {
-                $purchase_stock->delete();
-                return response()->json(['message' => 'Item Deleted Successfully'], 200);
-            } catch (\Exception $e) {
-                return response()->json([
-                    'message' => 'Error when deleting Item',
-                    'error' => $e->getMessage()
-                ], 500);
-            }
-}
+            $purchase_stock->update($updateData);
 
-   
+            return response()->json([
+                'message' => 'Stock Updated Successfully',
+                'item' => $purchase_stock
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error when Updating Purchase Stock',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function destroy($id)
+    {
+        $purchase_stock = PurchaseStock::find($id);
+
+        if (!$purchase_stock) {
+            return response()->json(['message' => 'Item not found'], 404);
+        }
+
+        try {
+            $purchase_stock->delete();
+            return response()->json(['message' => 'Item Deleted Successfully'], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error when deleting item',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

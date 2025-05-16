@@ -13,6 +13,8 @@ const RepRegistration = () => {
     password: "",
   });
 
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate(); 
 
   const handleChange = (e) => {
@@ -21,6 +23,7 @@ const RepRegistration = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const response = await fetch(
@@ -54,6 +57,8 @@ const RepRegistration = () => {
     } catch (error) {
       console.error("Error", error);
       alert("Something went wrong!");
+    } finally {
+      setLoading(false); // End loading
     }
   };
 
@@ -129,11 +134,20 @@ const RepRegistration = () => {
           </div>
 
           
-          <button type="submit" className="register-btn">
+          <button type="submit" className="register-btn" onClick={handleSubmit}>
             Register
           </button>
         </form>
       </div>
+
+      {/* Displaying the loading graphic if loading is true */}
+      {loading && (
+        <div className="Loading">
+          <div className="spinner"></div> {/* You can style this spinner */}
+          <p>Please Wait! Registering The Sales Rep...</p>
+        </div>
+      )}
+
     </div>
   );
 };

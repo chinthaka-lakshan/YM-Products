@@ -43,7 +43,6 @@ const AdminLogin = () => {
         localStorage.setItem("username", response.data.admin.name);
         console.log(localStorage.getItem("username"));
 
-        alert(response.data.message); // Show success message
         alert(response.data.message);
         navigate("/admindashboard");
       } else {
@@ -62,63 +61,119 @@ const AdminLogin = () => {
     }
   };
 
-  const handleSendResetEmail = () => {
-    if (!email) {
-      alert("Please enter your email to send reset instructions.");
-      return;
+  const handleSendResetEmail = async () => {
+  if (!email) {
+    alert("Please enter your email to send reset instructions.");
+    return;
+  }
+
+  try {
+    setLoading(true);
+    const response = await axios.post(
+      "http://localhost:8000/api/send-otp",
+      { email },
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (response.data.message) {
+      alert(response.data.message);
+      setEnterOTPMode(true);
     }
+  } catch (error) {
+    console.error("Error sending OTP:", error);
+    alert(error.response?.data?.message || "Failed to send OTP");
+  } finally {
+    setLoading(false);
+  }
+};
 
-    // Here, you'd typically call your backend API to send the reset email.
-    alert(`OTP sent to ${email}`);
-    setEnterOTPMode(true);
-  };
+const handleOTP = async () => {
+  if (!otp) {
+    alert("Please enter the OTP you received.");
+    return;
+  }
 
-  const handleOTP = () => {
-    if (!otp) {
-      alert("Please Enter The OTP In The Email You Recieved.");
-      return;
-    }
+  try {
+    setLoading(true);
+    const response = await axios.post(
+      "http://localhost:8000/api/verify-otp",
+      { email, otp },
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-    // Normally you'd call the backend here
-    alert("OTP verified successfully!");
-    setChangePasswordMode(true);
-  };
-
-  const handleChangePassword = () => {
-    if (!newPassword) {
-      alert("Please Enter A New Password.");
-      return;
-    }
 
     if (newPassword !== repeatPassword) {
       // Throw a browser error if passwords don't match
       alert("Passwords do not match!"); // You can use console.error if you prefer logging to console
       return;
+
+    if (response.data.message === "OTP verified successfully") {
+      alert("OTP verified!");
+      setChangePasswordMode(true);
+
     }
+  } catch (error) {
+    console.error("OTP verification error:", error);
+    alert(error.response?.data?.error || "Invalid OTP");
+  } finally {
+    setLoading(false);
+  }
+};
 
-    alert("Password Changed Successfully!");
+const handleChangePassword = async () => {
+  if (!newPassword) {
+    alert("Please enter a new password.");
+    return;
+  }
 
-    // Show loading transition graphic
-    setLoadingTransition(true);
+  if (newPassword !== repeatPassword) {
+    alert("Passwords do not match!");
+    return;
+  }
 
-    // Delay before navigating back to the login screen
-    setTimeout(() => {
-      // Reset modes to go back to the initial login screen
-      setForgotPasswordMode(false);
-      setEnterOTPMode(false);
-      setChangePasswordMode(false);
+  try {
+    setLoading(true);
+    const response = await axios.post(
+      "http://localhost:8000/api/reset-password-with-otp",
+      {
+        email,
+        otp,
+        password: newPassword,
+        password_confirmation: repeatPassword,
+      }
+    );
 
-      // Optionally clear fields
-      setEmail("");
-      setPassword("");
-      setOTP("");
-      setNewPassword("");
-      setRepeatPassword("");
-
-      // Hide loading transition after the delay
-      setLoadingTransition(false);
-    }, 2000);
-  };
+    if (response.data.message === "Password reset successfully") {
+      setSuccessMessage("Password changed successfully!");
+      
+      // Clear form and reset modes after 3 seconds
+      setTimeout(() => {
+        setForgotPasswordMode(false);
+        setEnterOTPMode(false);
+        setChangePasswordMode(false);
+        setEmail("");
+        setOTP("");
+        setNewPassword("");
+        setRepeatPassword("");
+        setSuccessMessage("");
+      }, 3000);
+    }
+  } catch (error) {
+    alert(error.response?.data?.error || "Failed to reset password");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="AdminLogin">

@@ -7,6 +7,8 @@ import AdminNavbar from "../../components/AdminNavbar/AdminNavbar.jsx";
 
 const CashFlowAnalysis = () => {
 
+   const [showAddModal, setShowAddModal] = useState(false);
+
   return (
     <div className="CashFlowAnalysis">
       <AdminSidebar/>
@@ -45,12 +47,25 @@ const CashFlowAnalysis = () => {
         </div>
 
         <div className="ButtonsContainer">
-          <button type="submit" className="btn">Add Expenses</button>
+          <button className="btn" onClick={() => setShowAddModal(true)}>
+              Add Expenses
+            </button>
         </div>
 
         <div className="TablesContainer">
           <CashFlowTable/>
         </div>
+
+      {showAddModal &&(
+        <div className="ModalBackdrop">
+          <div className="Modal">
+            <h2>Add Expenses</h2>
+          </div>
+        </div>
+      )}
+
+
+         
 
       </div>
     </div>

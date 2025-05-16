@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->decimal('total_price', 10, 2);
+            $table->decimal('discount', 10, 2);
             $table->decimal('return_balance', 10, 2)->nullable();
             $table->unsignedBigInteger('shop_id'); // foreign key
             $table->string('user_name');

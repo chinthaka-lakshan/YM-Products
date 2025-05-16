@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('purchase_stock', function (Blueprint $table) {
             $table->id();
             $table->string('item');
-            $table->decimal('weight',8,2);
+            $table->decimal('weight',8,3);
             $table->timestamps();
         });
     }
