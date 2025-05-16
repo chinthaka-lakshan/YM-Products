@@ -23,13 +23,18 @@ class CashflowController extends Controller
         $itemExpenses = Item::all()->sum(function ($item) {
         return $item->quantity * $item->itemCost;
         });
+
+        $transport = (float) $request->input('transport');
+        $other = (float) $request->input('other');
         //   Get the total income from the orders table
         $totalIncome = Order::sum('total_price');
-        $totalExpenses = $BadreturnExpenses + $itemExpenses;
+        $totalExpenses = $BadreturnExpenses + $itemExpenses + $transport + $other;
+        $totalProfit = $totalIncome - $totalExpenses;
 
         //  Replace income in the request with $totalIncome
         $request->merge(['income' => $totalIncome]);
         $request->merge(['expenses' => $totalExpenses]);
+        $request->merge(['profit' => $totalProfit]);
 
 
         // replace expenses in the request with $totalExpenses
@@ -38,8 +43,7 @@ class CashflowController extends Controller
         // Validate the rest of the fields (no need to validate income anymore)
         $validator = Validator::make($request->all(), [
             'transport' => 'required|string|max:225',
-            'other' => 'required|string|max:255',
-            'profit' => 'required|string|max:255',
+            'other' => 'required|string|max:255'
         ]);
 
         if ($validator->fails()) {
