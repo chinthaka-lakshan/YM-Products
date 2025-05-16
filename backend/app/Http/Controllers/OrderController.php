@@ -153,6 +153,7 @@ class OrderController extends Controller
         $validated = $request->validate([
             'shop_id'=>'required|exists:shops,id',
             'total_price'=> 'required|numeric',
+            'discount'=>'sometimes|numeric|min:0',
             'items'=>'sometimes|array',
             'items.*.item_id'=>'required|exists:items,id',
             'items.*.quantity'=>'required|integer|min:1',
@@ -165,6 +166,9 @@ class OrderController extends Controller
             'shop_id'=>$validated['shop_id'],
             'total_price'=>$orderCost,
             'status'=>"Pending",
+            'return_balance'=>$validated['return_balance'],
+            'discount'=>$validated['discount'],
+            'username'=> $validated['username']
         ]);
         $formattedItems=[];
         foreach($validated['items'] as $item){
