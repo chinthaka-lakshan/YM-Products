@@ -2,18 +2,58 @@ import React, { useState } from 'react'
 import './RepReturns.css'
 import RepNavbar from "../../components/RepNavbar/RepNavbar"
 import RepSidebar from "../../components/Sidebar/RepSidebar/RepSidebar"
-
+import SearchIcon from '@mui/icons-material/Search';
 
 const RepReturns = () => {
-    const [returns, setReturns] = useState([
-        { id: 1, shop: 'Shop', item: 'Chil Powder', weight: '50', qty: '5', type: 'Good', date: '2023/01/10' },
-        { id: 2, shop: 'Shop', item: 'Chil Powder', weight: '100', qty: '10', type: 'Bad', date: '2023/01/10' },
-        { id: 3, shop: 'Shop', item: 'Chil Powder', weight: '500', qty: '8', type: 'Bad', date: '2023/01/10' },
-        { id: 4, shop: 'Shop', item: 'Chil Powder', weight: '50', qty: '6', type: 'Good', date: '2023/01/10' },
-        { id: 5, shop: 'Shop', item: 'Chil Powder', weight: '100', qty: '10', type: 'Bad', date: '2023/01/10' },
-        { id: 6, shop: 'Shop', item: 'Chil Powder', weight: '500', qty: '8', type: 'Bad', date: '2023/01/10' },
-        { id: 7, shop: 'Shop', item: 'Chil Powder', weight: '50', qty: '6', type: 'Good', date: '2023/01/10' },
-    ]);
+  const [goodreturns, setGoodReturns] = useState([
+    { id: 1, shop_name: 'A Shop', created_at: '3/4/2027', return_cost: 1500.00 },
+    { id: 2, shop_name: 'B Shop', created_at: '13/4/2025', return_cost: 2500.00 },
+    { id: 3, shop_name: 'Dilshan Shop', created_at: '3/4/2025', return_cost: 1800.00 },
+    { id: 4, shop_name: 'C Shop', created_at: '30/4/2027', return_cost: 2500.00 },
+    { id: 5, shop_name: 'F Shop', created_at: '3/2/2025', return_cost: 12500.00 },
+    { id: 6, shop_name: 'Y Shop', created_at: '31/1/2025', return_cost: 22500.00 },
+    { id: 7, shop_name: 'S Shop', created_at: '13/4/2027', return_cost: 20500.00 },
+    { id: 8, shop_name: 'Wijaya Shop', created_at: '3/4/2025', return_cost: 1300.00 },
+    { id: 9, shop_name: 'Q Shop', created_at: '3/4/2020', return_cost: 52500.00 },
+    { id: 10, shop_name: 'AB Shop', created_at: '3/4/2025', return_cost: 13500.00 },
+    { id: 11, shop_name: 'CD Shop', created_at: '3/4/2025', return_cost: 26500.00 },
+  ].sort((a, b) => {
+    const dataA = new Date(a.created_at.split('/').reverse().join('/'));
+    const dataB = new Date(b.created_at.split('/').reverse().join('/'));
+    return dataB - dataA;
+  }));
+
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const sidebarRef = useRef();
+  
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
+  // Close sidebar when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        window.innerWidth <= 768 &&
+        sidebarRef.current &&
+        !sidebarRef.current.contains(event.target)
+      ) {
+        setSidebarOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const filteredReturns = orders.filter(order =>
+    order.created_at.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    order.shop_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    order.user_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    order.total_price.toString().includes(searchQuery) ||
+    order.status.toLowerCase().includes(searchQuery.toLowerCase())
+  );
     
     // Pagination state
     const [currentPage, setCurrentPage] = useState(1);
