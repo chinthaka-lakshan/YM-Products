@@ -32,6 +32,8 @@ const RepDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const sidebarRef = useRef();
 
+  const [returnBalance, setReturnBalance] = useState(0);
+
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
@@ -101,29 +103,39 @@ const RepDashboard = () => {
     setIsGood(false);
   };
 
-  const handleShopSelect = (shop) => {
+  // Modify the handleShopSelect function to fetch return balance
+  const handleShopSelect = async (shop) => {
     setSelectedShop(shop);
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8000/api/returns/${shop.id}`,
+        { withCredentials: true }
+      );
+      setReturnBalance(response.data.return_balance || 0);
+    } catch (error) {
+      console.error("Error fetching return balance", error);
+      setReturnBalance(0);
+    }
     setShowShopsModal(false);
     setSearchShopTerm("");
     setShowItemsModal(true);
-    // Load items from backend if needed
   };
 
   const handleItemSelect = (item) => {
     setSelectedItems([
       ...selectedItems,
-      { item: item.item, orderQty: 1, unitPrice: item.unitPrice },
+      { item: item, orderQty: 1, unitPrice: item.unitPrice },
     ]);
   };
 
-  const updateItemQuantity = (itemName, quantity) => {
+  const updateItemQuantity = (itemId, quantity) => {
     setSelectedItems((prev) =>
-      prev.map((i) => (i.item === itemName ? { ...i, orderQty: quantity } : i))
+      prev.map((i) => (i.item.id === itemId ? { ...i, orderQty: quantity } : i))
     );
   };
 
-  const removeSelectedItem = (itemName) => {
-    setSelectedItems((prev) => prev.filter((i) => i.item !== itemName));
+  const removeSelectedItem = (itemId) => {
+    setSelectedItems((prev) => prev.filter((i) => i.item.id !== itemId));
   };
 
   const handleCancelOrder = () => {
@@ -166,19 +178,12 @@ const RepDashboard = () => {
 
   const checkAdjustedOrderCost = async (shopId, orderAmount) => {
     try {
-      console.log("se;", selectedShop);
-
-      console.log("id", shopId);
-
       if (shopId != null) {
         const response = await axios.get(
           `http://127.0.0.1:8000/api/calculate-order-cost/${shopId}/${orderAmount}`,
           { withCredentials: true }
         );
         const data = response.data;
-        console.log("respons: ", data.return_balance);
-        console.log("kooo");
-
         return data.return_balance ?? orderAmount;
       }
     } catch (error) {
@@ -187,7 +192,170 @@ const RepDashboard = () => {
     }
   };
 
-  let itemsArray;
+  const getReturnValue = async (shopId) => {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8000/api/returns/${shopId}/balance`,
+        {
+          withCredentials: true,
+        }
+      );
+
+      console.log("RetV: ", response.data);
+      return response.data.remaining_balance;
+    } catch (error) {
+      console.error(error);
+      return 0;
+    }
+  };
+
+  const updateReturnBalance = async (shopId, returnValue) => {
+    try {
+      const response = await axios.put(
+        `http://127.0.0.1:8000/api/shops/${shopId}/return-balance`,
+        { return_balance: returnValue },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userToken}`,
+          },
+          withCredentials: true,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      alert(error);
+    }
+  };
+  const handleGenerateInvoice = async () => {
+    try {
+      // Calculate the total price from selected items
+      const totalPrice = orderToEdit.items.reduce(
+        (sum, item) =>
+          sum + (item.editedPrice || item.unitPrice) * item.orderQty,
+        0
+      );
+      console.log("reo:", orderToEdit);
+
+      const retV = await getReturnValue(orderToEdit.shop.id);
+      console.log("Return Value: ", retV);
+
+      console.log("ioio:", orderToEdit.items);
+      console.log("dis", totalOrderDiscount);
+
+      //save return
+      if (orderToEdit.isReturn) {
+        const returnRecord = {
+          shop_id: orderToEdit.shop.id,
+          type: orderToEdit.isGood ? "good" : "bad",
+          return_cost: totalPrice,
+          rep_name: username,
+          items: orderToEdit.items.map((item) => ({
+            item_id: item.item.id,
+            quantity: item.orderQty,
+          })),
+        };
+
+        console.log("rec", returnRecord);
+
+        const response = axios
+          .post("http://127.0.0.1:8000/api/returns", returnRecord, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${userToken}`,
+            },
+            withCredentials: true,
+          })
+          .then((res) => {
+            return res.data;
+          });
+        if (response.data != null) {
+          alert(response.data);
+        }
+      } else {
+        const discountValue = parseFloat(totalOrderDiscount) || 0;
+        const discountedTotPrice = totalPrice - totalOrderDiscount;
+        console.log("after reducing discount", discountedTotPrice);
+
+        let finalTotal;
+        console.log("after reducing return Value", finalTotal);
+        let remainingReturnBalance = 0;
+        if (retV >= discountedTotPrice) {
+          // return value should updated in db
+          remainingReturnBalance = retV - discountedTotPrice;
+          finalTotal = 0;
+        } else {
+          //return value also should update
+          remainingReturnBalance = 0;
+          finalTotal = discountedTotPrice - retV;
+        }
+
+        console;
+        const remRet = await getReturnValue(orderToEdit.shop.id);
+        console.log("remaining return Value", remRet);
+        if (isNaN(discountValue)) {
+          throw new Error("Invalid discount value");
+        }
+        // Prepare the order data according to your controller requirements
+        const orderData = {
+          shop_id: orderToEdit.shop.id,
+          total_price: finalTotal,
+          items: orderToEdit.items.map((item) => ({
+            item_id: item.item.id, // Send item ID
+            quantity: item.orderQty,
+            item_expenses: 0, // Default to 0 if not specified
+          })),
+          user_name: username,
+          status: "Pending",
+          return_balance: remainingReturnBalance,
+          discount: totalOrderDiscount,
+        };
+
+        console.log("order to Save", orderData);
+
+        // Make the API call to create the order
+        const response = await axios.post(
+          "http://127.0.0.1:8000/api/orders",
+          orderData,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${userToken}`,
+            },
+          }
+        );
+
+        console.log("Order created successfully:", response.data);
+
+        // Close the modal after successful submission
+        setOrderToEdit(null);
+
+        // Optionally show a success message or redirect
+        alert("Order created successfully!");
+      }
+    } catch (error) {
+      console.error("Error creating order:", error);
+
+      // Show error message to user
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        console.error("Server responded with:", error.response.data);
+        alert(
+          `Error: ${error.response.data.error || error.response.data.message}`
+        );
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.error("No response received:", error.request);
+        alert("Network error - no response from server");
+      } else {
+        // Something happened in setting up the request
+        console.error("Request setup error:", error.message);
+        alert(`Error: ${error.message}`);
+      }
+    }
+  };
+
+  /*let itemsArray;
   const setItemsAfterSelection = () => {
     if (selectedItems != null) {
       itemsArray = Array.isArray(selectedItems?.items)
@@ -201,7 +369,7 @@ const RepDashboard = () => {
     readyToSaveOrder = {
       shop_id: orderToEdit?.shop.id,
       total_price: 0,
-      items: orderToEdit?.map((item) => ({
+      items: itemsArray.map((item) => ({
         item_id: item.id,
         quantity: item.orderQty,
         item_expenses: item.itemExpenses || 0,
@@ -209,11 +377,82 @@ const RepDashboard = () => {
       user_name: username,
       status: "Pending",
       return_balance: 0,
-      discount: 0.0,
     };
-  };
+  };*/
 
-  const handleGenerateInvoice = () => {
+  /*const handleGenerateInvoice = async () => {
+    try {
+      const totalPrice = orderToEdit.items.reduce(
+        (sum, item) => sum + (item.editedPrice || item.unitPrice) * item.orderQty,
+        0
+      );
+
+      const adjustedTotal = await checkAdjustedOrderCost(orderToEdit.shop?.id, totalPrice);
+
+      if (orderToEdit.isReturn) {
+        // Handle return submission
+        const returnRecord = {
+          shop_id: orderToEdit.shop.id,
+          type: orderToEdit.isGood ? "good" : "bad",
+          return_cost: totalPrice,
+          user_name: username,
+          items: orderToEdit.items.map(item => ({
+            item_id: item.item.id,
+            quantity: item.orderQty,
+            unit_price: item.editedPrice || item.unitPrice
+          })),
+        };
+
+        const response = await axios.post(
+          "http://127.0.0.1:8000/api/returns",
+          returnRecord,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${userToken}`,
+            },
+          }
+        );
+
+        console.log("Return saved successfully!", response.data);
+      } else {
+        // Handle order submission
+        const orderData = {
+          shop_id: orderToEdit.shop.id,
+          total_price: adjustedTotal,
+          items: orderToEdit.items.map(item => ({
+            item_id: item.item.id,
+            quantity: item.orderQty,
+            unit_price: item.editedPrice || item.unitPrice
+          })),
+          user_name: username,
+          status: "Pending",
+          discount: totalOrderDiscount || 0,
+          return_balance: returnBalance
+        };
+
+        const response = await axios.post(
+          "http://127.0.0.1:8000/api/orders",
+          orderData,
+          {
+            headers: { 
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${userToken}`,
+            },
+          }
+        );
+
+        console.log("Order saved successfully!", response.data);
+      }
+
+      // Close the modal after successful submission
+      setOrderToEdit(null);
+    } catch (error) {
+      console.error("Error saving order/return:", error);
+    }
+  };*/
+
+  /*const handleGenerateInvoice = () => {
     setItemsAfterSelection();
     setReadyToSaveOrder();
     console.log("ko", orderToEdit);
@@ -232,7 +471,7 @@ const RepDashboard = () => {
 
     if (orderToEdit.isReturn) {
       const remainBalance = axios
-        .get(`http://127.0.0.1:8000/api/returns/${orderToEdit.shop.id}`)
+        .get(`http://127.0.0.1:8000/api/returns/${selectedShop.id}`)
         .then((data) => {
           if (data != null) {
             return data;
@@ -309,7 +548,7 @@ const RepDashboard = () => {
     console.log(orderToEdit);
     console.log("Ready to save: ", readyToSaveOrder);
     // }
-  };
+  };*/
 
   return (
     <div className="RepDashboard">
@@ -445,7 +684,7 @@ const RepDashboard = () => {
                     .sort((a, b) => a.item.localeCompare(b.item))
                     .map((item, index) => {
                       const selected = selectedItems.find(
-                        (i) => i.item === item.item
+                        (i) => i.item.id === item.id
                       );
                       return (
                         <div key={index} className="DistributionItemCard">
@@ -471,9 +710,9 @@ const RepDashboard = () => {
                                     onChange={(e) => {
                                       const qty = parseInt(e.target.value, 10);
                                       if (!isNaN(qty) && qty > 0) {
-                                        updateItemQuantity(item.item, qty);
+                                        updateItemQuantity(item.id, qty);
                                       } else {
-                                        updateItemQuantity(item.item, "");
+                                        updateItemQuantity(item.id, "");
                                       }
                                     }}
                                     placeholder="Qty"
@@ -481,9 +720,7 @@ const RepDashboard = () => {
                                   <button
                                     className="ClearQtyBtn"
                                     title="Clear"
-                                    onClick={() =>
-                                      removeSelectedItem(item.item)
-                                    }
+                                    onClick={() => removeSelectedItem(item.id)}
                                   >
                                     {" "}
                                     ❌{" "}
@@ -532,8 +769,8 @@ const RepDashboard = () => {
               <div className="ScrollableContent">
                 <table className="ConfirmedOrderTable">
                   <colgroup>
-                    <col style={{ width: "30%" }} />
-                    <col style={{ width: "20%" }} />
+                    <col style={{ width: "28%" }} />
+                    <col style={{ width: "22%" }} />
                     <col style={{ width: "25%" }} />
                     <col style={{ width: "25%" }} />
                   </colgroup>
@@ -547,19 +784,19 @@ const RepDashboard = () => {
                   </thead>
                   <tbody>
                     {[...orderToEdit.items]
-                      .sort((a, b) => a.item.localeCompare(b.item))
-                      .map((item, index) => (
-                        <tr key={item.index}>
-                          <td>{item.item}</td>
-                          <td>{item.orderQty}</td>
+                      .sort((a, b) => a.item.item.localeCompare(b.item.item))
+                      .map((selectedItem, index) => (
+                        <tr key={index}>
+                          <td>{selectedItem.item.item}</td>
+                          <td>{selectedItem.orderQty}</td>
                           <td>
                             <input
                               type="number"
                               min="0"
                               value={
-                                item.editedPrice !== undefined
-                                  ? item.editedPrice
-                                  : item.unitPrice
+                                selectedItem.editedPrice !== undefined
+                                  ? selectedItem.editedPrice
+                                  : selectedItem.unitPrice
                               } // Show editedPrice if available, else fallback to original unitPrice
                               onChange={(e) => {
                                 const value = e.target.value;
@@ -608,11 +845,13 @@ const RepDashboard = () => {
                           <td>
                             {(() => {
                               const unitPrice =
-                                item.editedPrice !== undefined &&
-                                item.editedPrice !== ""
-                                  ? parseFloat(item.editedPrice)
-                                  : parseFloat(item.unitPrice);
-                              return (item.orderQty * unitPrice).toFixed(2);
+                                selectedItem.editedPrice !== undefined &&
+                                selectedItem.editedPrice !== ""
+                                  ? parseFloat(selectedItem.editedPrice)
+                                  : parseFloat(selectedItem.unitPrice);
+                              return (
+                                selectedItem.orderQty * unitPrice
+                              ).toFixed(2);
                             })()}
                           </td>
                         </tr>
@@ -664,8 +903,8 @@ const RepDashboard = () => {
                       {orderToEdit.isReturn ? (
                         <td colSpan="2"></td>
                       ) : (
-                        <td colSpan="2">
-                          <label>Order Discount: </label>
+                        <td>
+                          <label>Order Discount:</label>
                           <input
                             type="text"
                             inputMode="decimal"
@@ -697,7 +936,34 @@ const RepDashboard = () => {
                           />
                         </td>
                       )}
-                      <td colSpan="2">
+                      <td>
+                        <label>Total Discount: </label>
+                        {(() => {
+                          const itemDiscount = orderToEdit.items.reduce(
+                            (sum, item) => {
+                              const originalPrice = parseFloat(item.unitPrice);
+                              const editedPrice =
+                                item.editedPrice !== undefined &&
+                                item.editedPrice !== ""
+                                  ? parseFloat(item.editedPrice)
+                                  : originalPrice;
+                              return (
+                                sum +
+                                (originalPrice - editedPrice) * item.orderQty
+                              );
+                            },
+                            0
+                          );
+                          const orderDiscount = parseFloat(
+                            totalOrderDiscount || 0
+                          );
+                          return (itemDiscount + orderDiscount).toFixed(2);
+                        })()}
+                      </td>
+                      <td>
+                        <div>Return Balance: {returnBalance.toFixed(2)}</div>
+                      </td>
+                      <td>
                         <strong>Grand Total:</strong>{" "}
                         {(
                           (orderToEdit?.items?.reduce((sum, item) => {

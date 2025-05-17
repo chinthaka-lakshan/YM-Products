@@ -34,12 +34,7 @@ class OrderController extends Controller
     // Create new order
     public function store(Request $request)
     {
-        //\Log::info('Authorization Header:',['token'=>$request->header('Authorization')]);
-        // $user = Auth::guard('admin')->user();
-        // if(!$user){
-        //     return response()->json(['error'=>'Unauthorized'],401);
-        // }
-        // $user_name=$user->name;
+        
         \Log::info("Incoming order request:",$request->all());
        try{
          $validated = $request->validate([
@@ -49,6 +44,7 @@ class OrderController extends Controller
            'items.*.item_id'=>'required|exists:items,id',
            'items.*.quantity'=>'required|integer|min:1',
            'items.*.item_expenses'=>'nullable|numeric|min:0',
+           'discount'=>'nullable|numeric|min:0',
         ]);
        }catch(\Illuminate\Validation\ValidationException $e){
         return response()->json(['error'=>$e->getMessage()],422);
@@ -61,6 +57,7 @@ class OrderController extends Controller
 
         
         $totPrice=$validated['total_price'];
+        $discount = $validated['discount'] ?? 0;
         $orderCost=max(0,$totPrice-$goodReturnValue);
         if($totPrice < $goodReturnValue){
             $goodReturnValue=$goodReturnValue-$totPrice;
@@ -95,6 +92,7 @@ class OrderController extends Controller
             //'user_name'=>"yasantha",
             'user_name'=>$request->user_name,
             'status'=>"Pending",
+            'discount'=>$validated['discount'],
            ]);
            $formattedItems=[];
            foreach($validated['items'] as $item){
@@ -128,7 +126,7 @@ class OrderController extends Controller
         ],500);
        }
     }
-
+    
     // Show single order
     public function show($id)
     {
@@ -310,4 +308,6 @@ class OrderController extends Controller
         }
         return response()->json($order);
     }
+
+    
 }

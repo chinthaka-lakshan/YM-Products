@@ -21,4 +21,9 @@ class Item extends Model
     {
         return $this->hasMany(Returns::class);
     }
+
+    public function returnItems()
+    {
+        return $this->hasMany(ReturnItem::class);
+    }
 }

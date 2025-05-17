@@ -65,7 +65,11 @@ Route::middleware('auth:sanctum')->group(function () {
 // Resource routes
 Route::apiResource('items', ItemController::class);
 Route::apiResource('purchase_stock', PurchaseStockController::class);
+
+
 Route::apiResource('shops', ShopController::class);
+Route::put('shops/{shopId}/return-balance',[ShopController::class,'updateReturnBalance']);
+
 Route::apiResource('sales_reps', SalesRepController::class);
 
 Route::get('/test-mail', function() {
@@ -113,3 +117,13 @@ Route::apiResource('good-returns',GoodReturnController::class);
 
  //Route::post('orders',[ OrderController::class,'store']);
  Route::apiResource("returns",ReturnController::class);
+
+ Route::get('returns/{shopId}/balance',[ReturnController::class,'getReturnBalance']);
+
+ Route::get('returns/shop/{shopId}',[ ReturnController::class,'getShopReturns']);
+
+ Route::get('returns/{returnId}/items',[ReturnController::class,'getReturnItems']);
+ Route::post('returns/{returnId}/items',[ReturnController::class,'store']);
+ Route::put('returns/{returnId}/items/{itemId"',[ReturnController::class,'getReturnItems']);
+Route::delete('returns/{returnId}/items/{itemId}',[ReturnController::class, 'removeReturn']);
+ Route::apiResource('returns',ReturnController::class)->except(['index']);
