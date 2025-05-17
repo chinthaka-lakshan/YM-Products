@@ -9,8 +9,10 @@ const PurchaseStock = () => {
     const [items, setItems] = useState([]);
     const [showAddModal, setShowAddModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
+    const [showAddStockModal, setShowAddStockModal] = useState(false);
     const [newItem, setNewItem] = useState({ item: "", weight: "" });
     const [editItem, setEditItem] = useState({ item: "", weight: "" });
+    const [addStockItem, setAddStockItem] = useState({ id: null, weight: "" });
     const [editIndex, setEditIndex] = useState(null);
 
     // Fetch purchase stocks from API
@@ -50,6 +52,15 @@ const PurchaseStock = () => {
         setShowEditModal(true);
     };
 
+    // Add this handler function
+    const handleAddStockClick = (index) => {
+        setAddStockItem({
+            id: items[index].id,
+            weight: ""
+        });
+        setShowAddStockModal(true);
+    };
+
     const handleEditItem = () => {
         const id = items[editIndex].id;
         axios.put(`http://127.0.0.1:8000/api/purchase_stock/${id}`, editItem)
@@ -62,6 +73,28 @@ const PurchaseStock = () => {
                 console.error("Error updating purchase stock:", error);
                 alert("Failed to update item.");
             });
+    };
+
+    // Add this function to handle stock addition
+    const handleAddStock = () => {
+        if (!addStockItem.weight) {
+            alert("Please enter weight to add");
+            return;
+        }
+
+        axios.post(`http://127.0.0.1:8000/api/purchase_stock/${addStockItem.id}/add`, {
+            weight: addStockItem.weight
+        })
+        .then(() => {
+            fetchData();
+            setShowAddStockModal(false);
+            setAddStockItem({ id: null, weight: "" });
+            alert("Stock added successfully!");
+        })
+        .catch((error) => {
+            console.error("Error adding stock:", error);
+            alert("Failed to add stock.");
+        });
     };
 
     const handleDeleteItem = (id) => {
@@ -95,12 +128,13 @@ const PurchaseStock = () => {
                                 <div className="PurchaseItemCardMiddle">
                                     <InventoryIcon className="PurchaseItemCardIcon" />
                                     <div className="PurchaseItemCardDetails">
-                                        <span><strong>Weight (kg): </strong>{item.weight}</span>
+                                        <span><strong>Weight (kg):</strong>{item.weight}</span>
                                     </div>
                                 </div>
                                 <div className="PurchaseItemCardButtons">
                                     <button className="DeleteButton" onClick={() => handleDeleteItem(item.id)}>Delete</button>
                                     <button className="EditButton" onClick={() => handleEditClick(index)}>Update</button>
+                                    <button className="AddStockButton" onClick={() => handleAddStockClick(index)}>Add</button>
                                 </div>
                             </div>
                         ))}
@@ -163,6 +197,30 @@ const PurchaseStock = () => {
                         <div className="ModalButtons">
                             <button className="CancelButton" onClick={() => setShowEditModal(false)}>Cancel</button>
                             <button className="SaveButton" onClick={handleEditItem}>Update</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Add Stock Modal */}
+            {showAddStockModal && (
+                <div className="ModalBackdrop">
+                    <div className="Modal">
+                        <h2>Add Stock</h2>
+                        <div className="ModalMiddle">
+                            <InventoryIcon className="ModalIcon" />
+                            <div className="ModalInputs">
+                                <input
+                                    type="number"
+                                    placeholder="Enter Weight to Add (kg)"
+                                    value={addStockItem.weight}
+                                    onChange={(e) => setAddStockItem({ ...addStockItem, weight: e.target.value })}
+                                />
+                            </div>
+                        </div>
+                        <div className="ModalButtons">
+                            <button className="CancelButton" onClick={() => setShowAddStockModal(false)}>Cancel</button>
+                            <button className="SaveButton" onClick={handleAddStock}>Add Stock</button>
                         </div>
                     </div>
                 </div>
