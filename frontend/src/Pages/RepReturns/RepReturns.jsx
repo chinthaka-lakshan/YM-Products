@@ -10,12 +10,30 @@ const RepReturns = () => {
     { id: 1, shop_name: 'A Shop', created_at: '3/4/2027', return_cost: 1500.00 },
     { id: 2, shop_name: 'B Shop', created_at: '13/4/2025', return_cost: 2500.00 },
     { id: 3, shop_name: 'Dilshan Shop', created_at: '3/4/2025', return_cost: 1800.00 },
+    { id: 4, shop_name: 'A Shop', created_at: '3/4/2027', return_cost: 1500.00 },
+    { id: 5, shop_name: 'B Shop', created_at: '13/4/2025', return_cost: 2500.00 },
+    { id: 6, shop_name: 'Dilshan Shop', created_at: '3/4/2025', return_cost: 1800.00 },
+    { id: 7, shop_name: 'A Shop', created_at: '3/4/2027', return_cost: 1500.00 },
+    { id: 8, shop_name: 'B Shop', created_at: '13/4/2025', return_cost: 2500.00 },
+    { id: 9, shop_name: 'Dilshan Shop', created_at: '3/4/2025', return_cost: 1800.00 },
+    { id: 10, shop_name: 'A Shop', created_at: '3/4/2027', return_cost: 1500.00 },
+    { id: 11, shop_name: 'B Shop', created_at: '13/4/2025', return_cost: 2500.00 },
+    { id: 12, shop_name: 'Dilshan Shop', created_at: '3/4/2025', return_cost: 1800.00 },
   ]);
 
   const [badReturns, setBadReturns] = useState([
     { id: 101, shop_name: 'X Shop', created_at: '4/5/2025', return_cost: 1000.00 },
     { id: 102, shop_name: 'Y Shop', created_at: '6/5/2025', return_cost: 2000.00 },
     { id: 103, shop_name: 'Z Shop', created_at: '7/5/2025', return_cost: 500.00 },
+    { id: 104, shop_name: 'X Shop', created_at: '4/5/2025', return_cost: 1000.00 },
+    { id: 105, shop_name: 'Y Shop', created_at: '6/5/2025', return_cost: 2000.00 },
+    { id: 106, shop_name: 'Z Shop', created_at: '7/5/2025', return_cost: 500.00 },
+    { id: 107, shop_name: 'X Shop', created_at: '4/5/2025', return_cost: 1000.00 },
+    { id: 108, shop_name: 'Y Shop', created_at: '6/5/2025', return_cost: 2000.00 },
+    { id: 109, shop_name: 'Z Shop', created_at: '7/5/2025', return_cost: 500.00 },
+    { id: 110, shop_name: 'X Shop', created_at: '4/5/2025', return_cost: 1000.00 },
+    { id: 111, shop_name: 'Y Shop', created_at: '6/5/2025', return_cost: 2000.00 },
+    { id: 112, shop_name: 'Z Shop', created_at: '7/5/2025', return_cost: 500.00 },
   ]);
 
   const [showGoodReturns, setShowGoodReturns] = useState(true);
@@ -135,7 +153,7 @@ const RepReturns = () => {
                     <tr key={rtn.id}>
                       <td>{rtn.created_at}</td>
                       <td>{rtn.shop_name}</td>
-                      <td className="HideTab">{rtn.total_price}</td>
+                      <td className="HideTab">{rtn.return_cost}</td>
                       <td><button className="ReturnTableViewButton">View</button></td>
                     </tr>
                   ))}
