@@ -462,7 +462,7 @@ const RepDashboard = () => {
                         <div key={index} className="DistributionItemCard">
                           <h2 className="CardTitle">{item.item}</h2>
                           <div className="DistributionItemCardMiddle">
-                            <ShoppingCartIcon className="DistributionItemCardIcon" />
+                            <ShoppingCartIcon className="DistributionItemCardIcon1" />
                             <div className="DistributionItemCardDetails">
                               <span>
                                 <strong>Price (LKR): </strong>
