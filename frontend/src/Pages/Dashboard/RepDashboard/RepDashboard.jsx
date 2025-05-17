@@ -646,13 +646,13 @@ const RepDashboard = () => {
                         :{" "}
                         {orderToEdit.items
                           .reduce((sum, item) => {
-                            const originalPrice = item.unitPrice; // The original price from the inventory
+                            const originalPrice = item.unitPrice;
                             const editedUnitPrice =
-                              item.editedPrice || originalPrice; // The price entered by the user
+                              item.editedPrice || originalPrice;
                             const priceDifference =
-                              originalPrice - editedUnitPrice; // Difference between original and edited price
+                              originalPrice - editedUnitPrice;
                             const itemDifference =
-                              priceDifference * item.orderQty; // Difference for this item based on quantity
+                              priceDifference * item.orderQty;
                             return sum + itemDifference;
                           }, 0)
                           .toFixed(2)}
@@ -675,54 +675,53 @@ const RepDashboard = () => {
                       {orderToEdit.isReturn ? (
                         <td colSpan="2"></td>
                       ) : (
-                        <td>
-                          <label>Order Discount:</label>
-                          <input
-                            type="text"
-                            inputMode="decimal"
-                            value={totalOrderDiscount}
-                            onChange={(e) => {
-                              const value = e.target.value;
-                              // Allow empty string to let user clear the input
-                              if (value === "") {
-                                setTotalOrderDiscount("");
-                                return;
-                              }
-                              // Regex to allow only numbers with up to 2 decimal places
-                              const regex = /^\d*\.?\d{0,2}$/;
-                              if (regex.test(value)) {
-                                setTotalOrderDiscount(value);
-                              }
-                            }}
-                            onBlur={() => {
-                              // Format to 2 decimal places on blur if value is valid
-                              if (totalOrderDiscount !== "") {
-                                const parsed = parseFloat(totalOrderDiscount);
-                                if (!isNaN(parsed)) {
-                                  setTotalOrderDiscount(parsed.toFixed(2));
+                        <>
+                          <td>
+                            <label>Order Discount:</label>
+                            <input
+                              type="text"
+                              inputMode="decimal"
+                              value={totalOrderDiscount}
+                              onChange={(e) => {
+                                const value = e.target.value;
+                                if (value === "") {
+                                  setTotalOrderDiscount("");
+                                  return;
                                 }
-                              }
-                            }}
-                            placeholder="0.00"
-                            className="DiscountInput"
-                          />
-                        </td>
+                                const regex = /^\d*\.?\d{0,2}$/;
+                                if (regex.test(value)) {
+                                  setTotalOrderDiscount(value);
+                                }
+                              }}
+                              onBlur={() => {
+                                if (totalOrderDiscount !== "") {
+                                  const parsed = parseFloat(totalOrderDiscount);
+                                  if (!isNaN(parsed)) {
+                                    setTotalOrderDiscount(parsed.toFixed(2));
+                                  }
+                                }
+                              }}
+                              placeholder="0.00"
+                              className="DiscountInput"
+                            />
+                          </td>
+                          <td>
+                            <label>Total Discount: </label>
+                            {(() => {
+                              const itemDiscount = orderToEdit.items.reduce((sum, item) => {
+                                const originalPrice = parseFloat(item.unitPrice);
+                                const editedPrice =
+                                  item.editedPrice !== undefined && item.editedPrice !== ""
+                                    ? parseFloat(item.editedPrice)
+                                    : originalPrice;
+                                return sum + (originalPrice - editedPrice) * item.orderQty;
+                              }, 0);
+                              const orderDiscount = parseFloat(totalOrderDiscount || 0);
+                              return (itemDiscount + orderDiscount).toFixed(2);
+                            })()}
+                          </td>
+                        </>
                       )}
-                      <td>
-                        <label>Total Discount: </label>
-                        {(() => {
-                          const itemDiscount = orderToEdit.items.reduce((sum, item) => {
-                            const originalPrice = parseFloat(item.unitPrice);
-                            const editedPrice =
-                              item.editedPrice !== undefined && item.editedPrice !== ""
-                                ? parseFloat(item.editedPrice)
-                                : originalPrice;
-                            return sum + (originalPrice - editedPrice) * item.orderQty;
-                          }, 0);
-                          const orderDiscount = parseFloat(totalOrderDiscount || 0);
-                          return (itemDiscount + orderDiscount).toFixed(2);
-                        })()}
-                      </td>
                       <td>
                         <div>Return Balance: {returnBalance.toFixed(2)}</div>
                       </td>

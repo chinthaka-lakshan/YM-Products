@@ -128,7 +128,7 @@ const PurchaseStock = () => {
                                 <div className="PurchaseItemCardMiddle">
                                     <InventoryIcon className="PurchaseItemCardIcon" />
                                     <div className="PurchaseItemCardDetails">
-                                        <span><strong>Weight (kg):</strong>{item.weight}</span>
+                                        <span><strong>Weight (kg): </strong>{item.weight}</span>
                                     </div>
                                 </div>
                                 <div className="PurchaseItemCardButtons">

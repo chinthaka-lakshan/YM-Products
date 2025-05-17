@@ -14,10 +14,11 @@
             display: flex;
             flex-direction: column;
             background: #f4f4f4;
-            gap: 0px;
+            gap: 10px;
             padding: 20px;
-            margin-top: 55px;
+            margin-top: 5%;
             margin-left: 16%;
+            width: calc(100% - 18%);
             height: calc(100vh - 75px);
             overflow-x: hidden;
             overflow-y: scroll;
@@ -54,10 +55,10 @@
 
             .RepShopsGrid {
                 display: grid;
-                width: 100%;
                 grid-template-columns: repeat(4, 1fr);
                 gap: 20px;
-                padding: 10px;
+                padding: 10px 0px;
+                width: 100%;
 
                 .RepShopCard {
                     display: flex;
@@ -65,7 +66,7 @@
                     width: 88%;
                     height: 80%;
                     align-items: center;
-                    justify-content: space-between;
+                    justify-content: center;
                     background:#b7adad;
                     padding: 15px;
                     border-radius: 15px;
@@ -78,6 +79,7 @@
                     h2 {
                         font-size: 18px;
                         color: #000;
+                        margin-top: -5px;
                     }
 
                     .RepShopCardMiddle {
@@ -172,12 +174,12 @@
             left: 50%;
             transform: translate(-50%, -50%);
             z-index: 2000;
-            gap: 20px;
+            gap: 30px;
 
             h2 {
                 font-size: 30px;
                 color: #616161;
-                margin-top: -15px;
+                margin-top: -20px;
             }
 
             .AddShopModalMiddle {
@@ -187,7 +189,7 @@
                 width: 90%;
 
                 .AddShopModalIcon {
-                    font-size: 200px;
+                    font-size: 160px;
                     color: #000;
                     align-self: flex-start;
                 }
@@ -213,8 +215,8 @@
                 flex-direction: row;
                 justify-content: center;
                 align-items: center;
-                gap: 30px;
-                font-size: 15px;
+                gap: 40px;
+                font-size: 18px;
 
                 .AddShopCancelButton {
                     background: orangered;
@@ -250,7 +252,9 @@
 
 @media (max-width: 768px) {
     .RepShopCardsContainer {
+        margin-top: 8% !important;
         margin-left: 50px !important;
+        width: calc(100% - 11%) !important;
     }
 
     .AddButton {
@@ -261,6 +265,7 @@
         grid-template-columns: repeat(2, 1fr) !important;
         margin-top: 5px !important;
         margin-left: 10px;
+        gap: 10px !important;
     }
 
     .RepShopCard h2 {
@@ -301,16 +306,24 @@
 
 @media (max-width: 480px) {
     .RepShopCardsContainer {
+        margin-top: 12% !important;
         margin-left: 0 !important;
+        width: calc(100% - 9%) !important;
+    }
+
+    .AddButton {
+        font-size: 20px !important;
     }
 
     .RepShopsGrid {
         display: flex !important;
         flex-direction: column !important;
+        margin-top: 0 !important;
+        margin-left: -5px !important;
     }
 
     .RepShopCard {
-        width: 88% !important;
+        width: 92% !important;
     }
 
     .AddShopModal {
