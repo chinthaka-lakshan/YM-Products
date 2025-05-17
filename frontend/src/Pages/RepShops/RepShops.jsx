@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import "./RepShops.css";
 import StoreFrontIcon from "@mui/icons-material/Store";
@@ -12,6 +12,28 @@ const RepShops = () => {
     const [newShop, setNewShop] = useState({ shop_name: "", location: "", contact: "" });
     const [editShop, setEditShop] = useState({ shop_name: "", location: "", contact: "" });
     const [editIndex, setEditIndex] = useState(null);
+
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+    const sidebarRef = useRef();
+
+    const toggleSidebar = () => {
+        setSidebarOpen(!sidebarOpen);
+    };
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+        if (
+            window.innerWidth <= 768 &&
+            sidebarRef.current &&
+            !sidebarRef.current.contains(event.target)
+        ) {
+            setSidebarOpen(false);
+        }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
 
     // ✅ Fetch shops from backend
     useEffect(() => {
@@ -84,27 +106,27 @@ const RepShops = () => {
     };
 
     return (
-        <div className="Shops">
-            <RepSidebar/>
-            <div className="ShopsContainer">
-                <RepNavbar/>
-                <div className="ShopCardsContainer">
-                    <div className="ShopsTop">
+        <div className="RepShops">
+            <RepSidebar isOpen={sidebarOpen} ref={sidebarRef} />
+            <div className="RepShopsContainer">
+                <RepNavbar onMenuClick={toggleSidebar}/>
+                <div className="RepShopCardsContainer">
+                    <div className="RepShopsTop">
                         <h1>Shops</h1>
                         <button className="AddButton" onClick={() => setShowAddModal(true)}>Add New</button>
                     </div>
-                    <div className="ShopsGrid">
+                    <div className="RepShopsGrid">
                         {shops.map((shop, index) => (
-                            <div key={shop.id} className="ShopCard">
+                            <div key={shop.id} className="RepShopCard">
                                 <h2>{shop.shop_name}</h2>
-                                <div className="ShopCardMiddle">
-                                    <StoreFrontIcon className="ShopCardIcon"/>
-                                    <div className="ShopCardDetails">
+                                <div className="RepShopCardMiddle">
+                                    <StoreFrontIcon className="RepShopCardIcon"/>
+                                    <div className="RepShopCardDetails">
                                         <span><strong>Location: </strong>{shop.location}</span>
                                         <span><strong>Contact: </strong>{shop.contact}</span>
                                     </div>
                                 </div>
-                                <div className="ShopCardButtons">
+                                <div className="RepShopCardButtons">
                                     <button className="DeleteButton" onClick={() => handleDeleteShop(shop.id)}>Delete</button>
                                     <button className="EditButton" onClick={() => handleEditClick(index)}>Edit</button>
                                 </div>
@@ -116,11 +138,11 @@ const RepShops = () => {
 
             {showAddModal && (
                 <div className="ModalBackdrop">
-                    <div className="Modal">
-                        <h2>Add New Shop</h2>
-                        <div className="ModalMiddle">
-                            <StoreFrontIcon className="ModalIcon"/>
-                            <div className="ModalInputs">
+                    <div className="AddShopModal">
+                        <h2 className="AddShopModalTitle">Add New Shop</h2>
+                        <div className="AddShopModalMiddle">
+                            <StoreFrontIcon className="AddShopModalIcon"/>
+                            <div className="AddShopModalInputs">
                                 <input
                                     type="text"
                                     placeholder="Enter Shop Name"
@@ -141,7 +163,7 @@ const RepShops = () => {
                                 />
                             </div>
                         </div>
-                        <div className="ModalButtons">
+                        <div className="AddShopModalButtons">
                             <button className="CancelButton" onClick={() => setShowAddModal(false)}>Cancel</button>
                             <button className="SaveButton" onClick={handleAddShop}>Save</button>
                         </div>
@@ -151,11 +173,11 @@ const RepShops = () => {
 
             {showEditModal && (
                 <div className="ModalBackdrop">
-                    <div className="Modal">
-                        <h2>Edit Shop</h2>
-                        <div className="ModalMiddle">
-                            <StoreFrontIcon className="ModalIcon"/>
-                            <div className="ModalInputs">
+                    <div className="AddShopModal">
+                        <h2 className="AddShopModalTitle">Edit Shop</h2>
+                        <div className="AddShopModalMiddle">
+                            <StoreFrontIcon className="AddShopModalIcon"/>
+                            <div className="AddShopModalInputs">
                                 <input 
                                     type="text" 
                                     placeholder="Enter Shop Name" 
@@ -176,7 +198,7 @@ const RepShops = () => {
                                 />
                             </div>
                         </div>
-                        <div className="ModalButtons">
+                        <div className="AddShopModalButtons">
                             <button className="CancelButton" onClick={() => setShowEditModal(false)}>Cancel</button>
                             <button className="SaveButton" onClick={handleEditShop}>Update</button>
                         </div>

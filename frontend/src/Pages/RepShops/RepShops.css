@@ -1,29 +1,29 @@
-.Shops {
+.RepShops {
     display: flex;
     width: 100%;
     height: 100vh;
     margin: 0;
     padding: 0;
 
-    .ShopsContainer {
+    .RepShopsContainer {
         display: flex;
         flex-direction: column;
         width: 100%;
 
-        .ShopCardsContainer {
+        .RepShopCardsContainer {
             display: flex;
             flex-direction: column;
             background: #f4f4f4;
-            gap: 10px;
+            gap: 0px;
             padding: 20px;
-            margin-top: 5%;
+            margin-top: 55px;
             margin-left: 16%;
             height: calc(100vh - 75px);
             overflow-x: hidden;
             overflow-y: scroll;
             align-items: center;
 
-            .ShopsTop {
+            .RepShopsTop {
                 display: flex;
                 flex-direction: row;
                 width: 100%;
@@ -52,14 +52,14 @@
                 }
             }
 
-            .ShopsGrid {
+            .RepShopsGrid {
                 display: grid;
                 width: 100%;
                 grid-template-columns: repeat(4, 1fr);
                 gap: 20px;
                 padding: 10px;
 
-                .ShopCard {
+                .RepShopCard {
                     display: flex;
                     flex-direction: column;
                     width: 88%;
@@ -80,19 +80,19 @@
                         color: #000;
                     }
 
-                    .ShopCardMiddle {
+                    .RepShopCardMiddle {
                         display: flex;
                         flex-direction: row;
                         align-items: center;
                         justify-content: center;
                         gap: 15px;
 
-                        .ShopCardIcon {
+                        .RepShopCardIcon {
                             font-size: 60px;
                             color: #000;
                         }
 
-                        .ShopCardDetails {
+                        .RepShopCardDetails {
                             display: flex;
                             flex-direction: column;
                             gap: 5px;
@@ -101,7 +101,7 @@
                         }
                     }
 
-                    .ShopCardButtons {
+                    .RepShopCardButtons {
                         display: flex;
                         gap: 15px;
 
@@ -134,7 +134,7 @@
                     }
                 }
 
-                .ShopCard:hover {
+                .RepShopCard:hover {
                     transform: scale(1.05);
                     box-shadow: 6px 10px 20px rgba(0, 0, 0, 0.12);
                     border-right: 6px solid #826c6cd1;
@@ -151,16 +151,16 @@
         width: 100%;
         height: 100%;
         background: rgba(0, 0, 0, 0.5);
-        z-index: 999;
+        z-index: 1999;
         display: flex;
         justify-content: center;
         align-items: center;
 
-        .Modal {
+        .AddShopModal {
             display: flex;
             flex-direction: column;
-            width: 60%;
-            height: 70%;
+            width: 50%;
+            height: 50%;
             background: whitesmoke;
             border-radius: 20px;
             -webkit-box-shadow: 1px 1px 5px 1px #425060;
@@ -171,35 +171,35 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            z-index: 1000;
-            gap: 30px;
+            z-index: 2000;
+            gap: 20px;
 
             h2 {
-                font-size: 35px;
+                font-size: 30px;
                 color: #616161;
-                margin-top: -20px;
+                margin-top: -15px;
             }
 
-            .ModalMiddle {
+            .AddShopModalMiddle {
                 display: flex;
                 flex-direction: row;
-                gap: 40px;
+                gap: 30px;
                 width: 90%;
 
-                .ModalIcon {
-                    font-size: 250px;
+                .AddShopModalIcon {
+                    font-size: 200px;
                     color: #000;
                     align-self: flex-start;
                 }
 
-                .ModalInputs {
+                .AddShopModalInputs {
                     display: flex;
                     flex-direction: column;
                     width: 70%;
-                    gap: 40px;
+                    gap: 30px;
 
                     input {
-                        font-size: 25px;
+                        font-size: 20px;
                         padding: 10px;
                         border-radius: 10px;
                         color: white;
@@ -208,15 +208,15 @@
                 }
             }
 
-            .ModalButtons {
+            .AddShopModalButtons {
                 display: flex;
                 flex-direction: row;
                 justify-content: center;
                 align-items: center;
-                gap: 40px;
-                font-size: 20px;
+                gap: 30px;
+                font-size: 15px;
 
-                .CancelButton {
+                .AddShopCancelButton {
                     background: orangered;
                     border: none;
                     padding: 10px;
@@ -225,12 +225,12 @@
                     font-weight: bold;
                 }
 
-                .CancelButton:hover {
+                .AddShopCancelButton:hover {
                     transform: scale(1.05);
                     background: orange;
                 }
 
-                .SaveButton {
+                .AddShopSaveButton {
                     background: peru;
                     border: none;
                     padding: 10px;
@@ -239,11 +239,114 @@
                     font-weight: bold;
                 }
 
-                .SaveButton:hover {
+                .AddShopSaveButton:hover {
                     transform: scale(1.05);
                     background: green;
                 }
             }
         }
+    }
+}
+
+@media (max-width: 768px) {
+    .RepShopCardsContainer {
+        margin-left: 50px !important;
+    }
+
+    .AddButton {
+        font-size: 20px !important;
+    }
+
+    .RepShopsGrid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        margin-top: 5px !important;
+        margin-left: 10px;
+    }
+
+    .RepShopCard h2 {
+        font-size: 20px !important;
+        margin-top: 0px !important;
+    }
+
+    .RepShopCardIcon {
+        font-size: 50px !important;
+    }
+
+    .DeleteButton, .EditButton {
+        font-size: 20px !important;
+        padding: 8px 15px !important;
+    }
+    
+    .AddShopModal {
+        width: 85% !important;
+        height: 40% !important;
+    }
+
+    .AddShopModalIcon {
+        font-size: 120px !important;
+    }
+
+    input {
+        font-size: 25px !important;
+    }
+
+    .AddShopModalButtons {
+        font-size: 22px !important;
+    }
+
+    .AddShopCancelButton {
+        font-size: 22px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .RepShopCardsContainer {
+        margin-left: 0 !important;
+    }
+
+    .RepShopsGrid {
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    .RepShopCard {
+        width: 88% !important;
+    }
+
+    .AddShopModal {
+        width: 85% !important;
+        height: 60% !important;
+        gap: 50px !important;
+    }
+
+    .AddShopModalMiddle {
+        display: flex;
+        flex-direction: column !important;
+        gap: 20px;
+        width: 100% !important;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .AddShopModalIcon {
+        font-size: 100px !important;
+        align-self: center !important;
+    }
+
+    .AddShopModalInputs {
+        width: 90% !important;
+        gap: 20px !important;
+    }
+
+    input {
+        font-size: 18px !important;
+    }
+
+    .AddShopModalButtons {
+        font-size: 18px !important;
+    }
+
+    .AddShopCancelButton {
+        font-size: 18px !important;
     }
 }
