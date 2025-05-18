@@ -64,9 +64,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
 // Resource routes
 Route::apiResource('items', ItemController::class);
+Route::put('/items/{id}/add-stock', [ItemController::class, 'addStock']);
 Route::apiResource('purchase_stock', PurchaseStockController::class);
 
-
+Route::post('/purchase_stock/{id}/add', [PurchaseStockController::class, 'addStock']);
 Route::apiResource('shops', ShopController::class);
 Route::put('shops/{shopId}/return-balance',[ShopController::class,'updateReturnBalance']);
 

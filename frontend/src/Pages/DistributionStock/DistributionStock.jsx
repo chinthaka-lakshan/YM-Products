@@ -9,6 +9,7 @@ const DistributionStock = () => {
   const [items, setItems] = useState([]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showAddStockModal, setShowAddStockModal] = useState(false);
   const [newItem, setNewItem] = useState({
     item: "",
     unitPrice: "",
@@ -19,6 +20,10 @@ const DistributionStock = () => {
     item: "",
     unitPrice: "",
     quantity: "",
+  });
+  const [addStockItem, setAddStockItem] = useState({
+    id: null,
+    quantityToAdd: "",
   });
   const [editIndex, setEditIndex] = useState(null);
 
@@ -49,6 +54,14 @@ const DistributionStock = () => {
     setShowEditModal(true);
   };
 
+  const handleAddStockClick = (item) => {
+    setAddStockItem({
+      id: item.id,
+      quantityToAdd: ""
+    });
+    setShowAddStockModal(true);
+  };
+
   const handleEditItem = async () => {
     try {
       const response = await axios.put(
@@ -65,6 +78,31 @@ const DistributionStock = () => {
     } catch (error) {
       console.error("Error updating item:", error);
       alert("Failed to update item.");
+    }
+  };
+
+  const handleAddStock = async () => {
+    try {
+      const response = await axios.put(
+        `http://127.0.0.1:8000/api/items/${addStockItem.id}/add-stock`,
+        { quantity: addStockItem.quantityToAdd }
+      );
+      
+      if (response.status === 200) {
+        const updatedItems = items.map(item => {
+          if (item.id === addStockItem.id) {
+            return { ...item, quantity: response.data.quantity };
+          }
+          return item;
+        });
+        
+        setItems(updatedItems);
+        setShowAddStockModal(false);
+        alert("Stock added successfully!");
+      }
+    } catch (error) {
+      console.error("Error adding stock:", error);
+      alert("Failed to add stock.");
     }
   };
 
@@ -116,6 +154,12 @@ const DistributionStock = () => {
                     onClick={() => handleEditClick(item)}
                   >
                     Update
+                  </button>
+                  <button
+                    className="AddStockButton"
+                    onClick={() => handleAddStockClick(item)}
+                  >
+                    Add
                   </button>
                 </div>
               </div>
@@ -216,6 +260,39 @@ const DistributionStock = () => {
               </button>
               <button className="SaveButton" onClick={handleEditItem}>
                 Update
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Add Stock Modal */}
+      {showAddStockModal && (
+        <div className="ModalBackdrop">
+          <div className="Modal">
+            <h2>Add Stock to Item</h2>
+            <div className="ModalMiddle">
+              <ShoppingCartIcon className="ModalIcon" />
+              <div className="ModalInputs">
+                <input
+                  type="number"
+                  placeholder="Enter Quantity To Add"
+                  value={addStockItem.quantityToAdd}
+                  onChange={(e) =>
+                    setAddStockItem({ ...addStockItem, quantityToAdd: e.target.value })
+                  }
+                />
+              </div>
+            </div>
+            <div className="ModalButtons">
+              <button
+                className="CancelButton"
+                onClick={() => setShowAddStockModal(false)}
+              >
+                Cancel
+              </button>
+              <button className="SaveButton" onClick={handleAddStock}>
+                Add Stock
               </button>
             </div>
           </div>
