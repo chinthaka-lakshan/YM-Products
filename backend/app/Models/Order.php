@@ -15,7 +15,7 @@ class Order extends Model
         'shop_id',
         'user_name',
         'status',
-        
+        "discount",
     ];
 
     public function shop()
