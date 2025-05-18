@@ -15,6 +15,7 @@ class Order extends Model
         'shop_id',
         'user_name',
         'status',
+        
     ];
 
     public function shop()
@@ -24,6 +25,11 @@ class Order extends Model
 
     public function items()
     {
-        return $this->belongsToMany(Item::class, 'order_items')->withPivot('quantity');
+        return $this->belongsToMany(Item::class, 'order_items','order_id','item_id')->withPivot('quantity','item_expenses');
+    }
+
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class, 'order_id');
     }
 }

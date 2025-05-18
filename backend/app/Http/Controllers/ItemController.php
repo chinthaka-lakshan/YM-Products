@@ -102,6 +102,41 @@ class ItemController extends Controller
         }
     }
 
+    public function addStock(Request $request, $id)
+    {
+        $item = Item::find($id);
+
+        if(!$item) {
+            return response()->json(['message'=>'Item not found'], 404);
+        }
+        
+        $validator = Validator::make($request->all(),[
+            'quantity' => 'required|integer|min:1'
+        ]);
+
+        if($validator->fails()){
+            return response()->json([
+                'message'=>'Validation failed',
+                'errors'=>$validator->errors()
+            ], 422);
+        }
+
+        try{
+            $quantityToAdd = $request->quantity;
+            $item->quantity += $quantityToAdd;
+            $item->save();
+
+            return response()->json([
+                'message'=>'Stock added successfully',
+                'quantity'=> $item->quantity
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message'=>'Error when adding stock',
+                'error'=>$e->getMessage()
+            ], 500);
+        }
+    }
 
     public function destroy($id)
     {
@@ -120,5 +155,18 @@ class ItemController extends Controller
                 'error'=> $e->getMessage()
             ], 500);
         }
+    }
+
+    
+    public function show($id)
+    {
+        \Log::info("Fetching item with ID: $id");
+
+        $item = Item::find($id);
+        if(!$item){
+            return response()->json(['message'=>'Item not found'],404);
+        }
+
+        return response()->json($item);
     }
 }

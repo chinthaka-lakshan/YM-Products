@@ -10,6 +10,11 @@ use App\Http\Controllers\PurchaseStockController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\GoodReturnController;
 
+use App\Http\Controllers\ReturnController;
+
+use App\Http\Controllers\CashflowController;
+
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -35,6 +40,10 @@ Route::post('/send-otp', [AuthController::class, 'sendOtp']);
 Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
 Route::post('/reset-password-with-otp', [AuthController::class, 'resetPasswordWithOtp']);
 
+Route::get('/cashflows', [CashflowController::class, 'index']);
+Route::post('/cashflows', [CashflowController::class, 'store']);
+Route::get('/cashflows/{id}', [CashflowController::class, 'show']);
+
 // Protected admin routes
 Route::middleware(['auth:sanctum', 'ability:admin'])->group(function () {
     
@@ -55,7 +64,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
 // Resource routes
 Route::apiResource('items', ItemController::class);
+Route::put('/items/{id}/add-stock', [ItemController::class, 'addStock']);
 Route::apiResource('purchase_stock', PurchaseStockController::class);
+Route::post('/purchase_stock/{id}/add', [PurchaseStockController::class, 'addStock']);
 Route::apiResource('shops', ShopController::class);
 Route::apiResource('sales_reps', SalesRepController::class);
 
@@ -93,6 +104,8 @@ Route::get('/test-mail', function() {
 // });
 Route::apiResource('orders', OrderController::class);
 Route::get('/calculate-order-cost/{shopId}/{orderAmount}', [OrderController::class, 'calculateOrderCost']);
+Route::get('/orders/{id}/items', [OrderController::class, 'showOrderItems']);
+Route::put('/orders/{id}/status',[OrderController::class,'updateStatus']);
 // Route::middleware('auth:sanctum')->group(function(){
 //     Route::apiResource('good-returns',GoodReturnController::class);
 // });
@@ -101,3 +114,4 @@ Route::apiResource('good-returns',GoodReturnController::class);
 
 
  //Route::post('orders',[ OrderController::class,'store']);
+ Route::apiResource("returns",ReturnController::class);

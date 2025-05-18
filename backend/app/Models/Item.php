@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Returns;
 
 class Item extends Model
 {
@@ -13,5 +14,11 @@ class Item extends Model
     public function orders()
     {
         return $this->belongsToMany(Order::class, 'order_items')->withPivot('quantity');
+        
+    }
+
+    public function returns()
+    {
+        return $this->hasMany(Returns::class);
     }
 }
