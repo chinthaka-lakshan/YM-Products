@@ -124,18 +124,18 @@ const RepDashboard = () => {
   const handleItemSelect = (item) => {
     setSelectedItems([
       ...selectedItems,
-      { item: item.item, orderQty: 1, unitPrice: item.unitPrice },
+      { item: item, orderQty: 1, unitPrice: item.unitPrice },
     ]);
   };
 
-  const updateItemQuantity = (itemName, quantity) => {
+  const updateItemQuantity = (itemId, quantity) => {
     setSelectedItems((prev) =>
-      prev.map((i) => (i.item === itemName ? { ...i, orderQty: quantity } : i))
+      prev.map((i) => (i.item.id === itemId ? { ...i, orderQty: quantity } : i))
     );
   };
 
-  const removeSelectedItem = (itemName) => {
-    setSelectedItems((prev) => prev.filter((i) => i.item !== itemName));
+  const removeSelectedItem = (itemId) => {
+    setSelectedItems((prev) => prev.filter((i) => i.item.id !== itemId));
   };
 
   const handleCancelOrder = () => {
@@ -178,19 +178,12 @@ const RepDashboard = () => {
 
   const checkAdjustedOrderCost = async (shopId, orderAmount) => {
     try {
-      console.log("se;", selectedShop);
-
-      console.log("id", shopId);
-
       if (shopId != null) {
         const response = await axios.get(
           `http://127.0.0.1:8000/api/calculate-order-cost/${shopId}/${orderAmount}`,
           { withCredentials: true }
         );
         const data = response.data;
-        console.log("respons: ", data.return_balance);
-        console.log("kooo");
-
         return data.return_balance ?? orderAmount;
       }
     } catch (error) {
@@ -199,128 +192,170 @@ const RepDashboard = () => {
     }
   };
 
-  let itemsArray;
-  const setItemsAfterSelection = () => {
-    if (selectedItems != null) {
-      itemsArray = Array.isArray(selectedItems?.items)
-        ? selectedItems.items
-        : [];
-    }
-    console.log("itemssss: ", itemsArray);
-  };
-  let readyToSaveOrder;
-  const setReadyToSaveOrder = () => {
-    readyToSaveOrder = {
-      shop_id: orderToEdit?.shop.id,
-      total_price: 0,
-      items: itemsArray.map((item) => ({
-        item_id: item.id,
-        quantity: item.orderQty,
-        item_expenses: item.itemExpenses || 0,
-      })),
-      user_name: username,
-      status: "Pending",
-      return_balance: 0,
-    };
-  };
-
-  const handleGenerateInvoice = () => {
-    setItemsAfterSelection();
-    setReadyToSaveOrder();
-    console.log("ko", orderToEdit);
-    console.log(selectedShop);
-
-    console.log("save", readyToSaveOrder);
-
-    //if (selectedShop != null) {
-    const totalPrice = orderToEdit?.items.reduce(
-      (sum, item) => sum + item.unitPrice * item.orderQty,
-      0
-    );
-    console.log("tot", totalPrice);
-
-    const afterTot = checkAdjustedOrderCost(selectedShop?.id, totalPrice);
-
-    if (orderToEdit.isReturn) {
-      const remainBalance = axios
-        .get(`http://127.0.0.1:8000/api/returns/${orderToEdit.shop.id}`)
-        .then((data) => {
-          if (data != null) {
-            return data;
-          }
-        });
-      const returnRecord = {
-        shop_id: orderToEdit?.shop.id,
-        type: "",
-        return_cost: totalPrice,
-        user_name: username,
-        items: itemsArray.map((item) => ({
-          item_id: item.id,
-          qty: item.orderQty,
-          weight: item.itemExpenses || 0,
-        })),
-      };
-      if (orderToEdit.isGood) {
-        returnRecord.type = "good";
-      } else {
-        returnRecord.type = "bad";
-      }
-      console.log("newR: ", newReturn);
-      readyToSaveOrder.total_price = afterTot;
-      readyToSaveOrder.return_balance = remainBalance;
-      try {
-        if (returnRecord.type === "good" || returnRecord.type === "bad") {
-          const response = axios.post(
-            "http://127.0.0.1:8000/api/returns",
-            returnRecord,
-            {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${userToken}`,
-              },
-            }
-          );
-          console.log("Return saved Successfully!", response.data);
-          console.log("Return data:!", response.data.data);
-
-          if (response != null) {
-            console.log("erres:", response);
-
-            setCurrentReturnInvoiceItems(response.data?.items);
-          }
+  const getReturnValue = async (shopId) => {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8000/api/returns/${shopId}/balance`,
+        {
+          withCredentials: true,
         }
-      } catch (error) {
-        console.error("Error saving Return!", error);
-      }
-    } else {
-      console.log("order:", readyToSaveOrder);
+      );
 
-      const response = axios.post(
-        "http://127.0.0.1:8000/api/orders",
-        readyToSaveOrder,
+      console.log("RetV: ", response.data);
+      return response.data.remaining_balance;
+    } catch (error) {
+      console.error(error);
+      return 0;
+    }
+  };
+
+  const updateReturnBalance = async (shopId, returnValue) => {
+    try {
+      const response = await axios.put(
+        `http://127.0.0.1:8000/api/shops/${shopId}/return-balance`,
+        { return_balance: returnValue },
         {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${userToken}`,
           },
-          //withCredentials: true,
+          withCredentials: true,
         }
-        // body: JSON.stringify(newOrder),
       );
-      if (response != null) {
-        console.log(response.data);
-        setCurrentReturnInvoiceItems(response.data.data?.items);
+      return response.data;
+    } catch (error) {
+      alert(error);
+    }
+  };
+  const handleGenerateInvoice = async () => {
+    try {
+      // Calculate the total price from selected items
+      const totalPrice = orderToEdit.items.reduce(
+        (sum, item) =>
+          sum + (item.editedPrice || item.unitPrice) * item.orderQty,
+        0
+      );
+      console.log("reo:", orderToEdit);
+
+      const retV = await getReturnValue(orderToEdit.shop.id);
+      console.log("Return Value: ", retV);
+
+      console.log("ioio:", orderToEdit.items);
+      console.log("dis", totalOrderDiscount);
+
+      //save return
+      if (orderToEdit.isReturn) {
+        const returnRecord = {
+          shop_id: orderToEdit.shop.id,
+          type: orderToEdit.isGood ? "good" : "bad",
+          return_cost: totalPrice,
+          rep_name: username,
+          items: orderToEdit.items.map((item) => ({
+            item_id: item.item.id,
+            quantity: item.orderQty,
+          })),
+        };
+
+        console.log("rec", returnRecord);
+
+        const response = axios
+          .post("http://127.0.0.1:8000/api/returns", returnRecord, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${userToken}`,
+            },
+            withCredentials: true,
+          })
+          .then((res) => {
+            return res.data;
+          });
+        if (response.data != null) {
+          alert(response.data);
+        }
+      } else {
+        const discountValue = parseFloat(totalOrderDiscount) || 0;
+        const discountedTotPrice = totalPrice - totalOrderDiscount;
+        console.log("after reducing discount", discountedTotPrice);
+
+        let finalTotal;
+        console.log("after reducing return Value", finalTotal);
+        let remainingReturnBalance = 0;
+        if (retV >= discountedTotPrice) {
+          // return value should updated in db
+          remainingReturnBalance = retV - discountedTotPrice;
+          finalTotal = 0;
+        } else {
+          //return value also should update
+          remainingReturnBalance = 0;
+          finalTotal = discountedTotPrice - retV;
+        }
+
+        console;
+        const remRet = await getReturnValue(orderToEdit.shop.id);
+        console.log("remaining return Value", remRet);
+        if (isNaN(discountValue)) {
+          throw new Error("Invalid discount value");
+        }
+        // Prepare the order data according to your controller requirements
+        const orderData = {
+          shop_id: orderToEdit.shop.id,
+          total_price: finalTotal,
+          items: orderToEdit.items.map((item) => ({
+            item_id: item.item.id, // Send item ID
+            quantity: item.orderQty,
+            item_expenses: 0, // Default to 0 if not specified
+          })),
+          user_name: username,
+          status: "Pending",
+          return_balance: remainingReturnBalance,
+          discount: totalOrderDiscount,
+        };
+
+        console.log("order to Save", orderData);
+
+        // Make the API call to create the order
+        const response = await axios.post(
+          "http://127.0.0.1:8000/api/orders",
+          orderData,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${userToken}`,
+            },
+          }
+        );
+
+        console.log("Order created successfully:", response.data);
+
+        // Close the modal after successful submission
+        setOrderToEdit(null);
+
+        // Optionally show a success message or redirect
+        alert("Order created successfully!");
+      }
+    } catch (error) {
+      console.error("Error creating order:", error);
+
+      // Show error message to user
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        console.error("Server responded with:", error.response.data);
+        alert(
+          `Error: ${error.response.data.error || error.response.data.message}`
+        );
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.error("No response received:", error.request);
+        alert("Network error - no response from server");
+      } else {
+        // Something happened in setting up the request
+        console.error("Request setup error:", error.message);
+        alert(`Error: ${error.message}`);
       }
     }
-    //setReturnToEdit(newReturn);
-    console.log("Generating invoice for:", orderToEdit);
-    // Logic to generate invoice (PDF/download/API call)
-
-    console.log("selt", orderToEdit.items);
-    console.log(orderToEdit);
-    console.log("Ready to save: ", readyToSaveOrder);
-    // }
   };
+
+ 
 
   return (
     <div className="RepDashboard">
@@ -456,7 +491,7 @@ const RepDashboard = () => {
                     .sort((a, b) => a.item.localeCompare(b.item))
                     .map((item, index) => {
                       const selected = selectedItems.find(
-                        (i) => i.item === item.item
+                        (i) => i.item.id === item.id
                       );
                       return (
                         <div key={index} className="DistributionItemCard">
@@ -482,9 +517,9 @@ const RepDashboard = () => {
                                     onChange={(e) => {
                                       const qty = parseInt(e.target.value, 10);
                                       if (!isNaN(qty) && qty > 0) {
-                                        updateItemQuantity(item.item, qty);
+                                        updateItemQuantity(item.id, qty);
                                       } else {
-                                        updateItemQuantity(item.item, "");
+                                        updateItemQuantity(item.id, "");
                                       }
                                     }}
                                     placeholder="Qty"
@@ -492,9 +527,7 @@ const RepDashboard = () => {
                                   <button
                                     className="ClearQtyBtn"
                                     title="Clear"
-                                    onClick={() =>
-                                      removeSelectedItem(item.item)
-                                    }
+                                    onClick={() => removeSelectedItem(item.id)}
                                   >
                                     {" "}
                                     ❌{" "}
@@ -558,19 +591,19 @@ const RepDashboard = () => {
                   </thead>
                   <tbody>
                     {[...orderToEdit.items]
-                      .sort((a, b) => a.item.localeCompare(b.item))
-                      .map((item, index) => (
-                        <tr key={item.index}>
-                          <td>{item.item}</td>
-                          <td>{item.orderQty}</td>
+                      .sort((a, b) => a.item.item.localeCompare(b.item.item))
+                      .map((selectedItem, index) => (
+                        <tr key={index}>
+                          <td>{selectedItem.item.item}</td>
+                          <td>{selectedItem.orderQty}</td>
                           <td>
                             <input
                               type="number"
                               min="0"
                               value={
-                                item.editedPrice !== undefined
-                                  ? item.editedPrice
-                                  : item.unitPrice
+                                selectedItem.editedPrice !== undefined
+                                  ? selectedItem.editedPrice
+                                  : selectedItem.unitPrice
                               } // Show editedPrice if available, else fallback to original unitPrice
                               onChange={(e) => {
                                 const value = e.target.value;
@@ -619,11 +652,13 @@ const RepDashboard = () => {
                           <td>
                             {(() => {
                               const unitPrice =
-                                item.editedPrice !== undefined &&
-                                item.editedPrice !== ""
-                                  ? parseFloat(item.editedPrice)
-                                  : parseFloat(item.unitPrice);
-                              return (item.orderQty * unitPrice).toFixed(2);
+                                selectedItem.editedPrice !== undefined &&
+                                selectedItem.editedPrice !== ""
+                                  ? parseFloat(selectedItem.editedPrice)
+                                  : parseFloat(selectedItem.unitPrice);
+                              return (
+                                selectedItem.orderQty * unitPrice
+                              ).toFixed(2);
                             })()}
                           </td>
                         </tr>
@@ -675,6 +710,31 @@ const RepDashboard = () => {
                       {orderToEdit.isReturn ? (
                         <td colSpan="2"></td>
                       ) : (
+                        <td>
+                          <label>Order Discount:</label>
+                          <input
+                            type="text"
+                            inputMode="decimal"
+                            value={totalOrderDiscount}
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              // Allow empty string to let user clear the input
+                              if (value === "") {
+                                setTotalOrderDiscount("");
+                                return;
+                              }
+                              // Regex to allow only numbers with up to 2 decimal places
+                              const regex = /^\d*\.?\d{0,2}$/;
+                              if (regex.test(value)) {
+                                setTotalOrderDiscount(value);
+                              }
+                            }}
+                            onBlur={() => {
+                              // Format to 2 decimal places on blur if value is valid
+                              if (totalOrderDiscount !== "") {
+                                const parsed = parseFloat(totalOrderDiscount);
+                                if (!isNaN(parsed)) {
+                                  setTotalOrderDiscount(parsed.toFixed(2));
                         <>
                           <td>
                             <label>Order Discount:</label>
@@ -722,6 +782,30 @@ const RepDashboard = () => {
                           </td>
                         </>
                       )}
+                      <td>
+                        <label>Total Discount: </label>
+                        {(() => {
+                          const itemDiscount = orderToEdit.items.reduce(
+                            (sum, item) => {
+                              const originalPrice = parseFloat(item.unitPrice);
+                              const editedPrice =
+                                item.editedPrice !== undefined &&
+                                item.editedPrice !== ""
+                                  ? parseFloat(item.editedPrice)
+                                  : originalPrice;
+                              return (
+                                sum +
+                                (originalPrice - editedPrice) * item.orderQty
+                              );
+                            },
+                            0
+                          );
+                          const orderDiscount = parseFloat(
+                            totalOrderDiscount || 0
+                          );
+                          return (itemDiscount + orderDiscount).toFixed(2);
+                        })()}
+                      </td>
                       <td>
                         <div>Return Balance: {returnBalance.toFixed(2)}</div>
                       </td>
