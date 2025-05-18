@@ -238,6 +238,7 @@ const RepDashboard = () => {
       console.log("reo:", orderToEdit);
 
       const retV = await getReturnValue(orderToEdit.shop.id);
+
       console.log("Return Value: ", retV);
 
       console.log("ioio:", orderToEdit.items);
@@ -274,23 +275,29 @@ const RepDashboard = () => {
         }
       } else {
         const discountValue = parseFloat(totalOrderDiscount) || 0;
-        const discountedTotPrice = totalPrice - totalOrderDiscount;
+        const discountedTotPrice = totalPrice - discountValue;
         console.log("after reducing discount", discountedTotPrice);
+        const currentReturnBalance = await getReturnValue(orderToEdit.shop.id);
 
-        let finalTotal;
+        const returnBalanceToUse = Math.min(currentReturnBalance,discountedTotPrice);
+
+        const remainingReturnBalance = currentReturnBalance-returnBalanceToUse;
+        const finalTotal = discountedTotPrice - returnBalanceToUse;
+
         console.log("after reducing return Value", finalTotal);
-        let remainingReturnBalance = 0;
-        if (retV >= discountedTotPrice) {
-          // return value should updated in db
-          remainingReturnBalance = retV - discountedTotPrice;
-          finalTotal = 0;
-        } else {
-          //return value also should update
-          remainingReturnBalance = 0;
-          finalTotal = discountedTotPrice - retV;
-        }
 
-        console;
+        // if (retV >= discountedTotPrice) {
+        //   // return value should updated in db
+        //   remainingReturnBalance = retV - discountedTotPrice;
+        //   finalTotal = 0;
+        // } else {
+        //   //return value also should update
+        //   remainingReturnBalance = 0;
+        //   finalTotal = discountedTotPrice - retV;
+        // }
+
+       // await updateReturnBalance(orderToEdit.shop.id, remainingReturnBalance);
+
         const remRet = await getReturnValue(orderToEdit.shop.id);
         console.log("remaining return Value", remRet);
         if (isNaN(discountValue)) {
@@ -354,8 +361,6 @@ const RepDashboard = () => {
       }
     }
   };
-
- 
 
   return (
     <div className="RepDashboard">
@@ -497,7 +502,7 @@ const RepDashboard = () => {
                         <div key={index} className="DistributionItemCard">
                           <h2 className="CardTitle">{item.item}</h2>
                           <div className="DistributionItemCardMiddle">
-                            <ShoppingCartIcon className="DistributionItemCardIcon1" />
+                            <ShoppingCartIcon className="DistributionItemCardIcon" />
                             <div className="DistributionItemCardDetails">
                               <span>
                                 <strong>Price (LKR): </strong>
@@ -681,13 +686,13 @@ const RepDashboard = () => {
                         :{" "}
                         {orderToEdit.items
                           .reduce((sum, item) => {
-                            const originalPrice = item.unitPrice;
+                            const originalPrice = item.unitPrice; // The original price from the inventory
                             const editedUnitPrice =
-                              item.editedPrice || originalPrice;
+                              item.editedPrice || originalPrice; // The price entered by the user
                             const priceDifference =
-                              originalPrice - editedUnitPrice;
+                              originalPrice - editedUnitPrice; // Difference between original and edited price
                             const itemDifference =
-                              priceDifference * item.orderQty;
+                              priceDifference * item.orderQty; // Difference for this item based on quantity
                             return sum + itemDifference;
                           }, 0)
                           .toFixed(2)}
@@ -735,52 +740,13 @@ const RepDashboard = () => {
                                 const parsed = parseFloat(totalOrderDiscount);
                                 if (!isNaN(parsed)) {
                                   setTotalOrderDiscount(parsed.toFixed(2));
-                        <>
-                          <td>
-                            <label>Order Discount:</label>
-                            <input
-                              type="text"
-                              inputMode="decimal"
-                              value={totalOrderDiscount}
-                              onChange={(e) => {
-                                const value = e.target.value;
-                                if (value === "") {
-                                  setTotalOrderDiscount("");
-                                  return;
                                 }
-                                const regex = /^\d*\.?\d{0,2}$/;
-                                if (regex.test(value)) {
-                                  setTotalOrderDiscount(value);
-                                }
-                              }}
-                              onBlur={() => {
-                                if (totalOrderDiscount !== "") {
-                                  const parsed = parseFloat(totalOrderDiscount);
-                                  if (!isNaN(parsed)) {
-                                    setTotalOrderDiscount(parsed.toFixed(2));
-                                  }
-                                }
-                              }}
-                              placeholder="0.00"
-                              className="DiscountInput"
-                            />
-                          </td>
-                          <td>
-                            <label>Total Discount: </label>
-                            {(() => {
-                              const itemDiscount = orderToEdit.items.reduce((sum, item) => {
-                                const originalPrice = parseFloat(item.unitPrice);
-                                const editedPrice =
-                                  item.editedPrice !== undefined && item.editedPrice !== ""
-                                    ? parseFloat(item.editedPrice)
-                                    : originalPrice;
-                                return sum + (originalPrice - editedPrice) * item.orderQty;
-                              }, 0);
-                              const orderDiscount = parseFloat(totalOrderDiscount || 0);
-                              return (itemDiscount + orderDiscount).toFixed(2);
-                            })()}
-                          </td>
-                        </>
+                              }
+                            }}
+                            placeholder="0.00"
+                            className="DiscountInput"
+                          />
+                        </td>
                       )}
                       <td>
                         <label>Total Discount: </label>
