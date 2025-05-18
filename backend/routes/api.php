@@ -112,7 +112,7 @@ Route::put('/orders/{id}/status',[OrderController::class,'updateStatus']);
 //     Route::apiResource('good-returns',GoodReturnController::class);
 // });
 
-Route::apiResource('good-returns',GoodReturnController::class);
+// Route::apiResource('good-returns',GoodReturnController::class);
 
 
  //Route::post('orders',[ OrderController::class,'store']);

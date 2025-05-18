@@ -238,6 +238,7 @@ const RepDashboard = () => {
       console.log("reo:", orderToEdit);
 
       const retV = await getReturnValue(orderToEdit.shop.id);
+
       console.log("Return Value: ", retV);
 
       console.log("ioio:", orderToEdit.items);
@@ -274,23 +275,29 @@ const RepDashboard = () => {
         }
       } else {
         const discountValue = parseFloat(totalOrderDiscount) || 0;
-        const discountedTotPrice = totalPrice - totalOrderDiscount;
+        const discountedTotPrice = totalPrice - discountValue;
         console.log("after reducing discount", discountedTotPrice);
+        const currentReturnBalance = await getReturnValue(orderToEdit.shop.id);
 
-        let finalTotal;
+        const returnBalanceToUse = Math.min(currentReturnBalance,discountedTotPrice);
+
+        const remainingReturnBalance = currentReturnBalance-returnBalanceToUse;
+        const finalTotal = discountedTotPrice - returnBalanceToUse;
+
         console.log("after reducing return Value", finalTotal);
-        let remainingReturnBalance = 0;
-        if (retV >= discountedTotPrice) {
-          // return value should updated in db
-          remainingReturnBalance = retV - discountedTotPrice;
-          finalTotal = 0;
-        } else {
-          //return value also should update
-          remainingReturnBalance = 0;
-          finalTotal = discountedTotPrice - retV;
-        }
 
-        console;
+        // if (retV >= discountedTotPrice) {
+        //   // return value should updated in db
+        //   remainingReturnBalance = retV - discountedTotPrice;
+        //   finalTotal = 0;
+        // } else {
+        //   //return value also should update
+        //   remainingReturnBalance = 0;
+        //   finalTotal = discountedTotPrice - retV;
+        // }
+
+       // await updateReturnBalance(orderToEdit.shop.id, remainingReturnBalance);
+
         const remRet = await getReturnValue(orderToEdit.shop.id);
         console.log("remaining return Value", remRet);
         if (isNaN(discountValue)) {
@@ -354,8 +361,6 @@ const RepDashboard = () => {
       }
     }
   };
-
- 
 
   return (
     <div className="RepDashboard">

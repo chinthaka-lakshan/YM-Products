@@ -9,7 +9,7 @@ use App\Models\Returns;
 class Item extends Model
 {
     use HasFactory;
-    protected $fillable = ['item','unitPrice','quantity'];
+    protected $fillable = ['item','unitPrice','quantity','itemCost'];
     
     public function orders()
     {
