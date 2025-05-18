@@ -13,12 +13,14 @@ const DistributionStock = () => {
   const [newItem, setNewItem] = useState({
     item: "",
     unitPrice: "",
+    itemCost: "",
     quantity: "",
   });
   const [editItem, setEditItem] = useState({
     id: null,
     item: "",
     unitPrice: "",
+    itemCost: "",
     quantity: "",
   });
   const [addStockItem, setAddStockItem] = useState({
@@ -38,7 +40,7 @@ const DistributionStock = () => {
     try {
       const response = await axios.post("http://127.0.0.1:8000/api/items", newItem);
       setItems([...items, response.data.item]);
-      setNewItem({ item: "", unitPrice: "", quantity: "" });
+      setNewItem({ item: "", unitPrice: "", itemCost: "", quantity: "" });
       alert("Item added successfully!");
       setShowAddModal(false);
     } catch (error) {
@@ -140,6 +142,7 @@ const DistributionStock = () => {
                   <div className="DistributionItemCardDetails">
                     <span><strong>Price (LKR):</strong> {item.unitPrice}</span>
                     <span><strong>Quantity:</strong> {item.quantity}</span>
+                    <span><strong>Cost (LKR)</strong> {item.itemCost}</span>
                   </div>
                 </div>
                 <div className="DistributionItemCardButtons">
@@ -194,6 +197,14 @@ const DistributionStock = () => {
                 />
                 <input
                   type="number"
+                  placeholder="Enter Unit Cost (LKR)"
+                  value={newItem.itemCost}
+                  onChange={(e) =>
+                    setNewItem({ ...newItem, itemCost: e.target.value })
+                  }
+                />
+                <input
+                  type="number"
                   placeholder="Enter Quantity"
                   value={newItem.quantity}
                   onChange={(e) =>
@@ -239,6 +250,14 @@ const DistributionStock = () => {
                   value={editItem.unitPrice}
                   onChange={(e) =>
                     setEditItem({ ...editItem, unitPrice: e.target.value })
+                  }
+                />
+                <input
+                  type="number"
+                  placeholder="Enter Unit Cost (LKR)"
+                  value={editItem.itemCost}
+                  onChange={(e) =>
+                    setEditItem({ ...editItem, itemCost: e.target.value })
                   }
                 />
                 <input
