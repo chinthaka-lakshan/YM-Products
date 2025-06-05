@@ -9,7 +9,7 @@ use App\Models\Returns;
 class Item extends Model
 {
     use HasFactory;
-    protected $fillable = ['item','unitPrice','quantity'];
+    protected $fillable = ['item','unitPrice','quantity','itemCost'];
     
     public function orders()
     {
@@ -20,5 +20,10 @@ class Item extends Model
     public function returns()
     {
         return $this->hasMany(Returns::class);
+    }
+
+    public function returnItems()
+    {
+        return $this->hasMany(ReturnItem::class);
     }
 }
